@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AuthView from '../views/AuthView.vue'
-import verifyAuth from '../views/VerifyAuthView.vue'
+import LoginView from '../views/LoginView.vue'
 
 Vue.use(VueRouter)
 
@@ -18,9 +18,9 @@ const routes = [
     component: AuthView
   },
   {
-    path: '/verifyAuth',
-    name: 'verifyAuth',
-    component: verifyAuth
+    path: '/login',
+    name: 'login',
+    component: LoginView
   },
   {
     path: '/about',
