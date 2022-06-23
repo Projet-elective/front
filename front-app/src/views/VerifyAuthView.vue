@@ -1,3 +1,9 @@
-<template>
-<h1>Page de vérification</h1>
-</template>
+<script>
+
+
+export default{
+    name:'verifyAuth'
+}
+
+
+</script>

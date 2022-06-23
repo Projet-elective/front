@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AuthView from '../views/AuthView.vue'
+import verifyAuth from '../views/VerifyAuthView.vue'
 
 Vue.use(VueRouter)
 
@@ -12,9 +13,14 @@ const routes = [
     component: HomeView //change to a menu list or smthg similar
   },
   {
-    path: '/auth',
-    name: 'auth',
+    path: '/register',
+    name: 'register',
     component: AuthView
+  },
+  {
+    path: '/verifyAuth',
+    name: 'verifyAuth',
+    component: verifyAuth
   },
   {
     path: '/about',
