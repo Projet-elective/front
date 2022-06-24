@@ -144,7 +144,7 @@ export default {
             this.$refs.observer.reset()
         },
         home() {
-            document.location.href = "http://localhost:8081/";
+            document.location.href = "http://localhost:8090/";
         }
     },
 }
