@@ -114,10 +114,10 @@ export default {
             this.$refs.observer.reset()
         },
         home() {
-            document.location.href = "http://localhost:8081/";
+            document.location.href = "http://localhost:8090/";
         },
         createAccount(){
-            document.location.href = "http://localhost:8081/register";
+            document.location.href = "http://localhost:8090/register";
         }
     },
 }
