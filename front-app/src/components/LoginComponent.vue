@@ -21,11 +21,8 @@
                     clear
                 </v-btn>
             </form>
-            <div class="error container" v-if="errorInRegister">
-                <h1>{{ errorMessages }}</h1>
-                <v-btn @click="home">
-                    Return home
-                </v-btn>
+            <div class="container" v-if="errorInLogin" style="color: red;">
+                <h2>{{ messageView }}</h2>
             </div>
             <div class="container">
                 <h3>No account ? Create one by clicking this button</h3>
@@ -41,6 +38,7 @@
 <script>
 import { required, digits, email, max, regex } from 'vee-validate/dist/rules'
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+import axios from 'axios'
 
 setInteractionMode('eager')
 
@@ -78,35 +76,32 @@ export default {
     data: () => ({
         username: '',
         password: '',
-        errorInRegister: false,
-        errorMessages: '',
+        errorInLogin: false,
+        messageView: '',
     }),
 
     methods: {
         async login() {
             const { username, password } = this;
 
-            const res = await fetch(
-                "http://localhost:8080/api/auth/signin",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        username,
-                        password,
-                    })
-                }
-            );
-            const data = await res.json();
-            if (data['message'] == 'User Not found.' || data['message'] == 'Invalid Password!') {
-                this.errorMessages = 'Incorrect username or password';
-                this.errorInRegister = true;
-            } else if (res.status == 200){
-                document.cookie= "access_token=" + data['accessToken']                
+            await axios.post('http://localhost:8080/api/auth/signin', {
+                username: username,
+                password: password
+            }).then((res) => {
+                console.log(res)
+                const token = res.data['accessToken']
+                document.cookie = "access_token=" + token
                 this.home();
-            }
+            }).catch((res) => {
+                console.log(res)
+                if (res.response.data['message'] == 'Invalid Password !' || res.response.data['message'] == 'User Not found.') {
+                    this.messageView = 'Incorrect username or password';
+                    this.errorInLogin = true;
+                }else{
+                    this.messageView = 'Unknown error, please retry later...'
+                }
+
+            })
         },
         clear() {
             this.username = ''
@@ -116,7 +111,7 @@ export default {
         home() {
             document.location.href = "http://localhost:8090/";
         },
-        createAccount(){
+        createAccount() {
             document.location.href = "http://localhost:8090/register";
         }
     },
