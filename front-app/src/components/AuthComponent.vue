@@ -29,13 +29,13 @@
                     clear
                 </v-btn>
             </form>
-            <div class="container" v-if="savingSuccessful" style="color:green;">
+            <div class="container" v-if="savingSuccessful" style="color: green;">
                 <h1>{{ errorMessages }}</h1>
                 <v-btn @click="home">
                     Return home
                 </v-btn>
             </div>
-            <div class="container" v-if="errorInRegister" style="color:red;">
+            <div class="container" v-if="errorInRegister" style="color: green;">
                 <h1>{{ errorMessages }}</h1>
                 <v-btn @click="home">
                     Return home
@@ -107,26 +107,58 @@ export default {
             const { username, password, email, select } = this;
             const role = []
             role.push(select)
-
             await axios.post('http://localhost:8080/api/auth/signup', {
                 username: username,
                 password: password,
-                role: role,
-                email: email
+                email: email,
+                role: role
             }).then((res) => {
-                this.errorMessages = res.data['message'];
-                this.savingSuccessful = true;
-                this.errorInRegister = false;
-                this.clear();
+                    this.errorMessages = res.data['message'];
+                    this.savingSuccessful = true;
+
             }).catch((res) => {
-                console.log(res)
-                this.errorMessages = res.response.data['message'];
-                this.errorInRegister = true;
-                this.savingSuccessful = false;
-                this.clear();
+                this.errorMessages = res.response.data['message']
+                this.errorInRegister = true
+
 
             })
         },
+        // async login() {
+        //     const { username, password, email, select } = this;
+        //     const role = []
+        //     role.push(select)
+
+        //     const res = await fetch(
+        //         "http://localhost:8080/api/auth/signup",
+        //         {
+        //             method: "POST",
+        //             headers: {
+        //                 "Content-Type": "application/json"
+        //             },
+        //             body: JSON.stringify({
+        //                 username,
+        //                 password,
+        //                 email,
+        //                 role,
+
+        //             })
+        //         }
+        //     );
+        //     const data = await res.json();
+        //     if (data['message'] == 'User was registered successfully!') {
+        //         this.errorMessages = data['message'];
+        //         this.savingSuccessful = true;
+        //         this.errorInRegister = false;
+        //     } else {
+        //         this.errorMessages = data['message'];
+        //         this.errorInRegister = true;
+        //         this.savingSuccessful = false;
+        //         this.clear();
+
+        //     }
+
+        // },
+
         clear() {
             this.username = ''
             this.password = ''
