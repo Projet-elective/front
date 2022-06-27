@@ -88,12 +88,10 @@ export default {
                 username: username,
                 password: password
             }).then((res) => {
-                console.log(res)
                 const token = res.data['accessToken']
                 document.cookie = "access_token=" + token
                 this.home();
             }).catch((res) => {
-                console.log(res)
                 if (res.response.data['message'] == 'Invalid Password !' || res.response.data['message'] == 'User Not found.') {
                     this.messageView = 'Incorrect username or password';
                     this.errorInLogin = true;

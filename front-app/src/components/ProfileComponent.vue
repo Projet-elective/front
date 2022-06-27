@@ -10,7 +10,7 @@
                                 <h6 class="mb-0">Username</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                Kenneth Valdez
+                                {{ username }}
                             </div>
                         </div>
 
@@ -19,7 +19,7 @@
                                 <h6 class="mb-0">Email</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                fip@jukmuh.al
+                                {{ email }}
                             </div>
                         </div>
 
@@ -28,16 +28,41 @@
                                 <h6 class="mb-0">Role</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                (239) 816-9029
+                                {{ role }}
                             </div>
                         </div>
+                        <validation-observer ref="observer" v-slot="{ invalid }">
+                            <form @submit.prevent="deleteAcc" style="margin-top: 5rem;">
+                                <div>
+                                    <h3>To delete you account enter your password</h3>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <validation-provider v-slot="{ errors }" name="username" rules="required">
+                                            <v-text-field v-model="username" :error-messages="errors" label="username"
+                                                required :disabled="true">
+                                            </v-text-field>
+                                        </validation-provider>
+                                        <validation-provider v-slot="{ errors }" name="password" rules="required">
+                                            <v-text-field v-model="password" :error-messages="errors" label="Password"
+                                                type='password' required>
+                                            </v-text-field>
+                                        </validation-provider>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <v-btn class="mr-4" type="submit" :disabled="invalid">
+                                            Delete account
+                                        </v-btn>
+                                    </div>
+                                </div>
+                                <div class="container" v-if="deleteError" style="color: red;">
+                                    <h2>{{ deleteMessage }}</h2>
+                                </div>
+                            </form>
+                        </validation-observer>
 
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <a class="btn btn-info" target=""
-                                    href="#">Edit</a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -47,21 +72,71 @@
 
 
 <script>
+import { required } from 'vee-validate/dist/rules'
+import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+import axios from 'axios';
+
+
+setInteractionMode('eager')
+
+extend('required', {
+    ...required,
+    message: '{_field_} can not be empty',
+})
 
 export default {
     name: 'ProfileComp',
     components: {
-
+        ValidationProvider,
+        ValidationObserver,
     },
-    data: ()=>({
-    username:'',
-    email: '',
-    role:'',
+    data: () => ({
+        username: '',
+        password: '',
+        email: '',
+        role: '',
+        deleteError: false,
+        deleteMessage: '',
+        editError: false,
+        editMessage: '',
 
     }),
-    mounted(){
-        console.log('mounted')
-        
+    mounted() {
+
+        const jwt = require('jose')
+        const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
+        const decodedjwtToken = jwt.decodeJwt(jwtToken)
+        this.username = decodedjwtToken.username
+        this.email = decodedjwtToken.email
+        this.role = decodedjwtToken.role[0]
+    },
+    methods: {
+
+        async deleteAcc() {
+            const userName = this.username
+            const passWord = this.password
+            console.log(userName, passWord)
+            await axios.delete('http://localhost:8080/api/auth/delete', {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    username: userName,
+                    password: passWord
+                }
+            }).then(() => {
+                document.cookie = "access_token=";
+                // this.home();
+
+            }).catch((res) => {
+                this.deleteError = true,
+                    this.deleteMessage = res.response.data.message
+
+            })
+        },
+        home() {
+            document.location.href = "http://localhost:8090/";
+        },
     }
 }
 </script>

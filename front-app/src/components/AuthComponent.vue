@@ -29,14 +29,14 @@
                     clear
                 </v-btn>
             </form>
-            <div class="success container" v-if="savingSuccessful">
-                <h1>{{errorMessages}}</h1>
+            <div class="container" v-if="savingSuccessful" style="color: green;">
+                <h1>{{ errorMessages }}</h1>
                 <v-btn @click="home">
                     Return home
                 </v-btn>
             </div>
-            <div class="error container" v-if="errorInRegister">
-                <h1>{{errorMessages}}</h1>
+            <div class="container" v-if="errorInRegister" style="color: green;">
+                <h1>{{ errorMessages }}</h1>
                 <v-btn @click="home">
                     Return home
                 </v-btn>
@@ -49,6 +49,7 @@
 <script>
 import { required, digits, email, max, regex } from 'vee-validate/dist/rules'
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+import axios from 'axios'
 
 setInteractionMode('eager')
 
@@ -98,7 +99,7 @@ export default {
         ],
         savingSuccessful: false,
         errorInRegister: false,
-        errorMessages:'',
+        errorMessages: '',
     }),
 
     methods: {
@@ -106,36 +107,58 @@ export default {
             const { username, password, email, select } = this;
             const role = []
             role.push(select)
+            await axios.post('http://localhost:8080/api/auth/signup', {
+                username: username,
+                password: password,
+                email: email,
+                role: role
+            }).then((res) => {
+                    this.errorMessages = res.data['message'];
+                    this.savingSuccessful = true;
 
-            const res = await fetch(
-                "http://localhost:8080/api/auth/signup",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        username,
-                        password,
-                        email,
-                        role,
+            }).catch((res) => {
+                this.errorMessages = res.response.data['message']
+                this.errorInRegister = true
 
-                    })
-                }
-            );
-            const data = await res.json();
-            if (data['message'] == 'User was registered successfully!') {
-                this.errorMessages = data['message'];
-                this.savingSuccessful = true;
-                this.errorInRegister = false;
-            } else {
-                this.errorMessages = data['message'];
-                this.errorInRegister = true;
-                this.savingSuccessful = false;
-                this.clear();
 
-            }
+            })
         },
+        // async login() {
+        //     const { username, password, email, select } = this;
+        //     const role = []
+        //     role.push(select)
+
+        //     const res = await fetch(
+        //         "http://localhost:8080/api/auth/signup",
+        //         {
+        //             method: "POST",
+        //             headers: {
+        //                 "Content-Type": "application/json"
+        //             },
+        //             body: JSON.stringify({
+        //                 username,
+        //                 password,
+        //                 email,
+        //                 role,
+
+        //             })
+        //         }
+        //     );
+        //     const data = await res.json();
+        //     if (data['message'] == 'User was registered successfully!') {
+        //         this.errorMessages = data['message'];
+        //         this.savingSuccessful = true;
+        //         this.errorInRegister = false;
+        //     } else {
+        //         this.errorMessages = data['message'];
+        //         this.errorInRegister = true;
+        //         this.savingSuccessful = false;
+        //         this.clear();
+
+        //     }
+
+        // },
+
         clear() {
             this.username = ''
             this.password = ''
