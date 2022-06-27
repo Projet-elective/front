@@ -38,11 +38,6 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <validation-provider v-slot="{ errors }" name="username" rules="required">
-                                            <v-text-field v-model="username" :error-messages="errors" label="username"
-                                                required :disabled="true">
-                                            </v-text-field>
-                                        </validation-provider>
                                         <validation-provider v-slot="{ errors }" name="password" rules="required">
                                             <v-text-field v-model="password" :error-messages="errors" label="Password"
                                                 type='password' required>
@@ -113,20 +108,19 @@ export default {
     methods: {
 
         async deleteAcc() {
-            const userName = this.username
             const passWord = this.password
-            console.log(userName, passWord)
+            console.log(passWord)
             await axios.delete('http://localhost:8080/api/auth/delete', {
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 data: {
-                    username: userName,
+                    username: this.username,
                     password: passWord
                 }
             }).then(() => {
                 document.cookie = "access_token=";
-                // this.home();
+                this.home();
 
             }).catch((res) => {
                 this.deleteError = true,
