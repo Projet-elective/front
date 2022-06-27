@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AuthView from '../views/AuthView.vue'
 import LoginView from '../views/LoginView.vue'
+import StatView from '../views/StatView.vue'
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,11 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginView
+  },
+  {
+    path: '/stat',
+    name: 'stat',
+    component: StatView
   },
   {
     path: '/about',
