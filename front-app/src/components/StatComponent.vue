@@ -1,47 +1,50 @@
 <template>
    <v-container>
-        <template --v-if="this.tokenRole == 'COMMERCIAL'">
-            <h1 style="text-align: center;">Statistique commercials</h1>
-            <p>Commande de la semaine</p>
-            <ul v-for="week in weeks" :key="week">
-                <li>{{week}}</li>   
-            </ul>
-        </template>
-            <v-spacer></v-spacer>
+        <template v-if="this.tokenRole == 'COMMERCIAL'">
+            <template>
+                <h1 style="text-align: center;">Statistique commercials</h1>
+                <p>Commande de la semaine</p>
+                <ul v-for="week in weeks" :key="week">
+                    <li>{{week}}</li>   
+                </ul>
+            </template>
+                <v-spacer></v-spacer>
+            <template>
+                <p>Commande du mois</p>
+                <ul v-for="month in months" :key="month">
+                    <li>{{month}}</li>   
+                </ul>
+            </template>
+                <v-spacer></v-spacer>
+            <template>
+                <p>Commande de l'année</p>
+                <ul v-for="year in years" :key="year">
+                    <li>{{year}} </li>   
+                </ul>
+            </template>
         <template>
-            <p>Commande du mois</p>
-            <ul v-for="month in months" :key="month">
-                <li>{{month}}</li>   
-            </ul>
         </template>
-            <v-spacer></v-spacer>
-        <template>
-            <p>Commande de l'année</p>
-            <ul v-for="year in years" :key="year">
-                <li>{{year}} </li>   
-            </ul>
-        </template>
-
-         <template --v-if="this.tokenRole == 'RESTAURANT'">
-            <h1 style="text-align: center;">Statistique restaurant</h1>
-            <p>Commande de la semaine</p>
-            <ul v-for="week in weeks" :key="week">
-                <li>{{week}}</li>   
-            </ul>
-        </template>
-            <v-spacer></v-spacer>
-        <template>
-            <p>Commande du mois</p>
-            <ul v-for="month in months" :key="month">
-                <li>{{month}}</li>   
-            </ul>
-        </template>
-            <v-spacer></v-spacer>
-        <template>
-            <p>Commande de l'année</p>
-            <ul v-for="year in years" :key="year">
-                <li>{{year}} </li>   
-            </ul>
+            <template v-if="this.tokenRole == 'RESTAURANT'">
+                <h1 style="text-align: center;">Statistique restaurant</h1>
+                <p>Commande de la semaine</p>
+                <ul v-for="week in weeks" :key="week">
+                    <li>{{week}}</li>   
+                </ul>
+            </template>
+                <v-spacer></v-spacer>
+            <template>
+                <p>Commande du mois</p>
+                <ul v-for="month in months" :key="month">
+                    <li>{{month}}</li>   
+                </ul>
+            </template>
+                <v-spacer></v-spacer>
+            <template>
+                <p>Commande de l'année</p>
+                <ul v-for="year in years" :key="year">
+                    <li>{{year}} </li>   
+                </ul>
+            </template>
         </template>
    </v-container> 
 </template>
@@ -102,13 +105,13 @@ export default {
             .catch(e => this.error = [{ title: "Error de chargement",e }]);
         },
     },
-    // mounted() {
-    // const jwt = require('jose')
-    // const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
-    // const decodedjwtToken = jwt.decodeJwt(jwtToken)
-    // this.tokenUsername = decodedjwtToken.username
-    // this.tokenRole = decodedjwtToken.role[0]
-    //},
+    mounted() {
+    const jwt = require('jose')
+    const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
+    const decodedjwtToken = jwt.decodeJwt(jwtToken)
+    this.tokenUsername = decodedjwtToken.username
+    this.tokenRole = decodedjwtToken.role[0]
+    },
 }
 </script>
 
