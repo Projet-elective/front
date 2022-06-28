@@ -1,10 +1,18 @@
 import Vue from "vue";
 import AuthComp from "./AuthComponent.vue"
 import LoginComp from "./LoginComponent.vue"
+import FooterComp from "./FooterComp.vue"
+import HeaderComp from "./HeaderComp.vue"
+import ProfilComp from "./ProfilComp.vue"
+import DevComp from "./DevComp.vue"
 
 const Components ={
     AuthComp,
-    LoginComp
+    LoginComp,
+    FooterComp,
+    HeaderComp,
+    ProfilComp,
+    DevComp
 };
 
 Object.keys(Components).forEach(name => {
@@ -13,5 +21,3 @@ Object.keys(Components).forEach(name => {
 
 export default Components;
 
-// export { default as AuthComp } from './components/AuthComponent.vue';
-// export { default as LoginComp } from './components/LoginComponent.vue';
