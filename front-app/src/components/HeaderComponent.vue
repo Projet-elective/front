@@ -10,7 +10,7 @@
 
       <v-spacer></v-spacer>
       <ul class="navigation-links">
-        <template v-if="user && user.role === 'client'">
+        <template v-if="this.tokenRole == 'CLIENT'">
           <li>
             <v-btn text :to="{ name: 'restaurant' }">
               <div class="d-flex flex-column-reverse d-lg-block">
@@ -27,9 +27,17 @@
               </div>
             </v-btn>
           </li>
+          <li>
+            <v-btn text :to="{ name: 'profile' }">
+              <div class="d-flex flex-column-reverse d-lg-block">
+                <span class="mr-2">profile</span>
+                <v-icon>mdi-account</v-icon>
+              </div>
+            </v-btn>
+          </li>
         </template>
 
-        <template v-if="user && user.role === 'tech'">
+        <template v-if="this.tokenRole == 'TECH'">
           <li>
             <v-btn text :to="{ name: 'logs' }">
               <div class="d-flex flex-column-reverse d-lg-block">
@@ -37,9 +45,17 @@
               </div>
             </v-btn>
           </li>
+          <li>
+            <v-btn text :to="{ name: 'profile' }">
+              <div class="d-flex flex-column-reverse d-lg-block">
+                <span class="mr-2">profile</span>
+                <v-icon>mdi-account</v-icon>
+              </div>
+            </v-btn>
+          </li>
         </template>
 
-        <template v-if="user && user.role === 'restaurant'">
+        <template v-if="this.tokenRole == 'RESTAURANT'">
           <li>
             <v-btn text :to="{ name: 'logs' }">
               <div class="d-flex flex-column-reverse d-lg-block">
@@ -72,9 +88,17 @@
               </div>
             </v-btn>
           </li>
+          <li>
+            <v-btn text :to="{ name: 'profile' }">
+              <div class="d-flex flex-column-reverse d-lg-block">
+                <span class="mr-2">profile</span>
+                <v-icon>mdi-account</v-icon>
+              </div>
+            </v-btn>
+          </li>
         </template>
 
-        <template v-if="user && user.role === 'delivery'">
+        <template v-if="this.tokenRole == 'DELIVERY'">
           <li>
             <v-btn text :to="{ name: 'delivery' }">
               <div class="d-flex flex-column-reverse d-lg-block">
@@ -83,9 +107,17 @@
               </div>
             </v-btn>
           </li>
+          <li>
+            <v-btn text :to="{ name: 'profile' }">
+              <div class="d-flex flex-column-reverse d-lg-block">
+                <span class="mr-2">profile</span>
+                <v-icon>mdi-account</v-icon>
+              </div>
+            </v-btn>
+          </li>
         </template>
 
-        <template v-if="user && user.role === 'dev'">
+        <template v-if="this.tokenRole == 'DEV'">
           <li>
             <v-btn text :to="{ name: 'composant' }">
               <div class="d-flex flex-column-reverse d-lg-block">
@@ -94,9 +126,17 @@
               </div>
             </v-btn>
           </li>
+          <li>
+            <v-btn text :to="{ name: 'profile' }">
+              <div class="d-flex flex-column-reverse d-lg-block">
+                <span class="mr-2">profile</span>
+                <v-icon>mdi-account</v-icon>
+              </div>
+            </v-btn>
+          </li>
         </template>
 
-        <template v-if="user && user.role === 'commercial'">
+        <template v-if="this.tokenRole == 'COMMERCIAL'">
           <li>
             <v-btn text :to="{ name: 'account' }">
               <div class="d-flex flex-column-reverse d-lg-block">
@@ -113,9 +153,17 @@
               </div>
             </v-btn>
           </li>
+          <li>
+            <v-btn text :to="{ name: 'profile' }">
+              <div class="d-flex flex-column-reverse d-lg-block">
+                <span class="mr-2">profile</span>
+                <v-icon>mdi-account</v-icon>
+              </div>
+            </v-btn>
+          </li>
         </template>
 
-        <template v-if="!login">
+        <template v-if="this.tokenRole == ''">
           <li>
             <v-btn text :to="{ name: 'restaurant' }">
               <div class="d-flex flex-column-reverse d-lg-block">
@@ -133,21 +181,21 @@
 
         </template>
 
-        <template v-else>
+        <!-- <template v-else>
           <li>
-            <v-btn text class="font-weight-bold" :to="{ name: 'account' }">
+            <v-btn text class="font-weight-bold" :to="{ name: 'profile' }">
               <span class="mr-2">Compte</span>
               <v-icon>mdi-account</v-icon>
             </v-btn>
           </li>
-          <!--Logout à faire-->
+
           <li>
             <v-btn text class="font-weight-bold" :to="{ name: 'unlogin' }">
               <span class="mr-2"> Se deconnecter</span>
               <v-icon>mdi-logout</v-icon>
             </v-btn>
           </li>
-        </template>
+        </template> -->
       </ul>
     </v-app-bar>
   </v-container>
@@ -159,9 +207,19 @@ export default {
   components: {
 
   },
+  mounted() {
+
+    const jwt = require('jose')
+    const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
+    const decodedjwtToken = jwt.decodeJwt(jwtToken)
+    this.tokenUsername = decodedjwtToken.username
+    this.tokenRole = decodedjwtToken.role[0]
+  },
   data() {
     return {
-      loginDialog: false
+      loginDialog: false,
+      tokenRole: '',
+      tokenUsername: '',
     }
   },
 

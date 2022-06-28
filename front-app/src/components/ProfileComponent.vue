@@ -315,7 +315,6 @@ export default {
                 document.cookie = "access_token=";
                 this.successTrigger = true
                 this.successMessage = 'Password updated successfully!'
-                // this.login();
 
             }).catch((res) => {
                 this.editError = true,
@@ -338,7 +337,7 @@ export default {
         },
 
         home() {
-            document.location.href = "http://localhost:8090/home";
+            document.location.href = "http://localhost:8090/";
         },
         login() {
             document.location.href = "http://localhost:8090/login";
