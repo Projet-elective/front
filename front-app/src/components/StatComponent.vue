@@ -1,51 +1,114 @@
 <template>
    <v-container>
-        <h1 style="text-align: center;">Statistique page</h1>
-        <ul v-for="order in orders" :key="order">
-            <li>{{order}} </li>
-        </ul>
+        <template --v-if="this.tokenRole == 'COMMERCIAL'">
+            <h1 style="text-align: center;">Statistique commercials</h1>
+            <p>Commande de la semaine</p>
+            <ul v-for="week in weeks" :key="week">
+                <li>{{week}}</li>   
+            </ul>
+        </template>
+            <v-spacer></v-spacer>
+        <template>
+            <p>Commande du mois</p>
+            <ul v-for="month in months" :key="month">
+                <li>{{month}}</li>   
+            </ul>
+        </template>
+            <v-spacer></v-spacer>
+        <template>
+            <p>Commande de l'année</p>
+            <ul v-for="year in years" :key="year">
+                <li>{{year}} </li>   
+            </ul>
+        </template>
+
+         <template --v-if="this.tokenRole == 'RESTAURANT'">
+            <h1 style="text-align: center;">Statistique restaurant</h1>
+            <p>Commande de la semaine</p>
+            <ul v-for="week in weeks" :key="week">
+                <li>{{week}}</li>   
+            </ul>
+        </template>
+            <v-spacer></v-spacer>
+        <template>
+            <p>Commande du mois</p>
+            <ul v-for="month in months" :key="month">
+                <li>{{month}}</li>   
+            </ul>
+        </template>
+            <v-spacer></v-spacer>
+        <template>
+            <p>Commande de l'année</p>
+            <ul v-for="year in years" :key="year">
+                <li>{{year}} </li>   
+            </ul>
+        </template>
    </v-container> 
 </template>
 
 <script>
 import axios from 'axios'
 
-
 export default {
     name: 'StatComp',
      components: {
         
     },
-    data: () => ({
-        orders: [],
-    }),
-
+    data() {
+        return{
+            weeks: [],
+            months: [],
+            years: [],
+        };
+    },
+    created() {
+        this.getWeekCommercial();
+        this.getMonthCommercial();
+        this.getYearCommercial();
+        this.getWeekRestaurant();
+        this.getMonthRestaurant();
+        this.getYearRestaurant();
+    },
     methods: {
-        async getmonth() {
-            const passWord = this.password
-            console.log(passWord)
-            await axios.get('http://localhost:3000/api/restaurants/month/62ac6d2d008f56644b5d9d06', {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: {
-                    username: this.username,
-                    password: passWord
-                }
-            }).then(() => {
-                document.cookie = "access_token=";
-                this.home();
-            }).catch((res) => {
-                this.deleteError = true,
-                    this.deleteMessage = res.response.data.message
-            })
+        getWeekCommercial(){
+            axios.get(`/stats/api/commercials/week`, {mode: 'no-cors'})
+            .then(response => this.weeks = response.data)
+            .catch(e => this.error = [{ title: "Error de chargement",e }]);
         },
-        home() {
-            document.location.href = "http://localhost:8090/";
+        getMonthCommercial(){
+            axios.get(`/stats/api/commercials/month`, {mode: 'no-cors'})
+            .then(response => this.months = response.data)
+            .catch(e => this.error = [{ title: "Error de chargement",e }]);
         },
-    }
-    
-}
+        getYearCommercial(){
+            axios.get(`/stats/api/commercials/year`, {mode: 'no-cors'})
+            .then(response => this.years = response.data)
+            .catch(e => this.error = [{ title: "Error de chargement",e }]);
+        },
 
+        getWeekRestaurant(){
+            axios.get(`/stats/api/restaurants/week`, {mode: 'no-cors'})
+            .then(response => this.weeks = response.data)
+            .catch(e => this.error = [{ title: "Error de chargement",e }]);
+        },
+        getMonthRestaurant(){
+            axios.get(`/stats/api/restaurants/month`, {mode: 'no-cors'})
+            .then(response => this.months = response.data)
+            .catch(e => this.error = [{ title: "Error de chargement",e }]);
+        },
+        getYearRestaurant(){
+            axios.get(`/stats/api/restaurants/year`, {mode: 'no-cors'})
+            .then(response => this.years = response.data)
+            .catch(e => this.error = [{ title: "Error de chargement",e }]);
+        },
+    },
+    // mounted() {
+    // const jwt = require('jose')
+    // const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
+    // const decodedjwtToken = jwt.decodeJwt(jwtToken)
+    // this.tokenUsername = decodedjwtToken.username
+    // this.tokenRole = decodedjwtToken.role[0]
+    //},
+}
 </script>
 
