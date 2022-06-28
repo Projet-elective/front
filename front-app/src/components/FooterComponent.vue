@@ -27,7 +27,7 @@ export default {
       'Accueil',
       'Mention légales',
       'Github',
-      'Contacter nous',
+      'Contactez nous',
     ],
   }),
 
