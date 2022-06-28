@@ -4,7 +4,7 @@
 
       <div class="d-flex align-center">
         <router-link to="/">
-          <v-img alt="Logo" class="shrink mr-2" contain src="../assets/logo.png" width=25% />
+          <v-img alt="Logo" class="shrink mr-2" contain src="../assets/exeat.png" width=10% />
         </router-link>
       </div>
 
