@@ -2,9 +2,9 @@
   <v-container>
     <v-app-bar app color="primary lighten-3">
 
-      <div class="d-flex align-center">
+      <div class="d-flex align-center" style="width:150px;">
         <router-link to="/">
-          <v-img alt="Logo" class="shrink mr-2" contain src="../assets/exeat.png" width=10% />
+          <v-img alt="Logo" class="shrink mr-2" contain src="../assets/logo_header.png" width=10% />
         </router-link>
       </div>
 

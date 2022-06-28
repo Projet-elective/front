@@ -58,7 +58,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <validation-provider v-slot="{ errors }" name="accPassword"
+                                            <validation-provider v-slot="{ errors }" name="Password"
                                                 rules="required">
                                                 <v-text-field v-model="accPassword" :error-messages="errors"
                                                     label="Password" type='password' required>
@@ -83,8 +83,15 @@
 
                         </div>
                     </div>
+                    <div class="col-sm-2">
+                        <v-btn @click="disconnectUser">
+                            Disconnect
+                        </v-btn>
+
+                    </div>
                 </div>
             </v-card>
+
         </div>
         <validation-observer ref="observer" v-slot="{ invalid }" v-if="editUsername">
             <form @submit.prevent="patchUsername" style="margin-top: 5rem;" v-if="!successTrigger">
@@ -341,6 +348,10 @@ export default {
         },
         login() {
             document.location.href = "http://localhost:8090/login";
+        },
+        disconnectUser() {
+            document.cookie = "access_token=";
+            this.home();
         }
     }
 }
