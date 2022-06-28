@@ -35,7 +35,7 @@
       return {
         items: [
           {
-            src: require('@/assets/gros-bao.png '),
+            src: require('@/assets/gros-bao.png'),
           },
           {
             src: require('@/assets/1745.png'),
