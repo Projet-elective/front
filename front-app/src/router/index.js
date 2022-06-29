@@ -4,6 +4,8 @@ import HomeView from '../views/HomeView.vue'
 import AuthView from '../views/AuthView.vue'
 import LoginView from '../views/LoginView.vue'
 import ProfileView from '../views/ProfileView.vue'
+import TechServiceView from '../views/TechServiceView.vue'
+
 
 Vue.use(VueRouter)
 
@@ -28,6 +30,12 @@ const routes = [
     name: 'profile',
     component: ProfileView
   },
+  {
+    path: '/techService',
+    name: 'techService',
+    component: TechServiceView
+  }
+    
 ]
 
 const router = new VueRouter({
