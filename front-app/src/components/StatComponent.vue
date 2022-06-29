@@ -64,6 +64,12 @@ export default {
             years: [],
         };
     },
+    mounted() {
+        const jwt = require('jose')
+        const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
+        const decodedjwtToken = jwt.decodeJwt(jwtToken)
+        this.tokenId = decodedjwtToken.id
+    },
     created() {
         this.getWeekCommercial();
         this.getMonthCommercial();
@@ -90,28 +96,21 @@ export default {
         },
 
         getWeekRestaurant(){
-            axios.get(`/stats/api/restaurants/week`, {mode: 'no-cors'})
+            axios.get(`/stats/api/restaurants/week/${this.tokenId}`, {mode: 'no-cors'})
             .then(response => this.weeks = response.data)
             .catch(e => this.error = [{ title: "Error de chargement",e }]);
         },
         getMonthRestaurant(){
-            axios.get(`/stats/api/restaurants/month`, {mode: 'no-cors'})
+            axios.get(`/stats/api/restaurants/month/${this.tokenId}`, {mode: 'no-cors'})
             .then(response => this.months = response.data)
             .catch(e => this.error = [{ title: "Error de chargement",e }]);
         },
         getYearRestaurant(){
-            axios.get(`/stats/api/restaurants/year`, {mode: 'no-cors'})
+            axios.get(`/stats/api/restaurants/year/${this.tokenId}`, {mode: 'no-cors'})
             .then(response => this.years = response.data)
             .catch(e => this.error = [{ title: "Error de chargement",e }]);
         },
-    },
-    mounted() {
-    const jwt = require('jose')
-    const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
-    const decodedjwtToken = jwt.decodeJwt(jwtToken)
-    this.tokenUsername = decodedjwtToken.username
-    this.tokenRole = decodedjwtToken.role[0]
-    },
+    }
 }
 </script>
 
