@@ -8,6 +8,9 @@
                   <ul v-for="product in products" :key="product">
                     <li v-if="restaurant._id == product.idRestaurant">{{product.name}}</li>
                   </ul>
+                  <ul v-for="menu in menus" :key="menu">
+                    <li v-if="restaurant._id == menu.idRestaurant">{{menu.name}}</li>
+                  </ul>
               </li>   
           </ul>
       </template>
@@ -24,6 +27,7 @@ import axios from 'axios'
      return{
         restaurants:[],
         products:[],
+        menu:[],
       }
     },
     props: {restaurantId: String},
@@ -42,6 +46,12 @@ import axios from 'axios'
         getAllProduct(){
             axios.get(`/restaurant/api/products/`, {mode: 'no-cors'})
             .then(response => this.products = response.data)
+            .catch(e => this.error = [{ title: "Error de chargement",e }]);
+        },  
+
+        getAllMenu(){
+            axios.get(`/restaurant/api/menus/`, {mode: 'no-cors'})
+            .then(response => this.menus = response.data)
             .catch(e => this.error = [{ title: "Error de chargement",e }]);
         },  
     },
