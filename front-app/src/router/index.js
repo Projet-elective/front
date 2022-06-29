@@ -40,6 +40,7 @@ const routes = [
     name: 'restaurant',
     component: RestauView
   },
+ 
 ]
 
 const router = new VueRouter({
