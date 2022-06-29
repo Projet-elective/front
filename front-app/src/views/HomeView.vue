@@ -6,10 +6,29 @@
   margin-right: auto;
   width: 60%;
 }
+.one h1 {
+  text-align: center;
+  text-transform: uppercase;
+  padding-bottom: 5px;
+}
+h1 {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  font-family: "Raleway", sans-serif;
+  font-weight: 300;
+  font-size: 60px;
+  color: #000000;
+  -webkit-transition: all 0.4s ease 0s;
+  -o-transition: all 0.4s ease 0s;
+  transition: all 0.4s ease 0s;
+}
 </style>
 
 
 <template>
+<div class="one">
+  <h1>Welcome on Exeat ! 
 <v-carousel
   class="carrousel"
   cycle
@@ -24,6 +43,8 @@
   
   ></v-carousel-item>
 </v-carousel>
+</h1>
+</div>
 </template>
 
 <script>
