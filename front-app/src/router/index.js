@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import AuthView from '../views/AuthView.vue'
 import LoginView from '../views/LoginView.vue'
 import StatView from '../views/StatView.vue'
+import CGVView from '../views/CGVView.vue'
 
 Vue.use(VueRouter)
 
@@ -35,6 +36,11 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+  },
+  {
+    path: '/cgv',
+    name: 'cgv',
+    component: CGVView
   }
 ]
 
