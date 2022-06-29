@@ -1,37 +1,20 @@
 <template>
     <v-container>
-    <!--<template v-if="this.tokenRole == 'TECH'">-->
-        <template>
-            <h1 style="text-align: center;">Statistique commercials</h1>
-            {{LoginComp}}
+    <template v-if="this.tokenRole == 'TECH'">
+            <h1 style="text-align: center;">Lien pour Développeur </h1>
+            <p>Voici ci-dessous le github du projet :</p>
+               <a v-bind:href="'https://github.com/Projet-elective'"> Projet elective </a>
         </template>
     </v-container>
 </template>
 
 <script>
-import axios from 'axios';
-//import LoginComp from '/LoginComponent.vue'
 
 export default {
   name: 'DevComp',
   components: {
-   //LoginComp
-
+ 
   },
-  data: () => ({
-    logincontent: [LoginComp],
-  }),
-  created() {
-        this.getWeekCommercial();
-    },
-    methods: {
-        getWeekCommercial(){
-            axios.get(`/login`, {mode: 'no-cors'})
-            .then(response => this.logincontent = response.data)
-            .catch(e => this.error = [{ title: "Error de chargement",e }]);
-        },
-       
-    },
     mounted() {
         const jwt = require('jose')
         const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
