@@ -10,9 +10,10 @@
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">Username</h6>
                                 </div>
-                                <div class="col-sm-7 text-secondary" v-if="getAll">
-                                    {{ getAll()}}
+                                <div class="col-sm-7 text-secondary" v-for="test in tests" :key="test.username" >
+                                    {{ test.username}}
                                 </div>
+                                
                                 <div class="col-sm-2">
                                     <v-btn @click="usernameEdit">
                                         edit username
@@ -50,6 +51,22 @@
 
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <v-btn @click="banEdit">
+                                        edit ban
+                                    </v-btn>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <v-btn @click="deBanEdit">
+                                        edit deban
+                                    </v-btn>
+
+                                </div>
+                            </div>
                             <validation-observer ref="observer" v-slot="{ invalid }">
                                 <form @submit.prevent="deleteAcc" style="margin-top: 5rem;">
                                     <div>
@@ -63,6 +80,10 @@
                                                     label="Password" type='password' required>
                                                 </v-text-field>
                                             </validation-provider>
+                                            <validation-provider v-slot="{ errors }" name="username" rules="required">
+                                            <v-text-field v-model="form.username" :error-messages="errors" label="Username" required>
+                                            </v-text-field>
+                                        </validation-provider>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -104,6 +125,12 @@
                             </v-text-field>
                         </validation-provider>
                     </div>
+                    <div class="col-sm-6">
+                        <validation-provider v-slot="{ errors }" name="newusername" rules="required">
+                            <v-text-field v-model="form.newusername" :error-messages="errors" label="New Username" required>
+                            </v-text-field>
+                        </validation-provider>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
@@ -126,6 +153,12 @@
                             </v-text-field>
                         </validation-provider>
                     </div>
+                    <div class="col-sm-6">
+                        <validation-provider v-slot="{ errors }" name="username" rules="required">
+                            <v-text-field v-model="form.username" :error-messages="errors" label="Username" required>
+                            </v-text-field>
+                        </validation-provider>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
@@ -143,6 +176,12 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-6">
+                        <validation-provider v-slot="{ errors }" name="username" rules="required">
+                            <v-text-field v-model="form.username" :error-messages="errors" label="Username" required>
+                            </v-text-field>
+                        </validation-provider>
+                    </div>
+                    <div class="col-sm-6">
                         <validation-provider v-slot="{ errors }" name="password" rules="required">
                             <v-text-field v-model="form.password" :error-messages="errors" label="password"
                                 type='password' required>
@@ -159,14 +198,56 @@
                 </div>
             </form>
         </validation-observer>
+        <validation-observer ref="observer" v-slot="{ invalid }" v-if="editBan">
+            <form @submit.prevent="patchBan" style="margin-top: 5rem;" v-if="!successTrigger">
+                <div>
+                    <h3>Enter your ban username</h3>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <validation-provider v-slot="{ errors }" name="username" rules="required">
+                            <v-text-field v-model="form.username" :error-messages="errors" label="Username" required>
+                            </v-text-field>
+                        </validation-provider>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <v-btn class="mr-4" type="submit" :disabled="invalid">
+                            Save
+                        </v-btn>
+                    </div>
+                </div>
+            </form>
+        </validation-observer>
+        <validation-observer ref="observer" v-slot="{ invalid }" v-if="editDeBan">
+            <form @submit.prevent="patchDeBan" style="margin-top: 5rem;" v-if="!successTrigger">
+                <div>
+                    <h3>Enter your deban username</h3>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <validation-provider v-slot="{ errors }" name="username" rules="required">
+                            <v-text-field v-model="form.username" :error-messages="errors" label="Username" required>
+                            </v-text-field>
+                        </validation-provider>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <v-btn class="mr-4" type="submit" :disabled="invalid">
+                            Save
+                        </v-btn>
+                    </div>
+                </div>
+            </form>
+        </validation-observer>
+
         <div class="container" v-if="editError" style="color: red;">
             <h2>{{ editMessage }}</h2>
         </div>
         <div class="container" v-if="successTrigger" style="color: green;">
             <h2>{{ successMessage }}</h2>
-            <v-btn @click="login">
-                Login
-            </v-btn>
         </div>
     </v-container>
 </template>
@@ -204,6 +285,9 @@ export default {
             username: '',
             password: '',
             email: '',
+            newusername: '',
+            newpassword: '',
+            newemail: '',
             role: '',
 
             accPassword: '',
@@ -217,8 +301,11 @@ export default {
             editUsername: false,
             editPassword: false,
             editEmail: false,
+            editBan: false,
+            editDeBan: false,
             successMessage: '',
             successTrigger: false,
+            tests: undefined
         }
 
 
@@ -232,19 +319,13 @@ export default {
         this.tokenUsername = decodedjwtToken.username
         this.tokenEmail = decodedjwtToken.email
         this.tokenRole = decodedjwtToken.role[0]
+        this.getAll()
     },
     methods: {
 
         async getAll() {
-            try{
-                const test = await axios.get('http://localhost:8080/api/auth/getAll')       
-                    console.log(test)
-                    res.send(test)
-            }catch(error) {
-                this.getError = true,
-                    this.getMessage = res.response.data.message
-
-            }
+                const test = await axios.get('http://localhost:8080/api/auth/getAll')  
+                this.tests = test.data   
         },
         async deleteAcc() {
             const password = this.accPassword
@@ -253,24 +334,21 @@ export default {
                     'Content-Type': 'application/json'
                 },
                 data: {
-                    username: this.tokenUsername,
+                    username: this.form.username,
                     password: password
                 }
             }).then(() => {
-                document.cookie = "access_token=";
-                this.home();
-
+                this.home()
             }).catch((res) => {
                 this.deleteError = true,
                     this.deleteMessage = res.response.data.message
 
             })
         },
-        async patchUsername() {
-            await axios.patch('http://localhost:8080/api/auth/patchUser', {
+        async patchBan() {
+            await axios.patch('http://localhost:8080/api/auth/patchForBan', {
 
-                username: this.tokenUsername,
-                newusername: this.form.username,
+                username: this.form.username,
             }, {
 
                 headers: {
@@ -279,10 +357,56 @@ export default {
             }
 
             ).then(() => {
-                document.cookie = "access_token=";
+                this.successTrigger = true
+                this.successMessage = 'Ban updated successfully!'
+                this.home()
+
+            }).catch((res) => {
+                this.editError = true,
+                    this.editMessage = res.response.data.message
+
+            })
+
+        },
+        async patchDeBan() {
+            await axios.patch('http://localhost:8080/api/auth/patchForDeBan', {
+
+                username: this.form.username,
+            }, {
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }
+
+            ).then(() => {
+                this.successTrigger = true
+                this.successMessage = 'DeBan updated successfully!'
+                this.home()
+
+            }).catch((res) => {
+                this.editError = true,
+                    this.editMessage = res.response.data.message
+
+            })
+
+        },
+        async patchUsername() {
+            await axios.patch('http://localhost:8080/api/auth/patchUser', {
+
+                username: this.form.username,
+                newusername: this.form.newusername,
+            }, {
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }
+
+            ).then(() => {
                 this.successTrigger = true
                 this.successMessage = 'Username updated successfully!'
-                // this.login();
+                this.home()
 
             }).catch((res) => {
                 this.editError = true,
@@ -294,7 +418,7 @@ export default {
         async patchEmail() {
             await axios.patch('http://localhost:8080/api/auth/patchEmail', {
 
-                username: this.tokenUsername,
+                username: this.form.username,
                 newemail: this.form.email,
             }, {
 
@@ -304,10 +428,9 @@ export default {
             }
 
             ).then(() => {
-                document.cookie = "access_token=";
                 this.successTrigger = true
                 this.successMessage = 'Email updated successfully!'
-                // this.login();
+                this.home()
 
             }).catch((res) => {
                 this.editError = true,
@@ -319,7 +442,7 @@ export default {
         async patchPass() {
             await axios.patch('http://localhost:8080/api/auth/patchPassword', {
 
-                username: this.tokenUsername,
+                username: this.form.username,
                 newpassword: this.form.password,
             }, {
 
@@ -329,9 +452,9 @@ export default {
             }
 
             ).then(() => {
-                document.cookie = "access_token=";
                 this.successTrigger = true
                 this.successMessage = 'Password updated successfully!'
+                this.home()
 
             }).catch((res) => {
                 this.editError = true,
@@ -344,6 +467,14 @@ export default {
             this.editTrigger = true
             this.editUsername = true
         },
+        banEdit() {
+            this.editTrigger = true
+            this.editBan = true
+        },
+        deBanEdit() {
+            this.editTrigger = true
+            this.editDeBan = true
+        },
         passwordEdit() {
             this.editTrigger = true
             this.editPassword = true
@@ -352,7 +483,6 @@ export default {
             this.editTrigger = true
             this.editEmail = true
         },
-
         home() {
             document.location.href = "http://localhost:8090/";
         },
