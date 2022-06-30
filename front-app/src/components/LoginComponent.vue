@@ -107,10 +107,10 @@ export default {
             this.$refs.observer.reset()
         },
         home() {
-            document.location.href = "http://localhost:8090/";
+            document.location.href = "/";
         },
         createAccount() {
-            document.location.href = "http://localhost:8090/register";
+            document.location.href = "/register";
         }
     },
 }

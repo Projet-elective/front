@@ -53,7 +53,7 @@ export default {
         async getOrder() {
             console.log(this.tokenJWT)
             console.log(this.tokenId)
-            await axios.get('http://localhost:8091/orders/api/orders/' + this.tokenId, {
+            await axios.get('/orders/api/orders/' + this.tokenId, {
                 headers: {
                     'Authorization': `${this.tokenJWT}`
                 },
@@ -68,7 +68,7 @@ export default {
         async restaurantNotCompletedOrders() {
             console.log(this.tokenJWT)
             console.log(this.tokenId)
-            await axios.get('http://localhost:8091/orders/api/orders/restaurantsNotCompletedOrders/' + this.tokenId, {
+            await axios.get('/orders/api/orders/restaurantsNotCompletedOrders/' + this.tokenId, {
                 headers: {
                     'Authorization': `${this.tokenJWT}`
                 },

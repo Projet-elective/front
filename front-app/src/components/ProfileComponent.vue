@@ -238,7 +238,7 @@ export default {
 
         async deleteAcc() {
             const password = this.accPassword
-            await axios.delete('http://localhost:8080/api/auth/delete', {
+            await axios.delete('/auth/api/auth/delete', {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -257,7 +257,7 @@ export default {
             })
         },
         async patchUsername() {
-            await axios.patch('http://localhost:8080/api/auth/patchUser', {
+            await axios.patch('/auth/api/auth/patchUser', {
 
                 username: this.tokenUsername,
                 newusername: this.form.username,
@@ -282,7 +282,7 @@ export default {
 
         },
         async patchEmail() {
-            await axios.patch('http://localhost:8080/api/auth/patchEmail', {
+            await axios.patch('/auth/api/auth/patchEmail', {
 
                 username: this.tokenUsername,
                 newemail: this.form.email,
@@ -307,7 +307,7 @@ export default {
 
         },
         async patchPass() {
-            await axios.patch('http://localhost:8080/api/auth/patchPassword', {
+            await axios.patch('/auth/api/auth/patchPassword', {
 
                 username: this.tokenUsername,
                 newpassword: this.form.password,
@@ -344,10 +344,10 @@ export default {
         },
 
         home() {
-            document.location.href = "http://localhost:8090/";
+            document.location.href = "/";
         },
         login() {
-            document.location.href = "http://localhost:8090/login";
+            document.location.href = "/login";
         },
         disconnectUser() {
             document.cookie = "access_token=";

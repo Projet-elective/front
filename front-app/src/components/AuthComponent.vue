@@ -107,7 +107,7 @@ export default {
             const { username, password, email, select } = this;
             const role = []
             role.push(select)
-            await axios.post('http://localhost:8080/api/auth/signup', {
+            await axios.post('/auth/api/auth/signup', {
                 username: username,
                 password: password,
                 email: email,
@@ -134,7 +134,7 @@ export default {
             this.$refs.observer.reset()
         },
         home() {
-            document.location.href = "http://localhost:8090/";
+            document.location.href = "/";
         }
     },
 }
