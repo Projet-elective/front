@@ -5,11 +5,16 @@
           <ul v-for="restaurant in restaurants" :key="restaurant">
               <li>
                 {{restaurant.name}}
+                  <p> Menus disponible : </p>
+                  <ul v-for="menu in menus " :key="menu">
+                  <li>{{menu.name}}</li>
+                    <ul v-for="product in products" :key="product"> 
+                      <li v-if="restaurant._id == menu.idRestaurant && product._id == menu.main">{{product.name}}</li>
+                    </ul>
+                  </ul>
+                  <p> Produit à l'unité : </p>
                   <ul v-for="product in products" :key="product">
                     <li v-if="restaurant._id == product.idRestaurant">{{product.name}}</li>
-                  </ul>
-                  <ul v-for="menu in menus" :key="menu">
-                    <li v-if="restaurant._id == menu.idRestaurant">{{menu.name}}</li>
                   </ul>
               </li>   
           </ul>
@@ -27,13 +32,14 @@ import axios from 'axios'
      return{
         restaurants:[],
         products:[],
-        menu:[],
+        menus:[],
       }
     },
     props: {restaurantId: String},
     created() {
         this.getAllRestaurant();
         this.getAllProduct();
+        this.getAllMenu();
 
     },
     methods: {
