@@ -7,9 +7,13 @@ import StatView from '../views/StatView.vue'
 import CGVView from '../views/CGVView.vue'
 import AboutView from '../views/AboutView.vue'
 import ProfileView from '../views/ProfileView.vue'
+
+import AccountView from '../views/AccountView.vue'
+
 import TechServiceView from '../views/TechServiceView.vue'
 import OrderView from '../views/OrderView.vue'
 import ContactView from '../views/ContactView.vue'
+
 
 
 Vue.use(VueRouter)
@@ -46,12 +50,18 @@ const routes = [
     name: 'cgv',
     component: CGVView
   },
-  { 
+  {
     path: '/profile',
     name: 'profile',
     component: ProfileView
   },
   {
+
+    path: '/account',
+    name: 'account',
+    component: AccountView
+  },
+  { 
     path: '/techService',
     name: 'techService',
     component: TechServiceView
@@ -60,6 +70,7 @@ const routes = [
     path: '/order',
     name: 'order',
     component: OrderView
+
   },
   {
     path: '/contact',

@@ -18,7 +18,7 @@
         <v-btn x-large color="primary" href="http://localhost:8000/api/auth/getAllLastConnected">
             Télécharger
         </v-btn>
-    </div>
+    </div>   
 </template>
 <script>
 export default {

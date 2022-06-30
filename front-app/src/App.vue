@@ -1,9 +1,9 @@
 <template>
   <v-app>
     <header-comp />
-    <v-main>
+
       <router-view />
-    </v-main>
+
     <footer-comp />
   </v-app>
 </template>

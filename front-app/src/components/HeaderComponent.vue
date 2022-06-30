@@ -141,7 +141,7 @@
           <li>
             <v-btn text :to="{ name: 'account' }">
               <div class="d-flex flex-column-reverse d-lg-block">
-                <span class="mr-2">Logs</span>
+                <span class="mr-2">Comptes</span>
                 <v-icon>mdi-clipboard-text-multiple-outline</v-icon>
               </div>
             </v-btn>
@@ -203,18 +203,24 @@
 </template>
 
 <script>
+
 export default {
   name: 'HeaderComp',
   components: {
 
   },
   mounted() {
+    const i = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
+    if(i){
+      const jwt = require('jose')
+      const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
+      console.log(jwtToken)
+      const decodedjwtToken = jwt.decodeJwt(jwtToken)
+      this.tokenUsername = decodedjwtToken.username
+      this.tokenRole = decodedjwtToken.role[0]
+    }
 
-    const jwt = require('jose')
-    const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
-    const decodedjwtToken = jwt.decodeJwt(jwtToken)
-    this.tokenUsername = decodedjwtToken.username
-    this.tokenRole = decodedjwtToken.role[0]
+
   },
   data() {
     return {
