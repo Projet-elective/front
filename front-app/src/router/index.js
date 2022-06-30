@@ -12,6 +12,7 @@ import AccountView from '../views/AccountView.vue'
 
 import TechServiceView from '../views/TechServiceView.vue'
 import OrderView from '../views/OrderView.vue'
+import ContactView from '../views/ContactView.vue'
 
 
 
@@ -59,7 +60,8 @@ const routes = [
     path: '/account',
     name: 'account',
     component: AccountView
-
+  },
+  { 
     path: '/techService',
     name: 'techService',
     component: TechServiceView
@@ -70,6 +72,11 @@ const routes = [
     component: OrderView
 
   },
+  {
+    path: '/contact',
+    name: 'contact',
+    component: ContactView
+  }
 ]
 
 const router = new VueRouter({
