@@ -1,12 +1,117 @@
+<style>
+.container-cart {
+    width: 100%;
+    display: flex;
+    margin-top: 5em;
+    min-height: 600px;
+}
+
+.list-cart {
+    flex: 2;
+    margin-right: 1em;
+}
+
+.list-cart table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.list-cart table tr{
+    border-bottom: 1px solid #ddd;
+}
+.list-cart table td{
+    padding: 15px;
+}
+
+.head-table td {
+    border-bottom: 1px solid rgb(150, 150, 150);
+    font-weight: 500;
+}
+
+.body-table {
+    
+}
+
+.body-table td {
+    border-bottom: 1px solid rgb(150, 150, 150);
+}
+
+.remove-button {
+    padding: 10px 20px;
+    background-color: var(--v-error-base);
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+}
+
+.total-cart {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.container-total-cart {
+    background-color: #efefef;
+    margin-bottom: 1em;
+}
+
+.container-total-cart div {
+    height: 100px;
+    padding: 40px 40px;
+}
+
+.container-total-cart :first-child {
+    border-bottom: 1px solid rgb(150, 150, 150);
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.container-button {
+    align-self: center;
+    width: 100%;
+}
+
+.pay-button {
+    width: 100%;
+    background-color: var(--v-primary-base);
+    color: white;
+    border-radius: 5px;
+    padding: 10px 0;
+    font-size: 20px;
+}
+</style>
 <template>
     <v-container>
-        <div>
-            <h1>Cart</h1>
-            <button @click="$router.push('/delivery')">Payer</button>
-            <ul v-for="cart in carts" :key="cart">
-                <li v-if="!cart =='' "><p>{{ cart.name }}</p><button @click="removeFromCart(cart._id)">Vider le panier</button></li>
-            </ul>
+        <h1>Votre Panier</h1>
+        <div class="container-cart">
+            <div class="list-cart">
+                <table>
+                    <thead class="head-table">
+                        <tr>
+                            <td style="width: 50%">Produit</td>
+                            <td style="width: 30%">Prix (€)</td>
+                            <td style="width: 20%"></td>
+                        </tr>
+                    </thead>
+                    <tbody class="body-table" v-for="cart in carts" :key="cart">
+                        <tr v-if="!cart ==''">
+                            <td>{{ cart.name }}</td>
+                            <td>{{ cart.price }}</td>
+                            <td><button class="remove-button" @click="removeFromCart(cart._id)">Supprimer du panier</button></td>
+                        </tr>
+                    </tbody> 
+                </table>   
+            </div>
+            <div class="total-cart">
+                <div class="container-total-cart">
+                    <div>Commande</div>
+                    <div>Total : </div>
+                </div>
+                
+                <div class="container-button"><button class="pay-button" @click="$router.push('/delivery')">Payer</button></div>
+            </div>
         </div>
+        
     </v-container>   
 </template>
 
