@@ -1,6 +1,5 @@
 <template>
-    <div>
-
+    <v-main>
         <template v-if="this.tokenRole == 'RESTAURANT'">
             <v-container>
 
@@ -8,13 +7,18 @@
                 <v-btn @click="restaurantNotCompletedOrders">
                     Non completed orders
                 </v-btn>
+                <!-- <div v-for="(value, name) in object">
+                    {{ name }}: {{ value }}
+                </div> -->
             </v-container>
         </template>
         <template v-if="this.tokenRole == 'CLIENT'">
             <h1>Page order CLient</h1>
         </template>
 
-    </div>
+
+
+    </v-main>
 </template>
 
 <script>
@@ -31,6 +35,7 @@ export default {
             tokenEmail: '',
             tokenRole: '',
             tokenId: '',
+            results:'',
 
         }
 
@@ -73,7 +78,8 @@ export default {
                     'Authorization': `${this.tokenJWT}`
                 },
             }).then((res) => {
-                console.log(res)
+                const results = res.data
+                console.log(results)
             }).catch((res) => {
                 console.log(res)
             })

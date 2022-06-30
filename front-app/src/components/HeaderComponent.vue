@@ -66,7 +66,7 @@
             </v-btn>
           </li>
           <li>
-            <v-btn text :to="{ name: 'commande' }">
+            <v-btn text :to="{ name: 'order' }">
               <div class="d-flex flex-column-reverse d-lg-block">
                 <span class="mr-2">Commande</span>
                 <v-icon>mdi-cart-outline</v-icon>
