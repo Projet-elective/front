@@ -1,5 +1,5 @@
  <template>
-    <v-main>
+
 
         <div>
 
@@ -12,7 +12,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            <h6 class="mb-0">Nom d'utilisateur</h6>
+                                            <h3 class="mb-0">Nom d'utilisateur</h3>
                                         </div>
                                         <div class="col-sm-7 text-secondary">
                                             {{ tokenUsername }}
@@ -27,7 +27,7 @@
 
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            <h6 class="mb-0">Adresse mail</h6>
+                                            <h3 class="mb-0">Adresse mail</h3>
                                         </div>
                                         <div class="col-sm-7 text-secondary">
                                             {{ tokenEmail }}
@@ -42,7 +42,7 @@
 
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            <h6 class="mb-0">Rôle</h6>
+                                            <h3 class="mb-0">Rôle</h3>
                                         </div>
                                         <div class="col-sm-7 text-secondary">
                                             {{ tokenRole }}
@@ -191,7 +191,6 @@
                 </v-container>
             </div>
         </div>
-    </v-main>
 </template>
 
     <style scoped>

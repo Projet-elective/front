@@ -1,36 +1,120 @@
 <template>
-    <div>
-
-        <template v-if="this.tokenRole == 'RESTAURANT'">
+    <v-main>
+        <div v-if="this.tokenRole == 'RESTAURANT'">
             <v-container>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3>
+                            Commandes non complétées
+                        </h3>
 
-                <h1>Page Order Restaurant</h1>
-                <v-btn @click="restaurantNotCompletedOrders">
-                    Non completed orders
-                </v-btn>
+                        <div class="text-secondary" v-for="result in resultsNotCompleted" :key="result._id">
+                            <v-card elevation="10" class="profile-container">
+                                ID Commande : {{ result._id }}
+                                <ul>
+                                    <li>
+                                        ID user : {{ result.idUser }}
+                                    </li>
+                                    <li>
+                                        prix total: {{ result.totalPrice }}
+                                    </li>
+                                    <li>
+                                        produits : {{ result.orderList }}
+                                    </li>
+                                    <li>
+                                        Status : {{ result.state_order }}
+                                    </li>
+                                </ul>
+                                <v-btn @click="validateOrder(result._id)"
+                                    v-if="result.state_order == 'En cours de validation'">
+                                    Validate
+                                </v-btn>
+                                <v-btn @click="isReady(result._id)"
+                                    v-if="result.state_order == 'En cours de préparation'">
+                                    Préparer
+                                </v-btn>
+                                <v-btn @click="deliver(result._id)" v-if="result.state_order == 'Commande prête'">
+                                    Livrer
+                                </v-btn>
+                                <v-btn @click="complete(result._id)"
+                                    v-if="result.state_order == 'En cours de livraison'">
+                                    Compléter
+                                </v-btn>
+                            </v-card>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <h3>
+                            Commandes Complétées
+                        </h3>
+
+                        <div class="text-secondary" v-for="result in resultsCompleted" :key="result._id">
+
+                            <v-card elevation="10" class="profile-container">
+                                ID Commande : {{ result._id }}
+                                <ul>
+                                    <li>
+                                        ID user : {{ result.idUser }}
+                                    </li>
+                                    <li>
+                                        prix total: {{ result.totalPrice }}
+                                    </li>
+                                    <li>
+                                        produits : {{ result.orderList }}
+                                    </li>
+                                    <li>
+                                        status : {{result.state_order}}
+                                    </li>
+
+                                </ul>
+                            </v-card>
+                        </div>
+                    </div>
+                </div>
+
             </v-container>
-        </template>
+
+        </div>
         <template v-if="this.tokenRole == 'CLIENT'">
             <h1>Page order CLient</h1>
         </template>
 
-    </div>
+
+    </v-main>
 </template>
 
-<script>
+<style>
+.profile-container {
+    padding: 10px;
+    margin: 10px;
+    width: 100%;
+    background-color: white;
+    border-radius: 25px;
+}
+</style>
 
+<script>
 import axios from 'axios';
+
+
 
 export default {
     name: 'OrderComp',
 
+
     data() {
         return {
+            form: {
+                idCommande: '',
+            },
             tokenJWT: '',
             tokenUsername: '',
             tokenEmail: '',
             tokenRole: '',
             tokenId: '',
+            resultsNotCompleted: undefined,
+            resultsCompleted: undefined,
+            orderId: '',
 
         }
 
@@ -46,6 +130,11 @@ export default {
         this.tokenEmail = decodedjwtToken.email
         this.tokenRole = decodedjwtToken.role[0]
         this.tokenId = decodedjwtToken.id
+
+        this.restaurantCompletedOrders()
+        this.restaurantNotCompletedOrders()
+
+
 
     },
     methods: {
@@ -66,19 +155,61 @@ export default {
         },
         /*For restaurants */
         async restaurantNotCompletedOrders() {
-            console.log(this.tokenJWT)
-            console.log(this.tokenId)
-            await axios.get('/orders/api/orders/restaurantsNotCompletedOrders/' + this.tokenId, {
+
+            const result = await axios.get('/orders/api/orders/restaurantsNotCompletedOrders/' + this.tokenId, {
                 headers: {
                     'Authorization': `${this.tokenJWT}`
                 },
-            }).then((res) => {
-                console.log(res)
-            }).catch((res) => {
-                console.log(res)
+            })
+            this.resultsNotCompleted = result.data
+        },
+        async restaurantCompletedOrders() {
+
+            const result = await axios.get('/orders/api/orders/restaurantsCompletedOrders/' + this.tokenId, {
+                headers: {
+                    'Authorization': `${this.tokenJWT}`
+                },
+            })
+            this.resultsCompleted = result.data
+        },
+
+        /* ->preparation*/
+        async validateOrder(idOrder) {
+
+            axios.patch('/delivery/api/state_orders/validateOrder/' + idOrder, { title: 'oui' }, {
+
+                headers: {
+                    'Authorization': `${this.tokenJWT}`
+                },
             })
 
+        },
+        async isReady(idOrder) {
+            axios.patch('/delivery/api/state_orders/isReadyOrder/' + idOrder, { title: 'oui' }, {
+
+                headers: {
+                    'Authorization': `${this.tokenJWT}`
+                },
+            })
+        },
+        async deliver(idOrder) {
+            axios.patch('/delivery/api/state_orders/deliverOrder/' + idOrder, { title: 'oui' }, {
+
+                headers: {
+                    'Authorization': `${this.tokenJWT}`
+                },
+            })
+        },
+        async complete(idOrder) {
+            axios.patch('/delivery/api/state_orders/CompleteOrder/' + idOrder, { title: 'oui' }, {
+
+                headers: {
+                    'Authorization': `${this.tokenJWT}`
+                },
+            })
         }
+
+
     }
 }
 
