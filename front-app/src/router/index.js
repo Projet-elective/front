@@ -71,7 +71,7 @@ const routes = [
     component: CartView
   },
   {
-    path: '/menu',
+    path: '/menu/:id',
     name: 'menu',
     props: true,
     component: MenuView
