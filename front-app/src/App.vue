@@ -1,11 +1,10 @@
 <template>
   <v-app>
-    <v-main>
-      <header-comp />
-      <router-view />
-      <footer-comp />
+    <header-comp />
 
-    </v-main>
+      <router-view />
+
+    <footer-comp />
   </v-app>
 </template>
 
@@ -18,7 +17,7 @@ export default {
   data: () => ({
     //
   }),
-  components:{
+  components: {
     HeaderComp,
     FooterComp
 

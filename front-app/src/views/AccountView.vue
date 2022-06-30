@@ -1,15 +1,15 @@
 <template>
-<home-comp />
+<account-comp />
 </template>
 
 <script>
 
-import HomeComp from '../components/HomeComponent.vue'
+import AccountComp from '../components/AccountComponent.vue'
 export default{
     name:'AuthView',
     
     components: {
-      HomeComp,
+      AccountComp,
     }
 }
 </script>

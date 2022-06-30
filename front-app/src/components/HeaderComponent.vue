@@ -2,9 +2,9 @@
   <v-container>
     <v-app-bar app color="primary lighten-3">
 
-      <div class="d-flex align-center">
+      <div class="d-flex align-center" style="width:150px;">
         <router-link to="/">
-          <v-img alt="Logo" class="shrink mr-2" contain src="../assets/exeat.png" width=10% />
+          <v-img alt="Logo" class="shrink mr-2" contain src="../assets/logo_header.png" width=10% />
         </router-link>
       </div>
 
@@ -39,8 +39,9 @@
 
         <template v-if="this.tokenRole == 'TECH'">
           <li>
-            <v-btn text :to="{ name: 'logs' }">
+            <v-btn text :to="{ name: 'techService' }">
               <div class="d-flex flex-column-reverse d-lg-block">
+                <span class="mr-2">Logs</span>
                 <v-icon>mdi-clipboard-text-multiple-outline</v-icon>
               </div>
             </v-btn>
@@ -65,7 +66,7 @@
             </v-btn>
           </li>
           <li>
-            <v-btn text :to="{ name: 'commande' }">
+            <v-btn text :to="{ name: 'order' }">
               <div class="d-flex flex-column-reverse d-lg-block">
                 <span class="mr-2">Commande</span>
                 <v-icon>mdi-cart-outline</v-icon>
@@ -140,7 +141,7 @@
           <li>
             <v-btn text :to="{ name: 'account' }">
               <div class="d-flex flex-column-reverse d-lg-block">
-                <span class="mr-2">Logs</span>
+                <span class="mr-2">Comptes</span>
                 <v-icon>mdi-clipboard-text-multiple-outline</v-icon>
               </div>
             </v-btn>
@@ -202,18 +203,24 @@
 </template>
 
 <script>
+
 export default {
   name: 'HeaderComp',
   components: {
 
   },
   mounted() {
+    const i = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
+    if(i){
+      const jwt = require('jose')
+      const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
+      console.log(jwtToken)
+      const decodedjwtToken = jwt.decodeJwt(jwtToken)
+      this.tokenUsername = decodedjwtToken.username
+      this.tokenRole = decodedjwtToken.role[0]
+    }
 
-    const jwt = require('jose')
-    const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
-    const decodedjwtToken = jwt.decodeJwt(jwtToken)
-    this.tokenUsername = decodedjwtToken.username
-    this.tokenRole = decodedjwtToken.role[0]
+
   },
   data() {
     return {
