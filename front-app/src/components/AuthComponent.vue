@@ -58,7 +58,7 @@
                     </v-text-field>
                 </validation-provider>
                 <validation-provider v-slot="{ errors }" name="password" rules="required">
-                    <v-text-field class="register-input" v-model="password" :error-messages="errors" label="Password" type='Mot de passe' required>
+                    <v-text-field class="register-input" v-model="password" :error-messages="errors" label="Password" type='password' required>
                     </v-text-field>
                 </validation-provider>
                 <validation-provider v-slot="{ errors }" name="email" rules="required|email">
