@@ -141,7 +141,7 @@
           <li>
             <v-btn text :to="{ name: 'account' }">
               <div class="d-flex flex-column-reverse d-lg-block">
-                <span class="mr-2">Logs</span>
+                <span class="mr-2">Comptes</span>
                 <v-icon>mdi-clipboard-text-multiple-outline</v-icon>
               </div>
             </v-btn>
