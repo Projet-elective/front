@@ -33,7 +33,7 @@
     padding-left: 10%;
 }
 
-h2 {
+.container-list .h2 {
     background-color: green;
     padding: 10px 30px;
     width: fit-content;

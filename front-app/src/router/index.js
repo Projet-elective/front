@@ -9,6 +9,7 @@ import AboutView from '../views/AboutView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import TechServiceView from '../views/TechServiceView.vue'
 import OrderView from '../views/OrderView.vue'
+import ContactView from '../views/ContactView.vue'
 
 
 Vue.use(VueRouter)
@@ -44,7 +45,8 @@ const routes = [
     path: '/cgv',
     name: 'cgv',
     component: CGVView
-
+  },
+  { 
     path: '/profile',
     name: 'profile',
     component: ProfileView
@@ -59,6 +61,11 @@ const routes = [
     name: 'order',
     component: OrderView
   },
+  {
+    path: '/contact',
+    name: 'contact',
+    component: ContactView
+  }
 ]
 
 const router = new VueRouter({
