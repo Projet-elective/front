@@ -54,6 +54,20 @@
 
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <v-btn color="accent" @click="sponsorCodeAdd">
+                                                Ajouter un code de parrainage
+                                            </v-btn>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <v-btn color="accent" @click="sponsorshipAdd">
+                                                Ajouter un parrainage
+                                            </v-btn>
+                                        </div>
+                                    </div>
                                     <validation-observer ref="observer" v-slot="{ invalid }">
                                         <form @submit.prevent="deleteAcc" style="margin-top: 5rem;">
                                             <div>
@@ -172,6 +186,56 @@
                         </form>
                     </div>
                 </validation-observer>
+                <validation-observer ref="observer" v-slot="{ invalid }" v-if="addSponsorCode">
+                    <div class="profile-container">
+                        <form @submit.prevent="addSponsorCode" style="margin-top: 5rem;" v-if="!successTrigger">
+                            <div>
+                                <h3>Enter a code</h3>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <validation-provider v-slot="{ errors }" name="code" rules="required">
+                                        <v-text-field v-model="form.codee" :error-messages="errors" label="Code"
+                                            required>
+                                        </v-text-field>
+                                    </validation-provider>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <v-btn class="mr-4" type="submit" :disabled="invalid">
+                                        Save
+                                    </v-btn>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </validation-observer>
+                <validation-observer ref="observer" v-slot="{ invalid }" v-if="addSponsorship">
+                    <div class="profile-container">
+                        <form @submit.prevent="addSponsorship" style="margin-top: 5rem;" v-if="!successTrigger">
+                            <div>
+                                <h3>Enter a test</h3>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <validation-provider v-slot="{ errors }" name="test" rules="required">
+                                        <v-text-field v-model="form.test" :error-messages="errors" label="test"
+                                            required>
+                                        </v-text-field>
+                                    </validation-provider>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <v-btn class="mr-4" type="submit" :disabled="invalid">
+                                        Save
+                                    </v-btn>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </validation-observer>
                 <div class="container" v-if="editError" style="color: red;">
                     <h2>{{ editMessage }}</h2>
                 </div>
@@ -270,11 +334,14 @@ export default {
             tokenUsername: '',
             tokenEmail: '',
             tokenRole: '',
+            tokenId: '',
 
             username: '',
             password: '',
             email: '',
             role: '',
+            code: '',
+            test:'',
 
             accPassword: '',
 
@@ -304,6 +371,7 @@ export default {
             const decodedjwtToken = jwt.decodeJwt(jwtToken)
             this.tokenUsername = decodedjwtToken.username
             this.tokenEmail = decodedjwtToken.email
+            this.tokenId = decodedjwtToken.id
             this.tokenRole = decodedjwtToken.role[0]
             this.tokenExists = true
 
@@ -409,6 +477,63 @@ export default {
             })
 
         },
+        async addSponsorCode() {
+            await axios.post('http://localhost:8080/api/sponsor-code/add', {
+
+                user: this.tokenId,
+                role: this.tokenRole,
+                code: this.form.code,
+            }, {
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }
+
+            ).then(() => {
+                document.cookie = "access_token=";
+                this.successTrigger = true
+
+                this.successMessage = 'Sponsor Code added successfully!'
+
+
+            }).catch((res) => {
+                this.editError = true,
+                    this.editMessage = res.response.data.message
+
+            })
+
+        },
+                async addSponsorship() {
+            await axios.post('http://localhost:8080/api/sponsorship/add', {
+
+                code: this.form.code,
+                user: {
+                    id: this.tokenId,
+                    role: this.tokenRole
+                }
+                
+            }, {
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }
+
+            ).then(() => {
+                document.cookie = "access_token=";
+                this.successTrigger = true
+
+                this.successMessage = 'Sponsorship added successfully!'
+
+
+            }).catch((res) => {
+                this.editError = true,
+                    this.editMessage = res.response.data.message
+
+            })
+
+        },
         usernameEdit() {
             this.editTrigger = true
             this.editUsername = true
@@ -420,6 +545,14 @@ export default {
         emailEdit() {
             this.editTrigger = true
             this.editEmail = true
+        },
+        sponsorCodeAdd() {
+            this.editTrigger = true
+            this.editSponsorCode = true
+        },
+        sponsorshipAdd() {
+            this.editTrigger = true
+            this.editSponsorship = true
         },
 
         home() {
