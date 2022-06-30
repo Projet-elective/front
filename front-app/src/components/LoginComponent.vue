@@ -133,7 +133,7 @@ export default {
         async login() {
             const { username, password } = this;
 
-            await axios.post('http://localhost:8080/api/auth/signin', {
+            await axios.post('/auth/api/auth/signin', {
                 username: username,
                 password: password
             }).then((res) => {
@@ -156,10 +156,10 @@ export default {
             this.$refs.observer.reset()
         },
         home() {
-            document.location.href = "http://localhost:8090/";
+            document.location.href = "/";
         },
         createAccount() {
-            document.location.href = "http://localhost:8090/register";
+            document.location.href = "/register";
         }
     },
 }

@@ -84,7 +84,7 @@
                     Retourner à l'accueil
                 </v-btn>
             </div>
-            <div class="container" v-if="errorInRegister" style="color: green;">
+            <div class="container" v-if="errorInRegister" style="color: red;">
                 <h1>{{ errorMessages }}</h1>
                 <v-btn @click="home">
                     Retourner à l'accueil
@@ -156,57 +156,24 @@ export default {
             const { username, password, email, select } = this;
             const role = []
             role.push(select)
-            await axios.post('http://localhost:8080/api/auth/signup', {
+            await axios.post('/auth/api/auth/signup', {
                 username: username,
                 password: password,
                 email: email,
-                role: role
+                roles: role
             }).then((res) => {
                     this.errorMessages = res.data['message'];
-                    this.savingSuccessful = true;
+                    this.savingSuccessful = true
+                    this.errorInRegister = false
 
             }).catch((res) => {
                 this.errorMessages = res.response.data['message']
                 this.errorInRegister = true
+                this.savingSuccessful = false
 
 
             })
         },
-        // async login() {
-        //     const { username, password, email, select } = this;
-        //     const role = []
-        //     role.push(select)
-
-        //     const res = await fetch(
-        //         "http://localhost:8080/api/auth/signup",
-        //         {
-        //             method: "POST",
-        //             headers: {
-        //                 "Content-Type": "application/json"
-        //             },
-        //             body: JSON.stringify({
-        //                 username,
-        //                 password,
-        //                 email,
-        //                 role,
-
-        //             })
-        //         }
-        //     );
-        //     const data = await res.json();
-        //     if (data['message'] == 'User was registered successfully!') {
-        //         this.errorMessages = data['message'];
-        //         this.savingSuccessful = true;
-        //         this.errorInRegister = false;
-        //     } else {
-        //         this.errorMessages = data['message'];
-        //         this.errorInRegister = true;
-        //         this.savingSuccessful = false;
-        //         this.clear();
-
-        //     }
-
-        // },
 
         clear() {
             this.username = ''
@@ -216,7 +183,7 @@ export default {
             this.$refs.observer.reset()
         },
         home() {
-            document.location.href = "http://localhost:8090/";
+            document.location.href = "/";
         }
     },
 }

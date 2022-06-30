@@ -104,7 +104,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <validation-provider v-slot="{ errors }" name="accPassword"
+                                            <validation-provider v-slot="{ errors }" name="Password"
                                                 rules="required">
                                                 <v-text-field v-model="accPassword" :error-messages="errors"
                                                     label="Mot de passe" type='password' required>
@@ -129,8 +129,15 @@
 
                         </div>
                     </div>
+                    <div class="col-sm-2">
+                        <v-btn @click="disconnectUser">
+                            Disconnect
+                        </v-btn>
+
+                    </div>
                 </div>
             </v-card>
+
         </div>
         <validation-observer ref="observer" v-slot="{ invalid }" v-if="editUsername">
             <div class="profile-container">
@@ -284,7 +291,7 @@ export default {
 
         async deleteAcc() {
             const password = this.accPassword
-            await axios.delete('http://localhost:8080/api/auth/delete', {
+            await axios.delete('/auth/api/auth/delete', {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -303,7 +310,7 @@ export default {
             })
         },
         async patchUsername() {
-            await axios.patch('http://localhost:8080/api/auth/patchUser', {
+            await axios.patch('/auth/api/auth/patchUser', {
 
                 username: this.tokenUsername,
                 newusername: this.form.username,
@@ -328,7 +335,7 @@ export default {
 
         },
         async patchEmail() {
-            await axios.patch('http://localhost:8080/api/auth/patchEmail', {
+            await axios.patch('/auth/api/auth/patchEmail', {
 
                 username: this.tokenUsername,
                 newemail: this.form.email,
@@ -353,7 +360,7 @@ export default {
 
         },
         async patchPass() {
-            await axios.patch('http://localhost:8080/api/auth/patchPassword', {
+            await axios.patch('/auth/api/auth/patchPassword', {
 
                 username: this.tokenUsername,
                 newpassword: this.form.password,
@@ -367,8 +374,9 @@ export default {
             ).then(() => {
                 document.cookie = "access_token=";
                 this.successTrigger = true
-                this.successMessage = 'Mot de passe modifié !'
-                // this.login();
+
+                this.successMessage = 'Password updated successfully!'
+
 
             }).catch((res) => {
                 this.editError = true,
@@ -391,10 +399,14 @@ export default {
         },
 
         home() {
-            document.location.href = "http://localhost:8090/home";
+            document.location.href = "/";
         },
         login() {
-            document.location.href = "http://localhost:8090/login";
+            document.location.href = "/login";
+        },
+        disconnectUser() {
+            document.cookie = "access_token=";
+            this.home();
         }
     }
 }
