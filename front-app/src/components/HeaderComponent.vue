@@ -39,8 +39,9 @@
 
         <template v-if="this.tokenRole == 'TECH'">
           <li>
-            <v-btn text :to="{ name: 'logs' }">
+            <v-btn text :to="{ name: 'techService' }">
               <div class="d-flex flex-column-reverse d-lg-block">
+                <span class="mr-2">Logs</span>
                 <v-icon>mdi-clipboard-text-multiple-outline</v-icon>
               </div>
             </v-btn>
