@@ -1,21 +1,24 @@
+<style>
+.container-techService {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+}
+
+.container-techService h1 {
+    margin-bottom: 2em;
+}
+
+</style>
 <template>
-    <v-container>
-        <v-card>
-            <div class="col-md-8">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-2">
-                                <v-btn href="http://localhost:8000/api/auth/getAllLastConnected">
-                                    Download log
-                                </v-btn>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </v-card>
-    </v-container>
+    <div class="container-techService">
+        <h1>Télécharger les logs de connexions des utilisateurs</h1>
+        <v-btn x-large color="primary" href="http://localhost:8000/api/auth/getAllLastConnected">
+            Télécharger
+        </v-btn>
+    </div>
 </template>
 <script>
 export default {
