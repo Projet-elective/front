@@ -5,6 +5,7 @@ import AuthView from '../views/AuthView.vue'
 import LoginView from '../views/LoginView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import RestauView from '../views/RestauView.vue'
+import CartView from '../views/CartView.vue'
 
 Vue.use(VueRouter)
 
@@ -34,6 +35,11 @@ const routes = [
     path: '/restaurant',
     name: 'restaurant',
     component: RestauView
+  },
+  {
+    path: '/cart',
+    name: 'cart',
+    component: CartView
   },
  
 ]
