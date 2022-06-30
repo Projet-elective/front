@@ -5,7 +5,7 @@ import AuthView from '../views/AuthView.vue'
 import LoginView from '../views/LoginView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import TechServiceView from '../views/TechServiceView.vue'
-
+import OrderView from '../views/OrderView.vue'
 
 Vue.use(VueRouter)
 
@@ -34,8 +34,11 @@ const routes = [
     path: '/techService',
     name: 'techService',
     component: TechServiceView
+  },
+    path: '/order',
+    name: 'order',
+    component: OrderView
   }
-    
 ]
 
 const router = new VueRouter({
