@@ -3,7 +3,7 @@
     <div>
       <template>
           <ul v-for="restaurant in restaurants" :key="restaurant">
-            <li><button @click="goToMenu(restaurant._id)">{{restaurant.name}}</button>
+            <li><button @click="goToMenu(restaurant._id)"><MenuComp  :restaurantId='restaurant._id'/>{{restaurant.name}}</button>
               <!-- <p> Menus disponible : </p>
               <ul v-for="menu in menus " :key="menu">
                 <li v-if="restaurant._id == menu.idRestaurant">{{menu._id}} 
@@ -29,9 +29,14 @@
 
 <script>
 import axios from 'axios'
+import MenuComp from './MenuComponent.vue'
 
   export default {
     name: 'RestauComp',
+    components:{
+      MenuComp
+    },
+
     data (){
      return{
         restaurants:[],
@@ -40,7 +45,7 @@ import axios from 'axios'
         cart:[],
       }
     },
-    props: {restaurantId: String},
+    //props: {restaurantId: String},
     created() {
         this.getAllRestaurant();
         this.getAllProduct();
@@ -66,11 +71,12 @@ import axios from 'axios'
         .then(response => this.menus = response.data)
         .catch(e => this.error = [{ title: "Error de chargement",e }]);
       },
-      
+
       goToMenu(id){
         const restaurantId= this.restaurants.find(restaurant=> restaurant._id == id)
         console.log(restaurantId._id)
         this.$router.push({name: "menu", params:{restaurantId: restaurantId}})
+        console.log(this.$router.push({name: "menu", props:{restaurantId: restaurantId}}))
 
       },
 

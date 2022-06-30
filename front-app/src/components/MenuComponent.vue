@@ -1,5 +1,6 @@
 <template>
   <v-container>
+  <RestauComp>{{restaurantId}}</RestauComp>
   <!-- <ul v-for="menu in menus " :key="menu">
                 <li v-if="restaurant._id == menu.idRestaurant">{{menu._id}} 
                   <button @click="addMenuToCart(menu._id)"> : Ajouter au panier</button>
@@ -18,9 +19,11 @@
     name: 'MenuComp',
     data (){
      return{
+      
         cart:[],
       }
     },
+    props:{restaurantId:String},
 
   }
 </script>
