@@ -2,8 +2,9 @@
     <v-container>
         <div>
             <h1>Cart</h1>
+            <button @click="$router.push('/delivery')">Payer</button>
             <ul v-for="cart in carts" :key="cart">
-            <li v-if="!cart =='' "><p>{{ cart.name }}</p><button @click="removeFromCart(cart._id)">Vider le panier</button></li>
+                <li v-if="!cart =='' "><p>{{ cart.name }}</p><button @click="removeFromCart(cart._id)">Vider le panier</button></li>
             </ul>
         </div>
     </v-container>   
@@ -31,7 +32,7 @@ export default {
             cartItems.splice(index, 1);
             localStorage.setItem("cart", JSON.stringify(cartItems));
             this.cart = JSON.parse(localStorage.getItem("cart"));
-            
+            this.getCart();
         },
         getCart() {
            console.log(localStorage.getItem("cart"))
@@ -40,6 +41,7 @@ export default {
             }
             this.carts = JSON.parse(localStorage.getItem("cart"));
         },
+
     },
     beforeMount() {
         this.getCart();
