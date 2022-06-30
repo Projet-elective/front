@@ -6,7 +6,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-2">
-                                <v-btn href="http://localhost:8000/api/auth/getAllLastConnected">
+                                <v-btn href="/auth/api/auth/getAllLastConnected">
                                     Download log
                                 </v-btn>
                             </div>

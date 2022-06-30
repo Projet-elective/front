@@ -44,7 +44,8 @@ const routes = [
     path: '/cgv',
     name: 'cgv',
     component: CGVView
-
+  },
+  {
     path: '/profile',
     name: 'profile',
     component: ProfileView
