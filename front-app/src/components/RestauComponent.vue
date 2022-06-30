@@ -1,9 +1,69 @@
+<style>
+.container-restaurant {
+    width: 100%;
+    min-height: 650px;
+}
+
+.container-restaurant table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.container-restaurant table tr{
+    border-bottom: 1px solid #ddd;
+}
+.container-restaurant table td{
+    padding: 15px;
+}
+
+.head-table td {
+    border-bottom: 1px solid rgb(150, 150, 150);
+    font-weight: 500;
+}
+
+.body-table {
+    
+}
+
+.body-table td {
+    border-bottom: 1px solid rgb(150, 150, 150);
+}
+
+.link-button {
+    padding: 10px 20px;
+    background-color: var(--v-primary-base);
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+}
+</style>
 <template>
   <v-container>
     <div>
       <template>
-          <ul v-for="restaurant in restaurants" :key="restaurant">
-            <li><button @click="goToMenu(restaurant._id)">{{restaurant.name}}</button>
+        <h1>Nos Restaurants</h1>
+            <div class="container-restaurant">
+                <table>
+                    <thead class="head-table">
+                        <tr>
+                            <td style="width: 40%">Restaurant</td>
+                            <td style="width: 30%">Adresse</td>
+                            <td style="width: 15%">Type</td>
+                            <td style="width: 15%"></td>
+                        </tr>
+                    </thead>
+                    <tbody class="body-table" v-for="restaurant in restaurants" :key="restaurant">
+                        <tr v-if="!restaurant ==''">
+                            <td>{{ restaurant.name }}</td>
+                            <td>{{ restaurant.address }}</td>
+                            <td>{{ restaurant.type }}</td>
+                            <td><button class="link-button" @click="goToMenu(restaurant._id)">Voir le Restaurant</button></td>
+                        </tr>
+                    </tbody> 
+                </table>   
+            </div>
+          <!-- <ul v-for="restaurant in restaurants" :key="restaurant"> -->
+            <!-- <li><button @click="goToMenu(restaurant._id)">{{restaurant.name}}</button> -->
               <!-- <p> Menus disponible : </p>
               <ul v-for="menu in menus " :key="menu">
                 <li v-if="restaurant._id == menu.idRestaurant">{{menu._id}} 
@@ -19,8 +79,8 @@
                   <button @click="addProductToCart(product._id)"> : Ajouter au panier</button>
                 </li>
               </ul>  -->
-            </li>   
-          </ul>
+            <!-- </li>    -->
+          <!-- </ul> -->
       </template>
     </div>
     

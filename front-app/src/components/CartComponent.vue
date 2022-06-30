@@ -105,7 +105,7 @@
             <div class="total-cart">
                 <div class="container-total-cart">
                     <div>Commande</div>
-                    <div>Total : </div>
+                    <div>Total : {{totalAMount}}</div>
                 </div>
                 
                 <div class="container-button"><button class="pay-button" @click="$router.push('/delivery')">Payer</button></div>
@@ -146,10 +146,22 @@ export default {
             }
             this.carts = JSON.parse(localStorage.getItem("cart"));
         },
+        totalPrice() {
+            if (!localStorage.getItem("cart")) {
+                var totalAMount;
+                const carts = JSON.parse(localStorage.getItem("cart"));
+                carts.forEach(element => {
+                  totalAMount = totalAMount + element.price  
+                });
+            }
+
+            this.total = totalAMount;
+        }
 
     },
     beforeMount() {
         this.getCart();
+        this.totalPrice();
     },
  
 }
