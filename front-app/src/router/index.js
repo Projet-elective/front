@@ -7,6 +7,9 @@ import StatView from '../views/StatView.vue'
 import CGVView from '../views/CGVView.vue'
 import AboutView from '../views/AboutView.vue'
 import ProfileView from '../views/ProfileView.vue'
+import RestauView from '../views/RestauView.vue'
+import CartView from '../views/CartView.vue'
+import MenuView from '../views/MenuView.vue'
 
 import AccountView from '../views/AccountView.vue'
 
@@ -55,6 +58,25 @@ const routes = [
     name: 'profile',
     component: ProfileView
   },
+  
+  {
+    path: '/restaurant',
+    name: 'restaurant',
+    props: true,
+    component: RestauView
+  },
+  {
+    path: '/cart',
+    name: 'cart',
+    component: CartView
+  },
+  {
+    path: '/menu',
+    name: 'menu',
+    props: true,
+    component: MenuView
+  },
+
   {
 
     path: '/account',
@@ -77,6 +99,7 @@ const routes = [
     name: 'contact',
     component: ContactView
   }
+
 ]
 
 const router = new VueRouter({
