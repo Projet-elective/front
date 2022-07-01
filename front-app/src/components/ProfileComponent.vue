@@ -61,13 +61,6 @@
                                             </v-btn>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-2">
-                                            <v-btn color="accent" @click="sponsorshipAdd">
-                                                Ajouter un parrainage
-                                            </v-btn>
-                                        </div>
-                                    </div>
                                     <validation-observer ref="observer" v-slot="{ invalid }">
                                         <form @submit.prevent="deleteAcc" style="margin-top: 5rem;">
                                             <div>
@@ -196,31 +189,6 @@
                                 <div class="col-sm-6">
                                     <validation-provider v-slot="{ errors }" name="code" rules="required">
                                         <v-text-field v-model="form.codee" :error-messages="errors" label="Code"
-                                            required>
-                                        </v-text-field>
-                                    </validation-provider>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <v-btn class="mr-4" type="submit" :disabled="invalid">
-                                        Save
-                                    </v-btn>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </validation-observer>
-                <validation-observer ref="observer" v-slot="{ invalid }" v-if="addSponsorship">
-                    <div class="profile-container">
-                        <form @submit.prevent="addSponsorship" style="margin-top: 5rem;" v-if="!successTrigger">
-                            <div>
-                                <h3>Enter a test</h3>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <validation-provider v-slot="{ errors }" name="test" rules="required">
-                                        <v-text-field v-model="form.test" :error-messages="errors" label="test"
                                             required>
                                         </v-text-field>
                                     </validation-provider>
@@ -439,6 +407,7 @@ export default {
             }
 
             ).then(() => {
+                console.log(this.tokenId)
                 document.cookie = "access_token=";
                 this.successTrigger = true
                 this.successMessage = 'Adresse mail modifié !'
@@ -478,7 +447,7 @@ export default {
 
         },
         async addSponsorCode() {
-            await axios.post('http://localhost:8080/api/sponsor-code/add', {
+            await axios.post('/sponsor-code/api/sponsor-code/add', {
 
                 user: this.tokenId,
                 role: this.tokenRole,
@@ -486,6 +455,7 @@ export default {
             }, {
 
                 headers: {
+                    Authorization : this.token,
                     'Content-Type': 'application/json'
                 },
             }
@@ -495,36 +465,6 @@ export default {
                 this.successTrigger = true
 
                 this.successMessage = 'Sponsor Code added successfully!'
-
-
-            }).catch((res) => {
-                this.editError = true,
-                    this.editMessage = res.response.data.message
-
-            })
-
-        },
-                async addSponsorship() {
-            await axios.post('http://localhost:8080/api/sponsorship/add', {
-
-                code: this.form.code,
-                user: {
-                    id: this.tokenId,
-                    role: this.tokenRole
-                }
-                
-            }, {
-
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            }
-
-            ).then(() => {
-                document.cookie = "access_token=";
-                this.successTrigger = true
-
-                this.successMessage = 'Sponsorship added successfully!'
 
 
             }).catch((res) => {
