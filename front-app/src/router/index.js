@@ -9,6 +9,7 @@ import AboutView from '../views/AboutView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import TechServiceView from '../views/TechServiceView.vue'
 import OrderView from '../views/OrderView.vue'
+import DashboardView from '../views/DashboardView.vue'
 
 
 Vue.use(VueRouter)
@@ -54,6 +55,11 @@ const routes = [
     path: '/techService',
     name: 'techService',
     component: TechServiceView
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboardService',
+    component: DashboardView
   },
   {
     path: '/order',

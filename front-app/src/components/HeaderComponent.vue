@@ -147,7 +147,7 @@
             </v-btn>
           </li>
           <li>
-            <v-btn text :to="{ name: 'stat' }">
+            <v-btn text :to="{ name: 'dashboardService' }">
               <div class="d-flex flex-column-reverse d-lg-block">
                 <span class="mr-2">Statistique</span>
                 <v-icon>mdi-chart-donut</v-icon>

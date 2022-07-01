@@ -64,6 +64,20 @@ export default {
             })
 
         },
+        async getOrders() {
+            console.log(this.tokenJWT)
+            console.log(this.tokenId)
+            await axios.get('/orders/api/orders/' + this.tokenId, {
+                headers: {
+                    'Authorization': `${this.tokenJWT}`
+                },
+            }).then((res) => {
+                console.log(res)
+            }).catch((res) => {
+                console.log(res)
+            })
+
+        },
         /*For restaurants */
         async restaurantNotCompletedOrders() {
             console.log(this.tokenJWT)
@@ -77,7 +91,18 @@ export default {
             }).catch((res) => {
                 console.log(res)
             })
-
+        }
+        ,
+        /*For restaurants */
+        async allNotCompletedOrders() {
+            console.log(this.tokenJWT)
+            console.log(this.tokenId)
+            await axios.get('/orders/api/orders/allNotCompletedOrders/' , {
+            }).then((res) => {
+                console.log(res)
+            }).catch((res) => {
+                console.log(res)
+            })
         }
     }
 }
