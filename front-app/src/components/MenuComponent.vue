@@ -9,7 +9,7 @@
                         <tr>
                             <td style="width: 40%">Nom</td>
                             <td style="width: 30%">Prix</td>
-                            <td style="width: 15%">Type</td>
+                            <td style="width: 15%"></td>
                             <td style="width: 15%"></td>
                         </tr>
                     </thead>
@@ -28,15 +28,17 @@
                     <thead class="head-table">
                         <tr>
                             <td style="width: 40%">Nom</td>
-                            <td style="width: 30%">Prix</td>
+                            <td style="width: 30%">Description</td>
+                            <td style="width: 15%">Prix</td>
                             <td style="width: 15%">Type</td>
-                            <td style="width: 15%"></td>
                         </tr>
                     </thead>
                     <tbody class="body-table" v-for="product in products" :key="product">
                         <tr v-if="!product ==''">
                             <td>{{ product.name }}</td>
+                            <td>{{ product.description }}</td>
                             <td>{{ product.price }}</td>
+                            <td>{{ product.type }}</td>
                             <td><button class="link-button" @click="addProductToCart(product._id)">Ajouter au panier</button></td>
                         </tr>
                     </tbody> 

@@ -105,7 +105,8 @@
             <div class="total-cart">
                 <div class="container-total-cart">
                     <div>Commande</div>
-                    <div>Total : {{totalAMount}}</div>
+                    <div>Nombre de produit : {{totalCount}}</div>
+                    <div>Total : {{total}}</div>
                 </div>
                 
                 <div class="container-button"><button class="pay-button" @click="$router.push('/delivery')">Payer</button></div>
@@ -127,7 +128,6 @@ export default {
       }
     },
     created() {
-        this.removeFromCart();
         this.getCart();
     },
     methods: {
@@ -138,30 +138,50 @@ export default {
             localStorage.setItem("cart", JSON.stringify(cartItems));
             this.cart = JSON.parse(localStorage.getItem("cart"));
             this.getCart();
+            this.totalPrice();
+            this.totalProduct();
         },
         getCart() {
-           console.log(localStorage.getItem("cart"))
+           //console.log(localStorage.getItem("cart"))
             if (!localStorage.getItem("cart")) {
                 localStorage.setItem("cart", JSON.stringify([]));
             }
             this.carts = JSON.parse(localStorage.getItem("cart"));
         },
         totalPrice() {
-            if (!localStorage.getItem("cart")) {
-                var totalAMount;
+            if (localStorage.getItem("cart")) {
+                var totalAMount=0;
                 const carts = JSON.parse(localStorage.getItem("cart"));
                 carts.forEach(element => {
-                  totalAMount = totalAMount + element.price  
+                    if(element == null){
+                        totalAMount = totalAMount + 0
+                    }else{
+                        totalAMount = totalAMount + element.price
+                    }
                 });
             }
-
             this.total = totalAMount;
+        },
+        totalProduct() {
+            if (localStorage.getItem("cart")) {
+                const carts = JSON.parse(localStorage.getItem("cart"));
+                var countProduct=0;
+                carts.forEach(element => {
+                    if(element == null){
+                         countProduct= countProduct +0
+                    }else{
+                        countProduct= countProduct+ 1
+                    }
+            });   
+            }
+            this.totalCount = countProduct;
         }
 
     },
     beforeMount() {
         this.getCart();
         this.totalPrice();
+        this.totalProduct
     },
  
 }
