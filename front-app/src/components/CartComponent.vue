@@ -79,40 +79,44 @@
     padding: 10px 0;
     font-size: 20px;
 }
+.body{
+  padding: 5%
+}
 </style>
 <template>
     <v-container>
-        <h1>Votre Panier</h1>
-        <div class="container-cart">
-            <div class="list-cart">
-                <table>
-                    <thead class="head-table">
-                        <tr>
-                            <td style="width: 50%">Produit</td>
-                            <td style="width: 30%">Prix (€)</td>
-                            <td style="width: 20%"></td>
-                        </tr>
-                    </thead>
-                    <tbody class="body-table" v-for="cart in carts" :key="cart">
-                        <tr v-if="!cart ==''">
-                            <td>{{ cart.name }}</td>
-                            <td>{{ cart.price }}</td>
-                            <td><button class="remove-button" @click="removeFromCart(cart._id)">Supprimer du panier</button></td>
-                        </tr>
-                    </tbody> 
-                </table>   
-            </div>
-            <div class="total-cart">
-                <div class="container-total-cart">
-                    <div>Commande</div>
-                    <div>Nombre de produit : {{totalCount}}</div>
-                    <div>Total : {{total}}</div>
+        <div class="body">
+            <h1>Votre Panier</h1>
+            <div class="container-cart">
+                <div class="list-cart">
+                    <table>
+                        <thead class="head-table">
+                            <tr>
+                                <td style="width: 50%">Produit</td>
+                                <td style="width: 30%">Prix (€)</td>
+                                <td style="width: 20%"></td>
+                            </tr>
+                        </thead>
+                        <tbody class="body-table" v-for="cart in carts" :key="cart">
+                            <tr v-if="!cart ==''">
+                                <td>{{ cart.name }}</td>
+                                <td>{{ cart.price }}</td>
+                                <td><button class="remove-button" @click="removeFromCart(cart._id)">Supprimer du panier</button></td>
+                            </tr>
+                        </tbody> 
+                    </table>   
                 </div>
-                
-                <div class="container-button"><button class="pay-button" @click="$router.push('/delivery')">Payer</button></div>
+                <div class="total-cart">
+                    <div class="container-total-cart">
+                        <div>Commande</div>
+                        <div>Nombre de produit : {{totalCount}}</div>
+                        <div>Total : {{total}}</div>
+                    </div>
+                    
+                    <div class="container-button"><button class="pay-button" @click="$router.push('/delivery')">Payer</button></div>
+                </div>
             </div>
         </div>
-        
     </v-container>   
 </template>
 
@@ -181,7 +185,7 @@ export default {
     beforeMount() {
         this.getCart();
         this.totalPrice();
-        this.totalProduct
+        this.totalProduct();
     },
  
 }
