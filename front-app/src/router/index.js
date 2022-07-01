@@ -16,7 +16,7 @@ import AccountView from '../views/AccountView.vue'
 import TechServiceView from '../views/TechServiceView.vue'
 import OrderView from '../views/OrderView.vue'
 import ContactView from '../views/ContactView.vue'
-
+import MyRestaurantView from '../views/MyRestaurantView.vue'
 
 
 Vue.use(VueRouter)
@@ -98,7 +98,12 @@ const routes = [
     path: '/contact',
     name: 'contact',
     component: ContactView
-  }
+  },
+  {
+    path: '/myRestaurant',
+    name: 'myRestaurant',
+    component: MyRestaurantView
+  },
 
 ]
 

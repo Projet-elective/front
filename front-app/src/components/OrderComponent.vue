@@ -63,7 +63,7 @@
                                         produits : {{ result.orderList }}
                                     </li>
                                     <li>
-                                        status : {{result.state_order}}
+                                        status : {{ result.state_order }}
                                     </li>
 
                                 </ul>
@@ -171,6 +171,7 @@ export default {
                 },
             })
             this.resultsCompleted = result.data
+            
         },
 
         /* ->preparation*/
@@ -182,7 +183,7 @@ export default {
                     'Authorization': `${this.tokenJWT}`
                 },
             })
-
+            this.refresh()
         },
         async isReady(idOrder) {
             axios.patch('/delivery/api/state_orders/isReadyOrder/' + idOrder, { title: 'oui' }, {
@@ -191,6 +192,7 @@ export default {
                     'Authorization': `${this.tokenJWT}`
                 },
             })
+            this.refresh()
         },
         async deliver(idOrder) {
             axios.patch('/delivery/api/state_orders/deliverOrder/' + idOrder, { title: 'oui' }, {
@@ -199,6 +201,7 @@ export default {
                     'Authorization': `${this.tokenJWT}`
                 },
             })
+            this.refresh()
         },
         async complete(idOrder) {
             axios.patch('/delivery/api/state_orders/CompleteOrder/' + idOrder, { title: 'oui' }, {
@@ -207,6 +210,10 @@ export default {
                     'Authorization': `${this.tokenJWT}`
                 },
             })
+            this.refresh()
+        },
+        refresh() {
+            document.location.href = "/order";
         }
 
 
