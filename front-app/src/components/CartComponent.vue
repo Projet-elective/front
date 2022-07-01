@@ -78,6 +78,7 @@
     border-radius: 5px;
     padding: 10px 0;
     font-size: 20px;
+    margin-top:5%;
 }
 .body{
   padding: 5%
@@ -110,8 +111,9 @@
                     <div class="container-total-cart">
                         <div>Commande</div>
                         <div>Nombre de produit : {{totalCount}}</div>
-                        <div>Total : {{total}}</div>
+                        <div>Total : {{total}} €</div>
                     </div>
+                    <div class="container-button"><button class="pay-button" @click="clearCart()">Vider le panier</button></div>
                     
                     <div class="container-button"><button class="pay-button" @click="$router.push('/delivery')">Payer</button></div>
                 </div>
@@ -141,6 +143,12 @@ export default {
             cartItems.splice(index, 1);
             localStorage.setItem("cart", JSON.stringify(cartItems));
             this.cart = JSON.parse(localStorage.getItem("cart"));
+            this.getCart();
+            this.totalPrice();
+            this.totalProduct();
+        },
+        clearCart(){
+            localStorage.clear();
             this.getCart();
             this.totalPrice();
             this.totalProduct();

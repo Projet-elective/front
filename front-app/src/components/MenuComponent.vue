@@ -19,6 +19,7 @@
                         <tr v-if="!menu ==''">
                             <td>{{ menu.name }}</td>
                             <td>{{ menu.price }}</td>
+                            <td></td>
                             <td><button class="link-button" @click="addMenuToCart(menu._id)">Ajouter au panier</button></td>
                         </tr>
                     </tbody> 
