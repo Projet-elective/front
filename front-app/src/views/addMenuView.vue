@@ -1,118 +1,43 @@
-<!-- <template>
-
-
-    <validation-observer ref="observer" v-slot="{ invalid }">
-        <div class="profile-container">
-            <form @submit.prevent="addProduct" style="margin-top: 5rem;">
-                <div>
-                    <h3>Enter a test</h3>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <validation-provider v-slot="{ errors }" name="name" rules="required">
-                            <v-text-field v-model="form.name" :error-messages="errors" label="test" required>
-                            </v-text-field>
-                        </validation-provider>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <v-btn class="mr-4" type="submit" :disabled="invalid">
-                            Save
-                        </v-btn>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </validation-observer>
-</template>
-
-
-<script>
-import { required } from 'vee-validate/dist/rules'
-import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
-// import axios from 'axios'
-
-setInteractionMode('eager')
-
-
-extend('required', {
-    ...required,
-    message: '{_field_} ne doit pas être vide',
-})
-
-export default {
-    name: 'addProductView',
-    components: {
-        ValidationProvider,
-        ValidationObserver
-    },
-    data(){
-        return {
-            form: {
-                name: '',
-                description: '',
-                address: '',
-                type: '',
-            },
-            tokenJWT: '',
-            tokenRole: '',
-            tokenId: '',
-            hasRestaurant: false,
-            restauName: '',
-            restauDesc: '',
-            restauAddress: '',
-            restauType: '',
-        }
-    },
-    mounted() {
-        const jwt = require('jose')
-        const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
-        const decodedjwtToken = jwt.decodeJwt(jwtToken)
-        this.tokenJWT = jwtToken
-        this.tokenRole = decodedjwtToken.role[0]
-        this.tokenId = decodedjwtToken.id
-
-    },
-    methods: {
-        async addProduct() {
-
-        },
-    },
-} -->
-
 <template>
 
     <div class="register-background">
         <validation-observer ref="observer" v-slot="{ invalid }">
             <div class="register-container">
                 <div class="title">
-                    Ajouter un produit
+                    Ajouter un menu
                 </div>
 
-                <form @submit.prevent="addProduct" v-if="!savingSuccessful" style="margin-bottom: 2rem;">
+                <form @submit.prevent="addMenu" v-if="!savingSuccessful" style="margin-bottom: 2rem;">
                     <validation-provider v-slot="{ errors }" name="name" rules="required">
                         <v-text-field class="register-input" v-model="name" :error-messages="errors" label="Nom"
                             required>
                         </v-text-field>
                     </validation-provider>
-                    <validation-provider v-slot="{ errors }" name="desciption" rules="required">
-                        <v-text-field class="register-input" v-model="description" :error-messages="errors"
-                            label="Description" required>
+                    <validation-provider v-slot="{ errors }" name="Entrée" rules="required">
+                        <v-text-field class="register-input" v-model="entree" :error-messages="errors" label="Entrée"
+                            required>
                         </v-text-field>
+                    </validation-provider>
+                    <validation-provider v-slot="{ errors }" name="main" rules="required">
+                        <v-text-field class="register-input" v-model="main" :error-messages="errors"
+                            label="Plat de résistance" required></v-text-field>
+                    </validation-provider>
+                    <validation-provider v-slot="{ errors }" name="drink" rules="required">
+                        <v-text-field class="register-input" v-model="drink" :error-messages="errors" label="Boisson"
+                            required></v-text-field>
+                    </validation-provider>
+                    <validation-provider v-slot="{ errors }" name="dessert" rules="required">
+                        <v-text-field class="register-input" v-model="dessert" :error-messages="errors" label="Dessert"
+                            required></v-text-field>
                     </validation-provider>
                     <validation-provider v-slot="{ errors }" name="price" rules="required">
                         <v-text-field class="register-input" v-model="price" :error-messages="errors" label="Prix"
                             required></v-text-field>
                     </validation-provider>
-                    <validation-provider v-slot="{ errors }" name="type" rules="required">
-                        <v-text-field class="register-input" v-model="type" :error-messages="errors" label="Type"
-                            required></v-text-field>
-                    </validation-provider>
 
                     <div class="button-container">
                         <v-btn class="mr-4" type="submit" :disabled="invalid">
-                            Ajouter un produit
+                            Ajouter un menu
                         </v-btn>
                         <!-- <v-btn @click="clear">
                             Effacer
@@ -206,15 +131,17 @@ export default {
     },
     data: () => ({
         name: '',
-        description: '',
+        entree: '',
+        main: '',
+        dessert: '',
         price: '',
-        type: '',
+        drink:'',
         savingSuccessful: false,
         errorInRegister: false,
         errorMessages: '',
-        tokenJWT:'',
-        tokenRole:'',
-        tokenId:'',
+        tokenJWT: '',
+        tokenRole: '',
+        tokenId: '',
     }),
     mounted() {
         const jwt = require('jose')
@@ -227,21 +154,22 @@ export default {
     },
 
     methods: {
-        async addProduct() {
-            const { name, description, price, type } = this;
-            await axios.post('../restaurant/api/products/addProduct/', {
-                idUser:this.tokenId,
+        async addMenu() {
+            const { name, entree, main,drink, dessert, price } = this;
+            await axios.post('../restaurant/api/menus/addMenu/', {
+                idUser: this.tokenId,
                 name: name,
-                description: description,
+                entree: entree,
+                main: main,
+                drink: drink,
+                dessert: dessert,
                 price: price,
-                type: type
             }, {
                 headers: {
                     'authorization': `${this.tokenJWT}`
                 }
-            }).then((res) => {
-                console.log(res)
-                this.errorMessages = 'product added ?';
+            }).then(() => {
+                this.errorMessages = 'Menu added';
                 this.savingSuccessful = true
                 this.errorInRegister = false
 
@@ -262,9 +190,6 @@ export default {
         //         this.type = '',
         //         this.$refs.observer.reset()
         // },
-        home(){
-            document.location.href = "/myRestaurant";
-        },
     },
 }
 </script>

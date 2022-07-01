@@ -47,8 +47,13 @@
                 </div>
             </v-card>
             <v-btn class="mr-4" :to="{ name: 'addProduct' }">
-                ajouter un produit
+                Ajouter un produit
             </v-btn>
+            <v-btn class="mr-4" :to="{ name: 'addMenu' }">
+                Ajouter un menu
+            </v-btn>
+            <button @click="goToProducts()">Liste des
+                produits</button>
 
         </v-container>
         <v-container v-if="this.tokenRole == 'RESTAURANT' && this.hasRestaurant == false">
@@ -152,6 +157,7 @@ export default {
             restauDesc: '',
             restauAddress: '',
             restauType: '',
+            restauId: '',
         }
     },
     mounted() {
@@ -162,10 +168,16 @@ export default {
         this.tokenRole = decodedjwtToken.role[0]
         this.tokenId = decodedjwtToken.id
         this.getRestaurantByOwner(this.tokenId)
+        console.log(this.restauId)
 
     },
 
     methods: {
+        goToProducts() {
+            const restaurantId = this.restauId
+            console.log(restaurantId)
+            this.$router.push({ name: 'myProducts', params: { id: restaurantId } })
+        },
 
         async getRestaurantByOwner(ownerId) {
             await axios.get('restaurant/api/restaurants/getByOwner/' + ownerId, {
@@ -179,7 +191,11 @@ export default {
                     this.restauAddress = res.data.restaurant.address
                     this.restauType = res.data.restaurant.type
                     this.hasRestaurant = true
+                    this.restauId = res.data.restaurant._id
+
+
                 }
+
 
             }).catch((res) => {
                 console.log(res)
