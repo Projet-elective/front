@@ -36,10 +36,15 @@
     color: white;
     font-weight: 500;
 }
+
+.body{
+  padding: 5%
+}
 </style>
+
 <template>
   <v-container>
-    <div>
+    <div class="body">
       <template>
         <h1>Nos Restaurants</h1>
             <div class="container-restaurant">
@@ -59,7 +64,7 @@
                             <td>{{ restaurant.name }}</td>
                             <td>{{ restaurant.address }}</td>
                             <td>{{ restaurant.type }}</td>
-                            <button @click="goToMenu(restaurant._id)" v-bind:restaurantId="restaurant._id">{{restaurant.name}}</button>
+                            <button class="link-button" @click="goToMenu(restaurant._id)" v-bind:restaurantId="restaurant._id">{{restaurant.name}}</button>
                         </tr>
                     </tbody> 
                 </table>   
