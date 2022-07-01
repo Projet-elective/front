@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <div class="body">
-          <a href="/cart" class="link-button" style="color:white; text-decoration:none">Panier</a>
+          <a href="/cart" class="link-button" style="color:white; text-decoration:none">Panier : {{totalCount}}</a>
       <template>
         <h1>Nos Menus</h1>
             <div class="container-restaurant">
@@ -20,12 +20,12 @@
                             <td>{{ menu.name }}</td>
                             <td>{{ menu.price }}</td>
                             <td></td>
-                            <td><button class="link-button" @click="addMenuToCart(menu._id)">Ajouter au panier</button></td>
+                            <td><button class="link-button" @click="addMenuToCart(menu._id)" >Ajouter au panier</button></td>
                         </tr>
                     </tbody> 
                 </table>   
             </div>
-          <h1>Nos Porduits</h1>
+          <h1>Nos Produits</h1>
             <div class="container-restaurant">
                 <table>
                     <thead class="head-table">
@@ -69,6 +69,7 @@ import axios from 'axios'
       this.getAllProduct();
       this.addProductToCart();
       this.addProductToCart();
+      this.totalProduct();
     },
     methods: {
 
@@ -79,7 +80,6 @@ import axios from 'axios'
         },
 
         getAllProduct(){
-          console.log(this.$route.params.id._id)
           axios.get(`/restaurant/api/products/restaurant/${this.$route.params.id._id}`, {mode: 'no-cors'})
           .then(response => this.products = response.data)
           .catch(e => this.error = [{ title: "Error de chargement",e }]);
@@ -94,19 +94,38 @@ import axios from 'axios'
           cartItems.push(item);
           localStorage.setItem("cart", JSON.stringify(cartItems));
           this.cart = JSON.parse(localStorage.getItem("cart"));
+          this.totalProduct();
         },
 
         addProductToCart(itemId) {
-        const item = this.products.find(product => product._id === itemId);
-        if (!localStorage.getItem("cart")) {
-          localStorage.setItem("cart", JSON.stringify([]));
+          const item = this.products.find(product => product._id === itemId);
+          if (!localStorage.getItem("cart")) {
+            localStorage.setItem("cart", JSON.stringify([]));
+          }
+          const cartItems = JSON.parse(localStorage.getItem("cart"));
+          cartItems.push(item);
+          localStorage.setItem("cart", JSON.stringify(cartItems));
+          this.cart = JSON.parse(localStorage.getItem("cart"));
+          this.totalProduct();
+        },
+        totalProduct() {
+        if (localStorage.getItem("cart")) {
+          const carts = JSON.parse(localStorage.getItem("cart"));
+          var countProduct=0;
+          carts.forEach(element => {
+              if(element == null){
+                  countProduct= countProduct +0
+              }else{
+                  countProduct= countProduct+ 1
+            }
+          });   
         }
-        const cartItems = JSON.parse(localStorage.getItem("cart"));
-        cartItems.push(item);
-        localStorage.setItem("cart", JSON.stringify(cartItems));
-        this.cart = JSON.parse(localStorage.getItem("cart"));
-      },
-    }
+        this.totalCount = countProduct;
+      }
+    },
+     beforeMount() {
+        this.totalProduct();
+    },
 }
 </script>
 
@@ -147,6 +166,18 @@ import axios from 'axios'
     border-radius: 5px;
     color: white;
     font-weight: 500;
+    font-size: 14px;
+    transition-property: font-size;
+    transition-duration: 4s;
+    transition-delay: 2s;
+}
+.link-button:active {
+    padding: 10px 20px;
+    background-color: var(--v-primary-base);
+    border-radius: 5px;
+    color: grey;
+    font-weight: 600;
+    font-size: 16px;
 }
 .body{
   padding: 10%

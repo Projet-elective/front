@@ -4,7 +4,7 @@
             <v-carousel-item v-for="(item, i) in items" :key="i" :src="item.src"></v-carousel-item>
 
         </v-carousel>
-        <v-btn elevation="5" color="primary" class="carrousel-button" href="">Découvrez nos restaurants</v-btn>
+        <v-btn elevation="5" color="primary" class="carrousel-button" href="/restaurant">Découvrez nos restaurants</v-btn>
     </div>
 
 
