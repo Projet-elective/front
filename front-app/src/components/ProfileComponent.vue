@@ -343,6 +343,7 @@ export default {
             role: '',
             code: '',
             test:'',
+           
 
             accPassword: '',
 
@@ -479,13 +480,14 @@ export default {
 
         },
         async addSponsorCode() {
-            await axios.post('http://localhost:8080/api/sponsor-code/add', {
+            await axios.post('http://localhost:3000/api/sponsor-code/add', {
 
                 user: this.tokenId,
                 role: this.tokenRole,
                 code: this.form.code,
-            }, {
-
+               
+            }, console.log(this.token),{
+                
                 headers: {
                     'Content-Type': 'application/json'
                 },
