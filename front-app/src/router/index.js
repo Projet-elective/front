@@ -17,6 +17,9 @@ import TechServiceView from '../views/TechServiceView.vue'
 import OrderView from '../views/OrderView.vue'
 import ContactView from '../views/ContactView.vue'
 import MyRestaurantView from '../views/MyRestaurantView.vue'
+import addProductView from '../views/addProductView.vue'
+import addMenuView from '../views/addMenuView.vue'
+import MyProductsView from '../views/MyProductsView.vue'
 
 
 Vue.use(VueRouter)
@@ -103,6 +106,21 @@ const routes = [
     path: '/myRestaurant',
     name: 'myRestaurant',
     component: MyRestaurantView
+  },
+  {
+    path: '/myRestaurant/addProduct',
+    name: 'addProduct',
+    component: addProductView,
+  },
+  {
+    path: '/myRestaurant/addMenu',
+    name: 'addMenu',
+    component: addMenuView,
+  },
+  {
+    path: '/myRestaurant/myProducts',
+    name: 'myProducts',
+    component: MyProductsView,
   },
 
 ]

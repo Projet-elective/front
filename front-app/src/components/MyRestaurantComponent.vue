@@ -46,7 +46,14 @@
                     </div>
                 </div>
             </v-card>
-
+            <v-btn class="mr-4" :to="{ name: 'addProduct' }">
+                Ajouter un produit
+            </v-btn>
+            <v-btn class="mr-4" :to="{ name: 'addMenu' }">
+                Ajouter un menu
+            </v-btn>
+            <button @click="goToProducts()">Liste des
+                produits</button>
 
         </v-container>
         <v-container v-if="this.tokenRole == 'RESTAURANT' && this.hasRestaurant == false">
@@ -65,11 +72,11 @@
                                 <v-text-field class="register-input" v-model="form.desciption" :error-messages="errors"
                                     label="Description" required>
                                 </v-text-field>
-                            <validation-provider v-slot="{ errors }" name="Adresse" rules="required">
-                                <v-text-field class="register-input" v-model="form.address" :error-messages="errors"
-                                    label="Adresse" required>
-                                </v-text-field>
-                            </validation-provider>
+                                <validation-provider v-slot="{ errors }" name="Adresse" rules="required">
+                                    <v-text-field class="register-input" v-model="form.address" :error-messages="errors"
+                                        label="Adresse" required>
+                                    </v-text-field>
+                                </validation-provider>
                             </validation-provider>
                             <validation-provider v-slot="{ errors }" name="Type de restaurant" rules="required">
                                 <v-text-field class="register-input" v-model="form.type" :error-messages="errors"
@@ -86,7 +93,7 @@
                             </div>
 
                         </form>
-                        <div class="container" v-if="savingSuccessful" style="color: green;">
+                        <!-- <div class="container" v-if="savingSuccessful" style="color: green;">
                             <h1>{{ errorMessages }}</h1>
                             <v-btn @click="home">
                                 Retourner à l'accueil
@@ -97,7 +104,7 @@
                             <v-btn @click="home">
                                 Retourner à l'accueil
                             </v-btn>
-                        </div>
+                        </div> -->
                     </div>
                 </validation-observer>
 
@@ -132,7 +139,7 @@ export default {
     name: 'MyRestauComp',
     components: {
         ValidationProvider,
-        ValidationObserver,
+        ValidationObserver
     },
     data() {
         return {
@@ -150,6 +157,7 @@ export default {
             restauDesc: '',
             restauAddress: '',
             restauType: '',
+            restauId: '',
         }
     },
     mounted() {
@@ -160,10 +168,16 @@ export default {
         this.tokenRole = decodedjwtToken.role[0]
         this.tokenId = decodedjwtToken.id
         this.getRestaurantByOwner(this.tokenId)
+        console.log(this.restauId)
 
     },
 
     methods: {
+        goToProducts() {
+            const restaurantId = this.restauId
+            console.log(restaurantId)
+            this.$router.push({ name: 'myProducts', params: { id: restaurantId } })
+        },
 
         async getRestaurantByOwner(ownerId) {
             await axios.get('restaurant/api/restaurants/getByOwner/' + ownerId, {
@@ -177,7 +191,11 @@ export default {
                     this.restauAddress = res.data.restaurant.address
                     this.restauType = res.data.restaurant.type
                     this.hasRestaurant = true
+                    this.restauId = res.data.restaurant._id
+
+
                 }
+
 
             }).catch((res) => {
                 console.log(res)
