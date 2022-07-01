@@ -82,9 +82,9 @@
             </v-btn>
           </li>
           <li>
-            <v-btn text :to="{ name: 'restaurant' }">
+            <v-btn text :to="{ name: 'myRestaurant' }">
               <div class="d-flex flex-column-reverse d-lg-block">
-                <span class="mr-2">Restaurant</span>
+                <span class="mr-2">My Restaurant</span>
                 <v-icon>mdi-silverware-fork-knife</v-icon>
               </div>
             </v-btn>
