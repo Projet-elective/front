@@ -356,6 +356,8 @@ export default {
             editUsername: false,
             editPassword: false,
             editEmail: false,
+            editSponsorCode: false,
+            editSponsorship: false,
             successMessage: '',
             successTrigger: false,
         }
@@ -480,7 +482,7 @@ export default {
 
         },
         async addSponsorCode() {
-            await axios.post('http://localhost:3000/api/sponsor-code/add', {
+            await axios.post('http://127.0.0.1:3000/api/sponsor-code/add', {
 
                 user: this.tokenId,
                 role: this.tokenRole,
@@ -489,7 +491,9 @@ export default {
             }, console.log(this.token),{
                 
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+
                 },
             }
 
