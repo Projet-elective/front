@@ -25,6 +25,9 @@
                                         Type : {{ product.type }}
                                     </li>
                                 </ul>
+                                <v-btn @click="deleteProduct(product._id)">
+                                    Supprimer
+                                </v-btn>
                             </v-card>
                         </div>
                     </div>
@@ -65,7 +68,7 @@ export default {
         this.tokenRole = decodedjwtToken.role[0]
         this.tokenId = decodedjwtToken.id
         this.getRestaurantByOwner(this.tokenId)
-        
+
 
     },
 
@@ -78,7 +81,7 @@ export default {
             }).then((res) => {
                 if (res.data.restaurant.idOwner == this.tokenId) {
                     this.myProducts = res.data.products
-                    
+
                 }
 
 
@@ -87,8 +90,28 @@ export default {
             })
 
         },
+
+        deleteProduct(id) {
+            axios.delete('../../restaurant/api/products/deleteProduct/' + id, {
+
+                headers: {
+                    'Authorization': `${this.tokenJWT}`
+                },
+            }, {
+                id: id,
+            }
+
+            ).then(() => {
+                this.home()
+
+
+            }).catch((res) => {
+                console.log(res)
+
+            })
+        },
         home() {
-            document.location.href = "/myRestaurant";
+            document.location.href = "/myRestaurant/myProducts";
         },
 
     },
