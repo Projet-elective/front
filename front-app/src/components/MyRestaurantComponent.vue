@@ -52,8 +52,9 @@
             <v-btn class="mr-4" :to="{ name: 'addMenu' }">
                 Ajouter un menu
             </v-btn>
-            <button @click="goToProducts()">Liste des
-                produits</button>
+            <v-btn class="mr-4" :to="{ name: 'myProducts' }">
+                Voir mes produits
+            </v-btn>
 
         </v-container>
         <v-container v-if="this.tokenRole == 'RESTAURANT' && this.hasRestaurant == false">
@@ -173,12 +174,7 @@ export default {
     },
 
     methods: {
-        goToProducts() {
-            const restaurantId = this.restauId
-            console.log(restaurantId)
-            this.$router.push({ name: 'myProducts', params: { id: restaurantId } })
-        },
-
+        
         async getRestaurantByOwner(ownerId) {
             await axios.get('restaurant/api/restaurants/getByOwner/' + ownerId, {
                 headers: {
@@ -192,7 +188,7 @@ export default {
                     this.restauType = res.data.restaurant.type
                     this.hasRestaurant = true
                     this.restauId = res.data.restaurant._id
-                    
+
 
 
                 }
