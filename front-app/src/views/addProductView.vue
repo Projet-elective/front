@@ -138,6 +138,111 @@ export default {
 
 </template>
 
+
+<script>
+import { required } from 'vee-validate/dist/rules'
+import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+import axios from 'axios'
+
+setInteractionMode('eager')
+
+extend('required', {
+    ...required,
+    message: '{_field_} ne doit pas être vide',
+})
+
+export default {
+    name: 'AuthComp',
+    components: {
+        ValidationProvider,
+        ValidationObserver,
+    },
+    data: () => ({
+        name: '',
+        description: '',
+        price: '',
+        type: '',
+        savingSuccessful: false,
+        errorInRegister: false,
+        errorMessages: '',
+        tokenJWT: '',
+        tokenRole: '',
+        tokenId: '',
+        restaurantId:'',
+    }),
+    mounted() {
+        const jwt = require('jose')
+        const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
+        const decodedjwtToken = jwt.decodeJwt(jwtToken)
+        this.tokenJWT = jwtToken
+        this.tokenRole = decodedjwtToken.role[0]
+        this.tokenId = decodedjwtToken.id
+        this.getRestaurantByOwner(this.tokenId)
+
+    },
+
+    methods: {
+        async getRestaurantByOwner(ownerId) {
+            await axios.get('../../restaurant/api/restaurants/getByOwner/' + ownerId, {
+                headers: {
+                    'Authorization': `${this.tokenJWT}`
+                },
+            }).then((res) => {
+                if (res.data.restaurant.idOwner == this.tokenId) {
+                    this.restaurantId = res.data.restaurant._id
+
+                }
+
+            }).catch((res) => {
+                console.log(res)
+            })
+
+        },
+        async addProduct() {
+            const { name, description, price, type } = this;
+            await axios.post('../restaurant/api/products/addProduct/', {
+                idRestaurant: this.restaurantId,
+                idUser: this.tokenId,
+                name: name,
+                description: description,
+                price: price,
+                type: type
+            }, {
+                headers: {
+                    'authorization': `${this.tokenJWT}`
+                }
+            }).then((res) => {
+                console.log(res)
+                this.errorMessages = res.data;
+                this.savingSuccessful = true
+                this.errorInRegister = false
+
+            }).catch((res) => {
+                console.log(res)
+                this.errorMessages = 'Erreur lors de l\'ajout du produit'
+                this.errorInRegister = true
+                this.savingSuccessful = false
+
+
+            })
+        },
+
+        // clear() {
+        //     this.name = '',
+        //         this.description = '',
+        //         this.price = '',
+        //         this.type = '',
+        //         this.$refs.observer.reset()
+        // },
+        home() {
+            document.location.href = "/myRestaurant";
+        },
+    },
+}
+</script>
+
+
+
 <style scoped>
 .register-background {
     width: 100%;
@@ -185,87 +290,4 @@ export default {
     margin-left: 15%;
 }
 </style>
-
-<script>
-import { required } from 'vee-validate/dist/rules'
-import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
-import axios from 'axios'
-
-setInteractionMode('eager')
-
-extend('required', {
-    ...required,
-    message: '{_field_} ne doit pas être vide',
-})
-
-export default {
-    name: 'AuthComp',
-    components: {
-        ValidationProvider,
-        ValidationObserver,
-    },
-    data: () => ({
-        name: '',
-        description: '',
-        price: '',
-        type: '',
-        savingSuccessful: false,
-        errorInRegister: false,
-        errorMessages: '',
-        tokenJWT:'',
-        tokenRole:'',
-        tokenId:'',
-    }),
-    mounted() {
-        const jwt = require('jose')
-        const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
-        const decodedjwtToken = jwt.decodeJwt(jwtToken)
-        this.tokenJWT = jwtToken
-        this.tokenRole = decodedjwtToken.role[0]
-        this.tokenId = decodedjwtToken.id
-
-    },
-
-    methods: {
-        async addProduct() {
-            const { name, description, price, type } = this;
-            await axios.post('../restaurant/api/products/addProduct/', {
-                idUser:this.tokenId,
-                name: name,
-                description: description,
-                price: price,
-                type: type
-            }, {
-                headers: {
-                    'authorization': `${this.tokenJWT}`
-                }
-            }).then((res) => {
-                console.log(res)
-                this.errorMessages = 'product added ?';
-                this.savingSuccessful = true
-                this.errorInRegister = false
-
-            }).catch((res) => {
-                console.log(res)
-                this.errorMessages = 'Error in add'
-                this.errorInRegister = true
-                this.savingSuccessful = false
-
-
-            })
-        },
-
-        // clear() {
-        //     this.name = '',
-        //         this.description = '',
-        //         this.price = '',
-        //         this.type = '',
-        //         this.$refs.observer.reset()
-        // },
-        home(){
-            document.location.href = "/myRestaurant";
-        },
-    },
-}
-</script>
 

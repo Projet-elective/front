@@ -169,12 +169,11 @@ export default {
         this.tokenRole = decodedjwtToken.role[0]
         this.tokenId = decodedjwtToken.id
         this.getRestaurantByOwner(this.tokenId)
-        console.log(this.restauId)
 
     },
 
     methods: {
-        
+
         async getRestaurantByOwner(ownerId) {
             await axios.get('restaurant/api/restaurants/getByOwner/' + ownerId, {
                 headers: {
@@ -188,9 +187,6 @@ export default {
                     this.restauType = res.data.restaurant.type
                     this.hasRestaurant = true
                     this.restauId = res.data.restaurant._id
-
-
-
                 }
 
 
