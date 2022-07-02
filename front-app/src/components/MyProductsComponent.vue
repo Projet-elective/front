@@ -4,10 +4,18 @@
             <v-container>
                 <div class="row">
                     <div class="col-sm-6">
-                        <h3>
-                            Mes produits
-                        </h3>
-
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h3>
+                                    Mes produits
+                                </h3>
+                            </div>
+                            <div class="col-md-3">
+                                <v-btn class="mr-4" :to="{ name: 'addProduct' }">
+                                    Ajouter un produit
+                                </v-btn>
+                            </div>
+                        </div>
                         <div class="text-secondary" v-for="product in myProducts" :key="product.name">
                             <v-card elevation="10" class="profile-container">
                                 ID produit {{ product._id }}
@@ -92,23 +100,26 @@ export default {
         },
 
         deleteProduct(id) {
-            axios.delete('../../restaurant/api/products/deleteProduct/' + id, {
+            if (confirm('Comfirmer la suppression du produit')) {
+                axios.delete('../../restaurant/api/products/deleteProduct/' + id, {
 
-                headers: {
-                    'Authorization': `${this.tokenJWT}`
-                },
-            }, {
-                id: id,
+                    headers: {
+                        'Authorization': `${this.tokenJWT}`
+                    },
+                }, {
+                    id: id,
+                }
+
+                ).then(() => {
+                    this.home()
+
+
+                }).catch((res) => {
+                    console.log(res)
+
+                })
             }
 
-            ).then(() => {
-                this.home()
-
-
-            }).catch((res) => {
-                console.log(res)
-
-            })
         },
         home() {
             document.location.href = "/myRestaurant/myProducts";

@@ -18,7 +18,7 @@
                             label="Description" required>
                         </v-text-field>
                     </validation-provider>
-                    <validation-provider v-slot="{ errors }" name="price" rules="required">
+                    <validation-provider v-slot="{ errors }" name="price" rules="required|numeric">
                         <v-text-field class="register-input" v-model="price" :error-messages="errors" label="Prix"
                             required></v-text-field>
                     </validation-provider>
@@ -39,14 +39,14 @@
                 </form>
                 <div class="container" v-if="savingSuccessful" style="color: green;">
                     <h1>{{ errorMessages }}</h1>
-                    <v-btn @click="home">
-                        Retourner à l'accueil
+                    <v-btn @click="myProducts">
+                        Voir mes produits
                     </v-btn>
                 </div>
                 <div class="container" v-if="errorInRegister" style="color: red;">
                     <h1>{{ errorMessages }}</h1>
-                    <v-btn @click="home">
-                        Retourner à l'accueil
+                    <v-btn @click="myProducts">
+                        Voir mes produits
                     </v-btn>
                 </div>
             </div>
@@ -57,7 +57,7 @@
 
 
 <script>
-import { required } from 'vee-validate/dist/rules'
+import { required, numeric } from 'vee-validate/dist/rules'
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
 import axios from 'axios'
 
@@ -66,6 +66,10 @@ setInteractionMode('eager')
 extend('required', {
     ...required,
     message: '{_field_} ne doit pas être vide',
+})
+extend('numeric', {
+    ...numeric,
+    message: '{_field_} needs to be a number. ({_value_})',
 })
 
 export default {
@@ -151,8 +155,8 @@ export default {
         //         this.type = '',
         //         this.$refs.observer.reset()
         // },
-        home() {
-            document.location.href = "/myRestaurant";
+        myProducts() {
+            document.location.href = "/myRestaurant/myProducts";
         },
     },
 }

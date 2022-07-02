@@ -394,153 +394,171 @@ export default {
     methods: {
 
         async deleteAcc() {
-            const password = this.accPassword
-            await axios.delete('/auth/api/auth/delete', {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: {
-                    username: this.tokenUsername,
-                    password: password
-                }
-            }).then(() => {
-                document.cookie = "access_token=";
-                this.home();
+            if (confirm('Confirmer la suppression de votre compte')) {
+                const password = this.accPassword
+                await axios.delete('/auth/api/auth/delete', {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: {
+                        username: this.tokenUsername,
+                        password: password
+                    }
+                }).then(() => {
+                    document.cookie = "access_token=";
+                    this.home();
 
-            }).catch((res) => {
-                this.deleteError = true,
-                    this.deleteMessage = res.response.data.message
+                }).catch((res) => {
+                    this.deleteError = true,
+                        this.deleteMessage = res.response.data.message
 
-            })
-        },
-        async patchUsername() {
-            await axios.patch('/auth/api/auth/patchUser', {
-
-                username: this.tokenUsername,
-                newusername: this.form.newUsername,
-            }, {
-
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                })
             }
 
-            ).then(() => {
-                document.cookie = "access_token=";
-                this.successTrigger = true
-                this.successMessage = 'Nom d\'utilisateur modifié !'
-                // this.login();
+        },
+        async patchUsername() {
+            if (confirm('Confirmer la modification du nom d\'utilisateur')) {
+                await axios.patch('/auth/api/auth/patchUser', {
 
-            }).catch((res) => {
-                this.editError = true,
-                    this.editMessage = res.response.data.message
+                    username: this.tokenUsername,
+                    newusername: this.form.newUsername,
+                }, {
 
-            })
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                }
+
+                ).then(() => {
+                    document.cookie = "access_token=";
+                    this.successTrigger = true
+                    this.successMessage = 'Nom d\'utilisateur modifié !'
+                    // this.login();
+
+                }).catch((res) => {
+                    this.editError = true,
+                        this.editMessage = res.response.data.message
+
+                })
+            }
+
 
         },
 
         async patchAddress() {
-            await axios.patch('/auth/api/auth/patchAddress', {
+            if (confirm('Confirmer la modification de l\'adresse')) {
 
-                username: this.tokenUsername,
-                newaddress: this.form.newAddress,
-            }, {
+                await axios.patch('/auth/api/auth/patchAddress', {
 
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                    username: this.tokenUsername,
+                    newaddress: this.form.newAddress,
+                }, {
+
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                }
+
+                ).then((res) => {
+                    console.log(res)
+                    document.cookie = "access_token=";
+                    this.successTrigger = true
+                    this.successMessage = 'Adresse modifiée !'
+                    // this.login();
+
+                }).catch((res) => {
+                    this.editError = true,
+                        this.editMessage = res.response.data.message
+
+                })
             }
-
-            ).then((res) => {
-                console.log(res)
-                document.cookie = "access_token=";
-                this.successTrigger = true
-                this.successMessage = 'Adresse modifiée !'
-                // this.login();
-
-            }).catch((res) => {
-                this.editError = true,
-                    this.editMessage = res.response.data.message
-
-            })
 
         },
         async patchEmail() {
-            await axios.patch('/auth/api/auth/patchEmail', {
+            if (confirm('Confirmer la mdoficationde l\'adresse mail')) {
 
-                username: this.tokenUsername,
-                newemail: this.form.newEmail,
-            }, {
+                await axios.patch('/auth/api/auth/patchEmail', {
 
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                    username: this.tokenUsername,
+                    newemail: this.form.newEmail,
+                }, {
+
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                }
+
+                ).then(() => {
+                    document.cookie = "access_token=";
+                    this.successTrigger = true
+                    this.successMessage = 'Adresse mail modifié !'
+                    // this.login();
+
+                }).catch((res) => {
+                    this.editError = true,
+                        this.editMessage = res.response.data.message
+
+                })
             }
-
-            ).then(() => {
-                document.cookie = "access_token=";
-                this.successTrigger = true
-                this.successMessage = 'Adresse mail modifié !'
-                // this.login();
-
-            }).catch((res) => {
-                this.editError = true,
-                    this.editMessage = res.response.data.message
-
-            })
 
         },
         async patchPass() {
-            await axios.patch('/auth/api/auth/patchPassword', {
+            if (confirm('Confirmer la modification du mot de passe')) {
 
-                username: this.tokenUsername,
-                newpassword: this.form.newPassword,
-            }, {
+                await axios.patch('/auth/api/auth/patchPassword', {
 
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                    username: this.tokenUsername,
+                    newpassword: this.form.newPassword,
+                }, {
+
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                }
+
+                ).then(() => {
+                    document.cookie = "access_token=";
+                    this.successTrigger = true
+
+                    this.successMessage = 'Password updated successfully!'
+
+
+                }).catch((res) => {
+                    this.editError = true,
+                        this.editMessage = res.response.data.message
+
+                })
             }
-
-            ).then(() => {
-                document.cookie = "access_token=";
-                this.successTrigger = true
-
-                this.successMessage = 'Password updated successfully!'
-
-
-            }).catch((res) => {
-                this.editError = true,
-                    this.editMessage = res.response.data.message
-
-            })
 
         },
         async addSponsorCode() {
-            await axios.post('http://localhost:8080/api/sponsor-code/add', {
+            if (confirm('Confirmer l\'ajout du code de parrainage')) {
 
-                user: this.tokenId,
-                role: this.tokenRole,
-                code: this.form.sponsorCode,
-            }, {
+                await axios.post('http://localhost:8080/api/sponsor-code/add', {
 
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                    user: this.tokenId,
+                    role: this.tokenRole,
+                    code: this.form.sponsorCode,
+                }, {
+
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                }
+
+                ).then(() => {
+                    document.cookie = "access_token=";
+                    this.successTrigger = true
+
+                    this.successMessage = 'Sponsor Code added successfully!'
+
+
+                }).catch((res) => {
+                    this.editError = true,
+                        this.editMessage = res.response.data.message
+
+                })
             }
-
-            ).then(() => {
-                document.cookie = "access_token=";
-                this.successTrigger = true
-
-                this.successMessage = 'Sponsor Code added successfully!'
-
-
-            }).catch((res) => {
-                this.editError = true,
-                    this.editMessage = res.response.data.message
-
-            })
 
         },
         // async addSponsorship() {
