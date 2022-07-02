@@ -41,6 +41,15 @@
                                         </div>
 
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <h3 class="mb-0">Adresse</h3>
+                                        </div>
+                                        <div class="col-md-7 text-secondary">
+                                            {{ tokenAddress }}
+                                        </div>
+
+                                    </div>
                                     <!-- <div class="row">
                                     <div class="col-sm-2">
                                             <v-btn color="accent" @click="sponsorshipAdd">
@@ -334,6 +343,7 @@ export default {
             tokenEmail: '',
             tokenRole: '',
             tokenId: '',
+            tokenAddress: '',
 
             username: '',
             password: '',
@@ -374,6 +384,7 @@ export default {
             this.tokenEmail = decodedjwtToken.email
             this.tokenId = decodedjwtToken.id
             this.tokenRole = decodedjwtToken.role[0]
+            this.tokenAddress = decodedjwtToken.address
             this.tokenExists = true
 
         } else {
