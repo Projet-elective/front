@@ -8,23 +8,23 @@
                             Mes produits
                         </h3>
 
-                        <div class="text-secondary" v-for="product in myProducts" :key="product">
+                        <div class="text-secondary" v-for="product in myProducts" :key="product.name">
                             <v-card elevation="10" class="profile-container">
-                                <!-- ID Commande : {{ product._id }}
+                                ID produit {{ product._id }}
                                 <ul>
                                     <li>
-                                        ID user : {{ product.name }}
+                                        Nom : {{ product.name }}
                                     </li>
                                     <li>
-                                        prix total: {{ product.decription }}
+                                        Description: {{ product.description }}
                                     </li>
                                     <li>
-                                        produits : {{ product.price }}
+                                        Prix : {{ product.price }}
                                     </li>
                                     <li>
-                                        Status : {{ product.type }}
+                                        Type : {{ product.type }}
                                     </li>
-                                </ul> -->
+                                </ul>
                             </v-card>
                         </div>
                     </div>
@@ -64,19 +64,27 @@ export default {
         this.tokenJWT = jwtToken
         this.tokenRole = decodedjwtToken.role[0]
         this.tokenId = decodedjwtToken.id
-        this.getProducts();
+        this.getRestaurantByOwner(this.tokenId)
+        
 
     },
 
     methods: {
-        async getProducts() {
-
-            const result = await axios.get(`../../restaurant/api/products/restaurant/${this.$route.params.id._id}`, {
+        async getRestaurantByOwner(ownerId) {
+            await axios.get('../../restaurant/api/restaurants/getByOwner/' + ownerId, {
                 headers: {
                     'Authorization': `${this.tokenJWT}`
                 },
+            }).then((res) => {
+                if (res.data.restaurant.idOwner == this.tokenId) {
+                    this.myProducts = res.data.products
+                    
+                }
+
+
+            }).catch((res) => {
+                console.log(res)
             })
-            this.myProducts = result.data
 
         },
         home() {

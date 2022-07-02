@@ -192,6 +192,7 @@ export default {
                     this.restauType = res.data.restaurant.type
                     this.hasRestaurant = true
                     this.restauId = res.data.restaurant._id
+                    
 
 
                 }
