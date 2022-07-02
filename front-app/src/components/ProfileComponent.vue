@@ -61,13 +61,13 @@
                                         </v-btn>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-sm-2">
                                         <v-btn color="accent" @click="sponsorshipAdd">
                                             Ajouter un parrainage
                                         </v-btn>
                                     </div>
-                                </div>
+                                </div> -->
                                 <validation-observer ref="observer" v-slot="{ invalid }">
                                     <form @submit.prevent="deleteAcc" style="margin-top: 5rem;">
                                         <div>
@@ -114,12 +114,12 @@
                 <div class="profile-container">
                     <form @submit.prevent="patchUsername" style="margin-top: 5rem;" v-if="!successTrigger">
                         <div>
-                            <h3>Enter your new username</h3>
+                            <h3>Entrez votre nouveau nom d'utilisateur</h3>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
                                 <validation-provider v-slot="{ errors }" name="username" rules="required">
-                                    <v-text-field v-model="form.username" :error-messages="errors" label="Username"
+                                    <v-text-field v-model="form.newUsername" :error-messages="errors" label="Nouveau nom d'utilisateur"
                                         required>
                                     </v-text-field>
                                 </validation-provider>
@@ -133,18 +133,21 @@
                             </div>
                         </div>
                     </form>
+                    <v-btn @click="profile" class="create-button">
+                        Revenir au profil
+                    </v-btn>
                 </div>
             </validation-observer>
             <validation-observer ref="observer" v-slot="{ invalid }" v-if="editEmail">
                 <div class="profile-container">
                     <form @submit.prevent="patchEmail" style="margin-top: 5rem;" v-if="!successTrigger">
                         <div>
-                            <h3>Enter your new email</h3>
+                            <h3>Entrez votre nouvelle adresse mail</h3>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
                                 <validation-provider v-slot="{ errors }" name="email" rules="required">
-                                    <v-text-field v-model="form.email" :error-messages="errors" label="Email" required>
+                                    <v-text-field v-model="form.newEmail" :error-messages="errors" label="Nouvelle adresse mail" required>
                                     </v-text-field>
                                 </validation-provider>
                             </div>
@@ -157,6 +160,9 @@
                             </div>
                         </div>
                     </form>
+                    <v-btn @click="profile" class="create-button">
+                        Revenir au profil
+                    </v-btn>
                 </div>
 
             </validation-observer>
@@ -164,12 +170,12 @@
                 <div class="profile-container">
                     <form @submit.prevent="patchPass" style="margin-top: 5rem;" v-if="!successTrigger">
                         <div>
-                            <h3>Enter your new password</h3>
+                            <h3>Entrez votre nouveau mot de passe</h3>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
                                 <validation-provider v-slot="{ errors }" name="password" rules="required">
-                                    <v-text-field v-model="form.password" :error-messages="errors" label="password"
+                                    <v-text-field v-model="form.newPassword" :error-messages="errors" label="Nouveau mot de passe"
                                         type='password' required>
                                     </v-text-field>
                                 </validation-provider>
@@ -183,18 +189,21 @@
                             </div>
                         </div>
                     </form>
+                    <v-btn @click="profile" class="create-button">
+                        Revenir au profil
+                    </v-btn>
                 </div>
             </validation-observer>
-            <validation-observer ref="observer" v-slot="{ invalid }" v-if="addSponsorCode">
+            <validation-observer ref="observer" v-slot="{ invalid }" v-if="editSponsorCode">
                 <div class="profile-container">
                     <form @submit.prevent="addSponsorCode" style="margin-top: 5rem;" v-if="!successTrigger">
                         <div>
-                            <h3>Enter a code</h3>
+                            <h3>Entrez un code de parrainage</h3>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
                                 <validation-provider v-slot="{ errors }" name="code" rules="required">
-                                    <v-text-field v-model="form.codee" :error-messages="errors" label="Code" required>
+                                    <v-text-field v-model="form.sponsorCode" :error-messages="errors" label="Code de parrainage" required>
                                     </v-text-field>
                                 </validation-provider>
                             </div>
@@ -207,9 +216,12 @@
                             </div>
                         </div>
                     </form>
+                    <v-btn @click="profile" class="create-button">
+                        Revenir au profil
+                    </v-btn>
                 </div>
             </validation-observer>
-            <validation-observer ref="observer" v-slot="{ invalid }" v-if="addSponsorship">
+            <!-- <validation-observer ref="observer" v-slot="{ invalid }" v-if="editSponsorship">
                 <div class="profile-container">
                     <form @submit.prevent="addSponsorship" style="margin-top: 5rem;" v-if="!successTrigger">
                         <div>
@@ -232,7 +244,7 @@
                         </div>
                     </form>
                 </div>
-            </validation-observer>
+            </validation-observer> -->
             <div class="container" v-if="editError" style="color: red;">
                 <h2>{{ editMessage }}</h2>
             </div>
@@ -254,53 +266,6 @@
     </div>
 </template>
 
-    <style scoped>
-    .profile-background {
-        width: 100%;
-        height: 100%;
-        background-color: var(--v-secondary-base);
-        padding-top: 5em;
-        padding-bottom: 5em;
-    }
-    
-    .profile-container {
-        width: 80%;
-        padding: 2em;
-        background-color: white;
-        border-radius: 25px;
-        margin: auto;
-    }
-    
-    .title {
-        margin-bottom: 1.5em;
-        margin-top: 1.5em;
-        text-align: center;
-        font-size: 3em !important;
-    }
-    
-    .register-input {
-        margin-left: 15%;
-        margin-right: 15%;
-    }
-    
-    .login-button {
-        margin-left: 15%;
-        margin-top: 2em;
-    }
-    
-    .clear-button {
-        margin-top: 2em;
-    }
-    
-    .create-button {
-        margin-top: 2em;
-    }
-    
-    .button-container {
-        margin-top: 4em;
-        margin-left: 15%;
-    }
-    </style>
 
 <script>
 import { required } from 'vee-validate/dist/rules'
@@ -326,7 +291,10 @@ export default {
             tokenExists: true,
 
             form: {
-                username: '',
+                newUsername: '',
+                newPassword: '',
+                newEmail: '',
+                sponsorCode: '',
             },
             tokenUsername: '',
             tokenEmail: '',
@@ -341,6 +309,9 @@ export default {
             test: '',
 
             accPassword: '',
+
+            editSponsorCode: false,
+            editSponsorship: false,
 
             deleteError: false,
             deleteMessage: '',
@@ -360,11 +331,9 @@ export default {
     },
     mounted() {
         const i = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
-        console.log(i)
         if (i.length > 0) {
             const jwt = require('jose')
             const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
-            console.log(jwtToken)
             const decodedjwtToken = jwt.decodeJwt(jwtToken)
             this.tokenUsername = decodedjwtToken.username
             this.tokenEmail = decodedjwtToken.email
@@ -402,7 +371,7 @@ export default {
             await axios.patch('/auth/api/auth/patchUser', {
 
                 username: this.tokenUsername,
-                newusername: this.form.username,
+                newusername: this.form.newUsername,
             }, {
 
                 headers: {
@@ -427,7 +396,7 @@ export default {
             await axios.patch('/auth/api/auth/patchEmail', {
 
                 username: this.tokenUsername,
-                newemail: this.form.email,
+                newemail: this.form.newEmail,
             }, {
 
                 headers: {
@@ -452,7 +421,7 @@ export default {
             await axios.patch('/auth/api/auth/patchPassword', {
 
                 username: this.tokenUsername,
-                newpassword: this.form.password,
+                newpassword: this.form.newPassword,
             }, {
 
                 headers: {
@@ -479,7 +448,7 @@ export default {
 
                 user: this.tokenId,
                 role: this.tokenRole,
-                code: this.form.code,
+                code: this.form.sponsorCode,
             }, {
 
                 headers: {
@@ -501,36 +470,36 @@ export default {
             })
 
         },
-        async addSponsorship() {
-            await axios.post('http://localhost:8080/api/sponsorship/add', {
+        // async addSponsorship() {
+        //     await axios.post('http://localhost:8080/api/sponsorship/add', {
 
-                code: this.form.code,
-                user: {
-                    id: this.tokenId,
-                    role: this.tokenRole
-                }
+        //         code: this.form.code,
+        //         user: {
+        //             id: this.tokenId,
+        //             role: this.tokenRole
+        //         }
 
-            }, {
+        //     }, {
 
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            }
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //     }
 
-            ).then(() => {
-                document.cookie = "access_token=";
-                this.successTrigger = true
+        //     ).then(() => {
+        //         document.cookie = "access_token=";
+        //         this.successTrigger = true
 
-                this.successMessage = 'Sponsorship added successfully!'
+        //         this.successMessage = 'Sponsorship added successfully!'
 
 
-            }).catch((res) => {
-                this.editError = true,
-                    this.editMessage = res.response.data.message
+        //     }).catch((res) => {
+        //         this.editError = true,
+        //             this.editMessage = res.response.data.message
 
-            })
+        //     })
 
-        },
+        // },
         usernameEdit() {
             this.editTrigger = true
             this.editUsername = true
@@ -558,6 +527,9 @@ export default {
         login() {
             document.location.href = "/login";
         },
+        profile() {
+            document.location.href = "/profile";
+        },
         disconnectUser() {
             document.cookie = "access_token=";
             this.home();
@@ -565,3 +537,50 @@ export default {
     }
 }
 </script>
+            <style scoped>
+            .profile-background {
+                width: 100%;
+                height: 100%;
+                background-color: var(--v-secondary-base);
+                padding-top: 5em;
+                padding-bottom: 5em;
+            }
+            
+            .profile-container {
+                width: 80%;
+                padding: 2em;
+                background-color: white;
+                border-radius: 25px;
+                margin: auto;
+            }
+            
+            .title {
+                margin-bottom: 1.5em;
+                margin-top: 1.5em;
+                text-align: center;
+                font-size: 3em !important;
+            }
+            
+            .register-input {
+                margin-left: 15%;
+                margin-right: 15%;
+            }
+            
+            .login-button {
+                margin-left: 15%;
+                margin-top: 2em;
+            }
+            
+            .clear-button {
+                margin-top: 2em;
+            }
+            
+            .create-button {
+                margin-top: 2em;
+            }
+            
+            .button-container {
+                margin-top: 4em;
+                margin-left: 15%;
+            }
+            </style>

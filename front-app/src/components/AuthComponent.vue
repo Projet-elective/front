@@ -1,56 +1,61 @@
 <template>
 
-        <div class="register-background">
-            <validation-observer ref="observer" v-slot="{ invalid }">
-                <div class="register-container">
-                    <div class="title">
-                        Inscription
-                    </div>
-
-                    <form @submit.prevent="login" v-if="!savingSuccessful" style="margin-bottom: 2rem;">
-                        <validation-provider v-slot="{ errors }" name="username" rules="required">
-                            <v-text-field class="register-input" v-model="username" :error-messages="errors"
-                                label="Nom d'utilisateur" required>
-                            </v-text-field>
-                        </validation-provider>
-                        <validation-provider v-slot="{ errors }" name="password" rules="required">
-                            <v-text-field class="register-input" v-model="password" :error-messages="errors"
-                                label="Password" type='password' required>
-                            </v-text-field>
-                        </validation-provider>
-                        <validation-provider v-slot="{ errors }" name="email" rules="required|email">
-                            <v-text-field class="register-input" v-model="email" :error-messages="errors"
-                                label="Adresse mail" required></v-text-field>
-                        </validation-provider>
-                        <validation-provider v-slot="{ errors }" name="roles" rules="required">
-                            <v-select class="register-input" v-model="select" :items="roles" :error-messages="errors"
-                                label="Sélection du rôle" data-vv-name="role" required></v-select>
-                        </validation-provider>
-                        <div class="button-container">
-                            <v-btn class="mr-4" type="submit" :disabled="invalid">
-                                S'inscrire
-                            </v-btn>
-                            <v-btn @click="clear">
-                                Effacer
-                            </v-btn>
-                        </div>
-
-                    </form>
-                    <div class="container" v-if="savingSuccessful" style="color: green;">
-                        <h1>{{ errorMessages }}</h1>
-                        <v-btn @click="home">
-                            Retourner à l'accueil
-                        </v-btn>
-                    </div>
-                    <div class="container" v-if="errorInRegister" style="color: red;">
-                        <h1>{{ errorMessages }}</h1>
-                        <v-btn @click="home">
-                            Retourner à l'accueil
-                        </v-btn>
-                    </div>
+    <div class="register-background">
+        <validation-observer ref="observer" v-slot="{ invalid }">
+            <div class="register-container">
+                <div class="title">
+                    Inscription
                 </div>
-            </validation-observer>
-        </div>
+
+                <form @submit.prevent="signup" v-if="!savingSuccessful" style="margin-bottom: 2rem;">
+                    <validation-provider v-slot="{ errors }" name="username" rules="required">
+                        <v-text-field class="register-input" v-model="username" :error-messages="errors"
+                            label="Nom d'utilisateur" required>
+                        </v-text-field>
+                    </validation-provider>
+                    <validation-provider v-slot="{ errors }" name="password" rules="required">
+                        <v-text-field class="register-input" v-model="password" :error-messages="errors"
+                            label="Password" type='password' required>
+                        </v-text-field>
+                    </validation-provider>
+                    <validation-provider v-slot="{ errors }" name="address" rules="required">
+                        <v-text-field class="register-input" v-model="address" :error-messages="errors"
+                            label="Adresse" required>
+                        </v-text-field>
+                    </validation-provider>
+                    <validation-provider v-slot="{ errors }" name="email" rules="required|email">
+                        <v-text-field class="register-input" v-model="email" :error-messages="errors"
+                            label="Adresse mail" required></v-text-field>
+                    </validation-provider>
+                    <validation-provider v-slot="{ errors }" name="roles" rules="required">
+                        <v-select class="register-input" v-model="select" :items="roles" :error-messages="errors"
+                            label="Sélection du rôle" data-vv-name="role" required></v-select>
+                    </validation-provider>
+                    <div class="button-container">
+                        <v-btn class="mr-4" type="submit" :disabled="invalid">
+                            S'inscrire
+                        </v-btn>
+                        <v-btn @click="clear">
+                            Effacer
+                        </v-btn>
+                    </div>
+
+                </form>
+                <div class="container" v-if="savingSuccessful" style="color: green;">
+                    <h1>{{ errorMessages }}</h1>
+                    <v-btn @click="home">
+                        Retourner à l'accueil
+                    </v-btn>
+                </div>
+                <div class="container" v-if="errorInRegister" style="color: red;">
+                    <h1>{{ errorMessages }}</h1>
+                    <v-btn @click="home">
+                        Retourner à l'accueil
+                    </v-btn>
+                </div>
+            </div>
+        </validation-observer>
+    </div>
 
 </template>
 
@@ -144,6 +149,7 @@ export default {
         username: '',
         password: '',
         email: '',
+        address: '',
         select: null,
         roles: [
             'client',
@@ -159,15 +165,16 @@ export default {
     }),
 
     methods: {
-        async login() {
-            const { username, password, email, select } = this;
+        async signup() {
+            const { username, password, email, address, select } = this;
             const role = []
             role.push(select)
             await axios.post('/auth/api/auth/signup', {
                 username: username,
                 password: password,
+                address: address,
                 email: email,
-                roles: role
+                roles: role,
             }).then((res) => {
                 this.errorMessages = res.data['message'];
                 this.savingSuccessful = true
@@ -186,6 +193,7 @@ export default {
             this.username = ''
             this.password = ''
             this.email = ''
+            this.address = ''
             this.select = null
             this.$refs.observer.reset()
         },

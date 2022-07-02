@@ -214,7 +214,6 @@ export default {
     if(i){
       const jwt = require('jose')
       const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
-      console.log(jwtToken)
       const decodedjwtToken = jwt.decodeJwt(jwtToken)
       this.tokenUsername = decodedjwtToken.username
       this.tokenRole = decodedjwtToken.role[0]
