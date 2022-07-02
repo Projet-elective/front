@@ -7,109 +7,110 @@
             <div v-if="!editTrigger">
                 <v-card elevation="10" class="profile-container">
                     <h1 class="title">Profil</h1>
-                    <div class="col-md-8">
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <h3 class="mb-0">Nom d'utilisateur</h3>
-                                    </div>
-                                    <div class="col-sm-7 text-secondary">
-                                        {{ tokenUsername }}
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <v-btn color="accent" @click="usernameEdit">
-                                            Modifier le nom d'utilisateur
-                                        </v-btn>
+                    <div class="row">
 
-                                    </div>
-                                </div>
+                        <div class="col-md-8">
+                            <div class="card mb-3">
+                                <div class="card-body">
 
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <h3 class="mb-0">Adresse mail</h3>
-                                    </div>
-                                    <div class="col-sm-7 text-secondary">
-                                        {{ tokenEmail }}
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <v-btn color="accent" @click="emailEdit">
-                                            Modifier l'adresse mail
-                                        </v-btn>
-
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <h3 class="mb-0">Rôle</h3>
-                                    </div>
-                                    <div class="col-sm-7 text-secondary">
-                                        {{ tokenRole }}
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <v-btn color="accent" @click="passwordEdit">
-                                            Modifier le mot de passe
-                                        </v-btn>
-
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-2">
-                                        <v-btn color="accent" @click="sponsorCodeAdd">
-                                            Ajouter un code de parrainage
-                                        </v-btn>
-                                    </div>
-                                </div>
-                                <!-- <div class="row">
-                                    <div class="col-sm-2">
-                                        <v-btn color="accent" @click="sponsorshipAdd">
-                                            Ajouter un parrainage
-                                        </v-btn>
-                                    </div>
-                                </div> -->
-                                <validation-observer ref="observer" v-slot="{ invalid }">
-                                    <form @submit.prevent="deleteAcc" style="margin-top: 5rem;">
-                                        <div>
-                                            <h3>Pour supprimer votre compte insérer votre mot de passe</h3>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <h3 class="mb-0">Nom d'utilisateur</h3>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <validation-provider v-slot="{ errors }" name="Password"
-                                                    rules="required">
-                                                    <v-text-field v-model="accPassword" :error-messages="errors"
-                                                        label="Mot de passe" type='password' required>
-                                                    </v-text-field>
-                                                </validation-provider>
+                                        <div class="col-md-7 text-secondary">
+                                            {{ tokenUsername }}
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <h3 class="mb-0">Adresse mail</h3>
+                                        </div>
+                                        <div class="col-md-7 text-secondary">
+                                            {{ tokenEmail }}
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <h3 class="mb-0">Rôle</h3>
+                                        </div>
+                                        <div class="col-md-7 text-secondary">
+                                            {{ tokenRole }}
+                                        </div>
+
+                                    </div>
+                                    <!-- <div class="row">
+                                    <div class="col-sm-2">
+                                            <v-btn color="accent" @click="sponsorshipAdd">
+                                                Ajouter un parrainage
+                                            </v-btn>
+                                        </div>
+                                        </div> -->
+
+                                    <validation-observer ref="observer" v-slot="{ invalid }">
+                                        <form @submit.prevent="deleteAcc" style="margin-top: 5rem;">
+                                            <div>
+                                                <h3>Pour supprimer votre compte insérer votre mot de passe</h3>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <v-btn color="error" class="mr-4" type="submit" :disabled="invalid">
-                                                    Supprimer le compte
-                                                </v-btn>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <validation-provider v-slot="{ errors }" name="Password"
+                                                        rules="required">
+                                                        <v-text-field v-model="accPassword" :error-messages="errors"
+                                                            label="Mot de passe" type='password' required>
+                                                        </v-text-field>
+                                                    </validation-provider>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="container" v-if="deleteError" style="color: red;">
-                                            <h2>{{ deleteMessage }}</h2>
-                                        </div>
-                                    </form>
-                                </validation-observer>
-
-
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <v-btn color="error" class="mr-4" type="submit" :disabled="invalid">
+                                                        Supprimer le compte
+                                                    </v-btn>
+                                                </div>
+                                            </div>
+                                            <div class="container" v-if="deleteError" style="color: red;">
+                                                <h2>{{ deleteMessage }}</h2>
+                                            </div>
+                                        </form>
+                                    </validation-observer>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <v-btn @click="disconnectUser">
+                                    Disconnect
+                                </v-btn>
 
                             </div>
                         </div>
-                        <div class="col-sm-2">
-                            <v-btn @click="disconnectUser">
-                                Disconnect
-                            </v-btn>
 
+                        <div class="col-md-4">
+                            <div class="col-sm-2">
+                                <v-btn color="accent" @click="usernameEdit">
+                                    Modifier le nom d'utilisateur
+                                </v-btn>
+                                <v-btn class="create-button" color="accent" @click="emailEdit">
+                                    Modifier l'adresse mail
+                                </v-btn>
+                                <v-btn class="create-button" color="accent" @click="passwordEdit">
+                                    Modifier le mot de passe
+                                </v-btn>
+                                <v-btn class="create-button" color="accent" @click="addressEdit">
+                                    Modifier l'adresse
+                                </v-btn>
+                                <v-btn class="create-button" color="accent" @click="sponsorCodeAdd">
+                                    Ajouter un code de parrainage
+                                </v-btn>
+                            </div>
                         </div>
+
                     </div>
                 </v-card>
 
             </div>
+
             <validation-observer ref="observer" v-slot="{ invalid }" v-if="editUsername">
                 <div class="profile-container">
                     <form @submit.prevent="patchUsername" style="margin-top: 5rem;" v-if="!successTrigger">
@@ -119,8 +120,8 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <validation-provider v-slot="{ errors }" name="username" rules="required">
-                                    <v-text-field v-model="form.newUsername" :error-messages="errors" label="Nouveau nom d'utilisateur"
-                                        required>
+                                    <v-text-field v-model="form.newUsername" :error-messages="errors"
+                                        label="Nouveau nom d'utilisateur" required>
                                     </v-text-field>
                                 </validation-provider>
                             </div>
@@ -138,6 +139,7 @@
                     </v-btn>
                 </div>
             </validation-observer>
+
             <validation-observer ref="observer" v-slot="{ invalid }" v-if="editEmail">
                 <div class="profile-container">
                     <form @submit.prevent="patchEmail" style="margin-top: 5rem;" v-if="!successTrigger">
@@ -146,8 +148,9 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
-                                <validation-provider v-slot="{ errors }" name="email" rules="required">
-                                    <v-text-field v-model="form.newEmail" :error-messages="errors" label="Nouvelle adresse mail" required>
+                                <validation-provider v-slot="{ errors }" name="email" rules="required|email">
+                                    <v-text-field v-model="form.newEmail" :error-messages="errors"
+                                        label="Nouvelle adresse mail" required>
                                     </v-text-field>
                                 </validation-provider>
                             </div>
@@ -164,8 +167,37 @@
                         Revenir au profil
                     </v-btn>
                 </div>
-
             </validation-observer>
+
+            <validation-observer ref="observer" v-slot="{ invalid }" v-if="editAddress">
+                <div class="profile-container">
+                    <form @submit.prevent="patchAddress" style="margin-top: 5rem;" v-if="!successTrigger">
+                        <div>
+                            <h3>Entrez votre nouvelle adresse</h3>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <validation-provider v-slot="{ errors }" name="adresse" rules="required">
+                                    <v-text-field v-model="form.newAddress" :error-messages="errors"
+                                        label="Nouvelle adresse" required>
+                                    </v-text-field>
+                                </validation-provider>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <v-btn class="mr-4" type="submit" :disabled="invalid">
+                                    Save
+                                </v-btn>
+                            </div>
+                        </div>
+                    </form>
+                    <v-btn @click="profile" class="create-button">
+                        Revenir au profil
+                    </v-btn>
+                </div>
+            </validation-observer>
+
             <validation-observer ref="observer" v-slot="{ invalid }" v-if="editPassword">
                 <div class="profile-container">
                     <form @submit.prevent="patchPass" style="margin-top: 5rem;" v-if="!successTrigger">
@@ -175,8 +207,8 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <validation-provider v-slot="{ errors }" name="password" rules="required">
-                                    <v-text-field v-model="form.newPassword" :error-messages="errors" label="Nouveau mot de passe"
-                                        type='password' required>
+                                    <v-text-field v-model="form.newPassword" :error-messages="errors"
+                                        label="Nouveau mot de passe" type='password' required>
                                     </v-text-field>
                                 </validation-provider>
                             </div>
@@ -203,7 +235,8 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <validation-provider v-slot="{ errors }" name="code" rules="required">
-                                    <v-text-field v-model="form.sponsorCode" :error-messages="errors" label="Code de parrainage" required>
+                                    <v-text-field v-model="form.sponsorCode" :error-messages="errors"
+                                        label="Code de parrainage" required>
                                     </v-text-field>
                                 </validation-provider>
                             </div>
@@ -294,6 +327,7 @@ export default {
                 newUsername: '',
                 newPassword: '',
                 newEmail: '',
+                newAddress: '',
                 sponsorCode: '',
             },
             tokenUsername: '',
@@ -322,6 +356,7 @@ export default {
             editUsername: false,
             editPassword: false,
             editEmail: false,
+            editAddress: false,
             successMessage: '',
             successTrigger: false,
         }
@@ -383,6 +418,33 @@ export default {
                 document.cookie = "access_token=";
                 this.successTrigger = true
                 this.successMessage = 'Nom d\'utilisateur modifié !'
+                // this.login();
+
+            }).catch((res) => {
+                this.editError = true,
+                    this.editMessage = res.response.data.message
+
+            })
+
+        },
+
+        async patchAddress() {
+            await axios.patch('/auth/api/auth/patchAddress', {
+
+                username: this.tokenUsername,
+                newaddress: this.form.newAddress,
+            }, {
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }
+
+            ).then((res) => {
+                console.log(res)
+                document.cookie = "access_token=";
+                this.successTrigger = true
+                this.successMessage = 'Adresse modifiée !'
                 // this.login();
 
             }).catch((res) => {
@@ -511,6 +573,10 @@ export default {
         emailEdit() {
             this.editTrigger = true
             this.editEmail = true
+        },
+        addressEdit() {
+            this.editTrigger = true
+            this.editAddress = true
         },
         sponsorCodeAdd() {
             this.editTrigger = true
