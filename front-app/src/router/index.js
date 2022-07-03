@@ -20,6 +20,7 @@ import MyRestaurantView from '../views/MyRestaurantView.vue'
 import addProductView from '../views/addProductView.vue'
 import addMenuView from '../views/addMenuView.vue'
 import MyProductsView from '../views/MyProductsView.vue'
+import MyMenusView from '../views/MyMenusView.vue'
 
 
 Vue.use(VueRouter)
@@ -61,7 +62,7 @@ const routes = [
     name: 'profile',
     component: ProfileView
   },
-  
+
   {
     path: '/restaurant',
     name: 'restaurant',
@@ -86,7 +87,7 @@ const routes = [
     name: 'account',
     component: AccountView
   },
-  { 
+  {
     path: '/techService',
     name: 'techService',
     component: TechServiceView
@@ -121,6 +122,11 @@ const routes = [
     path: '/myRestaurant/myProducts',
     name: 'myProducts',
     component: MyProductsView,
+  },
+  {
+    path: '/myRestaurant/myMenus',
+    name: 'myMenus',
+    component: MyMenusView,
   },
 
 ]

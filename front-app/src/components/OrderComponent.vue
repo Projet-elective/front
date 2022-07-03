@@ -33,13 +33,13 @@
                                     v-if="result.state_order == 'En cours de préparation'">
                                     Préparer
                                 </v-btn>
-                                <v-btn @click="deliver(result._id)" v-if="result.state_order == 'Commande prête'">
+                                <!-- <v-btn @click="deliver(result._id)" v-if="result.state_order == 'Commande prête'">
                                     Livrer
                                 </v-btn>
                                 <v-btn @click="complete(result._id)"
                                     v-if="result.state_order == 'En cours de livraison'">
                                     Compléter
-                                </v-btn>
+                                </v-btn> -->
                             </v-card>
                         </div>
                     </div>
@@ -112,8 +112,9 @@ export default {
             tokenEmail: '',
             tokenRole: '',
             tokenId: '',
-            resultsNotCompleted: undefined,
-            resultsCompleted: undefined,
+            resultsNotCompleted: '',
+            resultsCompleted: '',
+            resultsReadyToDeliver: '',
             orderId: '',
 
         }
@@ -138,6 +139,27 @@ export default {
 
     },
     methods: {
+        async getRestaurantByOwner(ownerId) {
+            await axios.get('restaurant/api/restaurants/getByOwner/' + ownerId, {
+                headers: {
+                    'Authorization': `${this.tokenJWT}`
+                },
+            }).then((res) => {
+                if (res.data.restaurant.idOwner == this.tokenId) {
+                    this.restauName = res.data.restaurant.name
+                    this.restauDesc = res.data.restaurant.description
+                    this.restauAddress = res.data.restaurant.address
+                    this.restauType = res.data.restaurant.type
+                    this.hasRestaurant = true
+                    this.restauId = res.data.restaurant._id
+                }
+
+
+            }).catch((res) => {
+                console.log(res)
+            })
+
+        },
         /*For clients */
         async getOrder() {
             console.log(this.tokenJWT)
@@ -161,7 +183,9 @@ export default {
                     'Authorization': `${this.tokenJWT}`
                 },
             })
+
             this.resultsNotCompleted = result.data
+
         },
         async restaurantCompletedOrders() {
 
@@ -171,7 +195,7 @@ export default {
                 },
             })
             this.resultsCompleted = result.data
-            
+
         },
 
         /* ->preparation*/

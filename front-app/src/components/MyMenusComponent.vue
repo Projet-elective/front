@@ -7,35 +7,35 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <h3>
-                                    Mes produits
+                                    Mes Menus
                                 </h3>
                             </div>
                             <div class="col-md-3">
-                                <v-btn class="mr-4" :to="{ name: 'addProduct' }">
-                                    Ajouter un produit
+                                <v-btn class="mr-4" :to="{ name: 'addMenu' }">
+                                    Ajouter un menu
                                 </v-btn>
                             </div>
                         </div>
                         <div>
-                            <div v-if="myProducts != ''">
-                                <div class="text-secondary" v-for="product in myProducts" :key="product.name">
+                            <div v-if="myMenus != ''">
+                                <div class="text-secondary" v-for="menu in myMenus" :key="menu.name">
                                     <v-card elevation="10" class="profile-container">
-                                        ID produit {{ product._id }}
+                                        Nom du menu : {{ menu.name }}
                                         <ul>
                                             <li>
-                                                Nom : {{ product.name }}
+                                                Entrée : {{ menu.entree.name }}
                                             </li>
                                             <li>
-                                                Description: {{ product.description }}
+                                                Plat principal: {{ menu.main.name }}
                                             </li>
                                             <li>
-                                                Prix : {{ product.price }} €
+                                                Dessert : {{ menu.dessert.name }}
                                             </li>
                                             <li>
-                                                Type : {{ product.type }}
+                                                Boisson : {{ menu.drink.name }}
                                             </li>
                                         </ul>
-                                        <v-btn @click="deleteProduct(product._id)">
+                                        <v-btn @click="deleteMenu(menu._id)">
                                             Supprimer
                                         </v-btn>
                                     </v-card>
@@ -43,7 +43,7 @@
                             </div>
                             <div v-else>
                                 <v-card elevation="10" class="profile-container">
-                                    <h3>Aucun produit disponible</h3>
+                                    <h3>Aucun menu disponible</h3>
                                 </v-card>
                             </div>
                         </div>
@@ -60,7 +60,7 @@
 import axios from 'axios'
 
 export default {
-    name: 'MyProductsComp',
+    name: 'MyMenusComp',
     components: {
 
     },
@@ -75,42 +75,33 @@ export default {
         tokenJWT: '',
         tokenRole: '',
         tokenId: '',
-        myProducts: '',
+        myMenus: '',
     }),
     mounted() {
-        const jwt = require('jose')
-        const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
-        const decodedjwtToken = jwt.decodeJwt(jwtToken)
-        this.tokenJWT = jwtToken
-        this.tokenRole = decodedjwtToken.role[0]
-        this.tokenId = decodedjwtToken.id
-        this.getRestaurantByOwner(this.tokenId)
-
-
+        this.fetch()
     },
 
     methods: {
-        async getRestaurantByOwner(ownerId) {
-            await axios.get('../../restaurant/api/restaurants/getByOwner/' + ownerId, {
+        getRestaurantByOwner(ownerId) {
+            axios.get('/restaurant/api/restaurants/getByOwner/' + ownerId, {
                 headers: {
                     'Authorization': `${this.tokenJWT}`
                 },
             }).then((res) => {
                 if (res.data.restaurant.idOwner == this.tokenId) {
-                    this.myProducts = res.data.products
+                    this.myMenus = res.data.menus
+                    console.log(this.myMenus)
 
                 }
-
-
             }).catch((res) => {
                 console.log(res)
             })
 
         },
 
-        deleteProduct(id) {
-            if (confirm('Comfirmer la suppression du produit')) {
-                axios.delete('../../restaurant/api/products/deleteProduct/' + id, {
+        deleteMenu(id) {
+            if (confirm('Comfirmer la suppression du menu')) {
+                axios.delete('/restaurant/api/menus/deleteMenu/' + id, {
 
                     headers: {
                         'Authorization': `${this.tokenJWT}`
@@ -121,8 +112,6 @@ export default {
 
                 ).then(() => {
                     this.home()
-
-
                 }).catch((res) => {
                     console.log(res)
 
@@ -130,8 +119,17 @@ export default {
             }
 
         },
+        fetch() {
+            const jwt = require('jose')
+            const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
+            const decodedjwtToken = jwt.decodeJwt(jwtToken)
+            this.tokenJWT = jwtToken
+            this.tokenRole = decodedjwtToken.role[0]
+            this.tokenId = decodedjwtToken.id
+            this.getRestaurantByOwner(this.tokenId)
+        },
         home() {
-            document.location.href = "/myRestaurant/myProducts";
+            this.fetch()
         },
 
     },

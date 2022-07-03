@@ -55,6 +55,9 @@
             <v-btn class="mr-4" :to="{ name: 'myProducts' }">
                 Voir mes produits
             </v-btn>
+            <v-btn class="mr-4" :to="{ name: 'myMenus' }">
+                Voir mes menus
+            </v-btn>
 
         </v-container>
         <v-container v-if="this.tokenRole == 'RESTAURANT' && this.hasRestaurant == false">
