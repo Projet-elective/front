@@ -42,25 +42,29 @@
     margin-bottom: 25px;
     margin-top: 25px;
 }
+
+.show-button {
+    width: 100%;
+    background-color: var(--v-primary-base);
+    color: white;
+    border-radius: 5px;
+    padding: 10px 0;
+    font-size: 20px;
+    margin-top:5%;
+}
 </style>
 <template>
 <div class="stat-body">
     <v-container class="stat-container">
-        <template v-if="this.tokenRole == 'COMMERCIAL'">
+    <template v-if="this.tokenRole == 'COMMERCIAL'">
             <div class="container-title">
                 <h1>Statistique Commercial</h1>
-            </div>
+            </div><button class="show-button" @click="getCommercial()">Afficher les statistiques</button>
             <div class="container-lists">
                 <template>
                     <h2>Commande de la semaine</h2>
                     <ul v-for="week in weeks" :key="week">
                         <li>{{week}}</li> 
-                        
-                    </ul>
-                    <ul>
-                        <li>text</li>  
-                        <li>text</li> 
-                        <li>text</li> 
                     </ul>
                 </template>
                     <v-spacer></v-spacer>
@@ -83,7 +87,7 @@
         <template v-if="this.tokenRole == 'RESTAURANT'">
                 <div class="container-title">
                     <h1>Statistique Restaurant</h1>
-                </div>
+                </div><button class="show-button"  @click="getRestaurant()">Afficher les statistiques</button>
                 <div class="container-lists">
                     <template>
                         <h2>Commande de la semaine</h2>
@@ -106,7 +110,6 @@
                         </ul>
                     </template>
                 </div>
-            
         </template>
    </v-container>
 </div>
@@ -134,42 +137,26 @@ export default {
         const decodedjwtToken = jwt.decodeJwt(jwtToken)
         this.tokenId = decodedjwtToken.id
     },
-    created() {
-        this.getWeekCommercial();
-        this.getMonthCommercial();
-        this.getYearCommercial();
-        this.getWeekRestaurant();
-        this.getMonthRestaurant();
-        this.getYearRestaurant();
-    },
     methods: {
-        getWeekCommercial(){
+        getCommercial(){
             axios.get(`/stats/api/commercials/week`, {mode: 'no-cors'})
             .then(response => this.weeks = response.data)
             .catch(e => this.error = [{ title: "Error de chargement",e }]);
-        },
-        getMonthCommercial(){
             axios.get(`/stats/api/commercials/month`, {mode: 'no-cors'})
             .then(response => this.months = response.data)
             .catch(e => this.error = [{ title: "Error de chargement",e }]);
-        },
-        getYearCommercial(){
             axios.get(`/stats/api/commercials/year`, {mode: 'no-cors'})
             .then(response => this.years = response.data)
             .catch(e => this.error = [{ title: "Error de chargement",e }]);
         },
 
-        getWeekRestaurant(){
+        getRestaurant(){
             axios.get(`/stats/api/restaurants/week/${this.tokenId}`, {mode: 'no-cors'})
             .then(response => this.weeks = response.data)
             .catch(e => this.error = [{ title: "Error de chargement",e }]);
-        },
-        getMonthRestaurant(){
             axios.get(`/stats/api/restaurants/month/${this.tokenId}`, {mode: 'no-cors'})
             .then(response => this.months = response.data)
             .catch(e => this.error = [{ title: "Error de chargement",e }]);
-        },
-        getYearRestaurant(){
             axios.get(`/stats/api/restaurants/year/${this.tokenId}`, {mode: 'no-cors'})
             .then(response => this.years = response.data)
             .catch(e => this.error = [{ title: "Error de chargement",e }]);
