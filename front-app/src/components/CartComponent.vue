@@ -86,50 +86,54 @@
 </style>
 
 <template>
-    <!-- <v-container v-if="this.tokenRole == 'CLIENT'"> -->
     <v-container>
-     <validation-observer ref="observer" v-slot="{ invalid }">
-        <div class="body">
-            <h1>Votre Panier</h1>
-            <div class="container-cart">
-                <form style="margin-bottom: 2rem;">
-                    <validation-provider v-slot="{ errors }" name="delivery_address" rules="required">
-                        <v-text-field v-model="delivery_address" :error-messages="errors" label="Votre adresse" required>
-                        </v-text-field>
-                    </validation-provider>
-                    <div class="list-cart">
-                        <table>
-                            <thead class="head-table">
-                                <tr>
-                                    <td style="width: 50%">Produit</td>
-                                    <td style="width: 30%">Prix (€)</td>
-                                    <td style="width: 20%"></td>
-                                </tr>
-                            </thead>
-                            <tbody class="body-table" v-for="cart in carts" :key="cart">
-                                <tr v-if="!cart ==''">
-                                    <td>{{ cart.name }}</td>
-                                    <td>{{ cart.price }}</td>
-                                    <td><button class="remove-button" @click="removeFromCart(cart._id)">Supprimer du panier</button></td>
-                                </tr>
-                            </tbody> 
-                        </table>   
-                    </div>
-                    </form>
-                     <div class="total-cart">
-                        <div class="container-total-cart">
-                            <div>Commande</div>
-                            <div>Nombre de produit : {{totalCount}}</div>
-                            <div>Total : {{total}} €</div>
+        <validation-observer ref="observer" v-slot="{ invalid }">
+            <div class="body">
+                <h1>Votre Panier</h1>
+                <div class="container-cart">
+                    <form style="margin-bottom: 2rem;">
+                        <validation-provider v-slot="{ errors }" name="delivery_address" rules="required">
+                            <v-text-field v-model="delivery_address" :error-messages="errors" label="Votre adresse" required>
+                            </v-text-field>
+                        </validation-provider>
+                        <div class="list-cart">
+                            <table>
+                                <thead class="head-table">
+                                    <tr>
+                                        <td style="width: 50%">Produit</td>
+                                        <td style="width: 30%">Prix (€)</td>
+                                        <td style="width: 20%"></td>
+                                    </tr>
+                                </thead>
+                                <tbody class="body-table" v-for="cart in carts" :key="cart">
+                                    <tr v-if="!cart ==''">
+                                        <td>{{ cart.name }}</td>
+                                        <td>{{ cart.price }}</td>
+                                        <td><button class="remove-button" @click="removeFromCart(cart._id)">Supprimer du panier</button></td>
+                                    </tr>
+                                </tbody> 
+                            </table>   
                         </div>
-                        <div class="container-button"><button class="pay-button" @click="clearCart()">Vider le panier</button></div>
-                   
-                        <div class="container-button"><button class="pay-button" @click="postOrder()" type="submit" :disabled="invalid">Payer</button></div>
-                    </div>
+                        </form>
+                        <div class="total-cart">
+                            <div class="container-total-cart">
+                                <div>Commande</div>
+                                <div>Nombre de produit : {{totalCount}}</div>
+                                <div>Total : {{total}} €</div>
+                            </div>
+                            <div class="container-button"><button class="pay-button" @click="clearCart()">Vider le panier</button></div>
+                            <template v-if="this.tokenRole == 'CLIENT'">
+                                <div class="container-button"><button class="pay-button" @click="postOrder()" type="submit" :disabled="invalid">Payer</button></div>
+                            </template>
+                            <template v-if="this.tokenRole == ''">
+                                <p> Connecter vous pour payer</p>
+                            </template>
+                        </div>
+                </div>
             </div>
-        </div>
         </validation-observer>
-    </v-container>   
+    </v-container>
+
 </template>
 
 <script>
