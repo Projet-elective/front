@@ -86,17 +86,17 @@
 </style>
 
 <template>
-    <v-container v-if="this.tokenRole == 'CLIENT'">
+    <!-- <v-container v-if="this.tokenRole == 'CLIENT'"> -->
+    <v-container>
      <validation-observer ref="observer" v-slot="{ invalid }">
         <div class="body">
             <h1>Votre Panier</h1>
             <div class="container-cart">
-                <form @submit.prevent="login" v-if="!savingSuccessful" style="margin-bottom: 2rem;">
+                <form style="margin-bottom: 2rem;">
                     <validation-provider v-slot="{ errors }" name="delivery_address" rules="required">
                         <v-text-field v-model="delivery_address" :error-messages="errors" label="Votre adresse" required>
                         </v-text-field>
                     </validation-provider>
-
                     <div class="list-cart">
                         <table>
                             <thead class="head-table">
@@ -124,7 +124,7 @@
                         </div>
                         <div class="container-button"><button class="pay-button" @click="clearCart()">Vider le panier</button></div>
                    
-                        <div class="container-button"><button class="pay-button" @click="$router.push('/delivery'), postOrder()" type="submit" :disabled="invalid">Payer</button></div>
+                        <div class="container-button"><button class="pay-button" @click="postOrder()" type="submit" :disabled="invalid">Payer</button></div>
                     </div>
             </div>
         </div>
@@ -156,7 +156,6 @@ extend('regex', {
     message: '{_field_} {_value_} does not match {regex}',
 })
 
-
 export default {
     name: 'CartComp',
     components: {
@@ -166,30 +165,34 @@ export default {
     data (){
      return{
         carts:[],
+        cartsId:[],
         order:[],
         savingSuccessful: false,
         errorInRegister: false,
         errorMessages: '',
-        idRestaurant:this.carts._id,
-        orderList: this.carts,
+        idRestaurant:this.$route.params.id,
+        orderList: this.carts._id,
         idUser:this.tokenId,
         tokenRole: '',
         tokenUsername: '',
-        delivery_address:''
+        delivery_address:'',
       }
     },
     created() {
         this.getCart();
-        this.postOrder();
+        this.totalPrice();
+        this.totalProduct();
     },
     methods: {
         postOrder(){
-            const { orderList,idRestaurant, idUser, delivery_address } = this;
+            console.log(this.cartsId)
+            const { idRestaurant, idUser, delivery_address } = this;
             axios.post(`/orders/api/orders/addOrder`, {mode: 'no-cors', 
-                orderList:orderList, 
+                orderList:this.cartsId, 
                 idRestaurant:idRestaurant,
                 idUser:idUser,
-                delivery_address:delivery_address  })
+                delivery_address:delivery_address,
+                totalPrice:this.total  })
             .then((res) => {
                     this.errorMessages = res.data['message'];
                     this.savingSuccessful = true
@@ -199,36 +202,42 @@ export default {
                 this.errorInRegister = true
                 this.savingSuccessful = false
             })
+            this.clearCart()
+            console.log('Commande envoyée')
         },
        removeFromCart(itemId) {
             const cartItems = JSON.parse(localStorage.getItem("cart"));
-            const index = this.carts.find(cart => cart._id === itemId)
-            cartItems.splice(index, 1);
+            const indexone = this.carts.find(cart => cart._id === itemId)
+            cartItems.splice(indexone, 1);
             localStorage.setItem("cart", JSON.stringify(cartItems));
             this.cart = JSON.parse(localStorage.getItem("cart"));
+            const cartId = JSON.parse(localStorage.getItem("cartId"));
+            const indextwo = this.carts.find(cart => cart._id === itemId)
+            cartId.splice(indextwo, 1);
+            localStorage.setItem("cartId", JSON.stringify(cartId));
+            this.cartId = JSON.parse(localStorage.getItem("cartId"));
+
             this.getCart();
             this.totalPrice();
             this.totalProduct();
+            this.$refs.observer.reset()
         },
         clearCart(){
+            this.$refs.observer.reset()
             localStorage.clear();
             this.getCart();
             this.totalPrice();
             this.totalProduct();
         },
         getCart() {
-           //console.log(localStorage.getItem("cart"))
             if (!localStorage.getItem("cart")) {
                 localStorage.setItem("cart", JSON.stringify([]));
             }
             this.carts = JSON.parse(localStorage.getItem("cart"));
-            this.carts.forEach(element => {
-                    if(element == null){
-                       localStorage.removeItem('index')
-                    }else{
-                        console.log('')
-                    }
-                });
+            if (!localStorage.getItem("cartId")) {
+                localStorage.setItem("cartId", JSON.stringify([]));
+            }
+            this.cartsId = JSON.parse(localStorage.getItem("cartId"));
         },
         totalPrice() {
             if (localStorage.getItem("cart")) {
@@ -254,11 +263,10 @@ export default {
                     }else{
                         countProduct= countProduct+ 1
                     }
-            });   
+                });   
             }
             this.totalCount = countProduct;
         }
-
     },
     mounted() {
         const i = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
@@ -271,11 +279,6 @@ export default {
         this.tokenRole = decodedjwtToken.role[0]
         this.tokenId = decodedjwtToken.id
         }
-    },
-    beforeMount() {
-        this.getCart();
-        this.totalPrice();
-        this.totalProduct();
     },
  
 }
