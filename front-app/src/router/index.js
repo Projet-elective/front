@@ -16,6 +16,7 @@ import AccountView from '../views/AccountView.vue'
 import TechServiceView from '../views/TechServiceView.vue'
 import OrderView from '../views/OrderView.vue'
 import ContactView from '../views/ContactView.vue'
+import DashboardView from '../views/DashboardView.vue'
 
 
 
@@ -98,6 +99,12 @@ const routes = [
     path: '/contact',
     name: 'contact',
     component: ContactView
+  }
+  ,
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: DashboardView
   }
 
 ]

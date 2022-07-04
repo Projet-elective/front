@@ -335,6 +335,7 @@ export default {
             tokenEmail: '',
             tokenRole: '',
             tokenId: '',
+            token: '',
 
             username: '',
             password: '',
@@ -372,6 +373,7 @@ export default {
             this.tokenUsername = decodedjwtToken.username
             this.tokenEmail = decodedjwtToken.email
             this.tokenId = decodedjwtToken.id
+            this.token = decodedjwtToken
             this.tokenRole = decodedjwtToken.role[0]
             this.tokenExists = true
 
@@ -478,7 +480,7 @@ export default {
 
         },
         async addSponsorCode() {
-            await axios.post('http://localhost:8080/api/sponsor-code/add', {
+            await axios.post('/sponsor-code/api/sponsor-code/add', {
 
                 user: this.tokenId,
                 role: this.tokenRole,
@@ -486,23 +488,25 @@ export default {
             }, {
 
                 headers: {
+                    'Authorization': `${this.token}`,
                     'Content-Type': 'application/json'
                 },
             }
-
+            
             ).then(() => {
                 document.cookie = "access_token=";
                 this.successTrigger = true
-
+console.log(this.token)
                 this.successMessage = 'Sponsor Code added successfully!'
 
 
             }).catch((res) => {
                 this.editError = true,
+                console.log(this.token)
                     this.editMessage = res.response.data.message
 
             })
-
+console.log(this.token)
         },
                 async addSponsorship() {
             await axios.post('http://localhost:8080/api/sponsorship/add', {
