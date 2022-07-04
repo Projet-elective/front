@@ -101,7 +101,7 @@
 
         <template v-if="this.tokenRole == 'DELIVERY'">
           <li>
-            <v-btn text :to="{ name: 'delivery' }">
+            <v-btn text :to="{ name: 'order' }">
               <div class="d-flex flex-column-reverse d-lg-block">
                 <span class="mr-2">Livraison</span>
                 <v-icon>mdi-truck-delivery</v-icon>

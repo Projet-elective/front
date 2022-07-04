@@ -3,7 +3,7 @@
         <div v-if="this.tokenRole == 'RESTAURANT'">
             <v-container>
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <h3>
                             Commandes non complétées
                         </h3>
@@ -24,6 +24,9 @@
                                     <li>
                                         Status : {{ result.state_order }}
                                     </li>
+                                    <li>
+                                        ID livreur : {{ result.deliverer_id }}
+                                    </li>
                                 </ul>
                                 <v-btn @click="validateOrder(result._id)"
                                     v-if="result.state_order == 'En cours de validation'">
@@ -43,7 +46,38 @@
                             </v-card>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
+                        <h3>
+                            Commandes en livraison
+                        </h3>
+
+                        <div class="text-secondary" v-for="result in resultsDelivering" :key="result._id">
+
+                            <v-card elevation="10" class="profile-container">
+                                ID Commande : {{ result._id }}
+                                <ul>
+                                    <li>
+                                        ID user : {{ result.idUser }}
+                                    </li>
+                                    <li>
+                                        prix total: {{ result.totalPrice }}
+                                    </li>
+                                    <li>
+                                        produits : {{ result.orderList }}
+                                    </li>
+                                    <li>
+                                        status : {{ result.state_order }}
+                                    </li>
+
+                                    <li>
+                                        Livreur : {{ result.deliverer_id }}
+                                    </li>
+
+                                </ul>
+                            </v-card>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
                         <h3>
                             Commandes Complétées
                         </h3>
@@ -65,6 +99,9 @@
                                     <li>
                                         status : {{ result.state_order }}
                                     </li>
+                                    <li>
+                                        Livreur : {{ result.deliverer_id }}
+                                    </li>
 
                                 </ul>
                             </v-card>
@@ -75,9 +112,134 @@
             </v-container>
 
         </div>
-        <template v-if="this.tokenRole == 'CLIENT'">
+        <div v-if="this.tokenRole == 'DELIVERY'">
+            <v-container>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h3>
+                            Liste des commandes
+                        </h3>
+                        <div v-if="this.deliveryAvailable != ''">
+                            <div class="text-secondary" v-for="result in deliveryAvailable" :key="result._id">
+                                <v-card elevation="10" class="profile-container">
+                                    ID Commande : {{ result._id }}
+                                    <ul>
+                                        <li>
+                                            ID user : {{ result.idUser }}
+                                        </li>
+                                        <li>
+                                            prix total: {{ result.totalPrice }}
+                                        </li>
+                                        <li>
+                                            produits : {{ result.orderList }}
+                                        </li>
+                                        <li>
+                                            Status : {{ result.state_order }}
+                                        </li>
+                                    </ul>
+                                    <v-btn @click="acceptDelivery(result._id)">
+                                        Accepter
+                                    </v-btn>
+                                    <!-- <v-btn @click="deliver(result._id)" v-if="result.state_order == 'Commande prête'">
+                                    Livrer
+                                </v-btn>
+                                <v-btn @click="complete(result._id)"
+                                    v-if="result.state_order == 'En cours de livraison'">
+                                    Compléter
+                                </v-btn> -->
+                                </v-card>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <v-card elevation="10" class="profile-container" style="width:50%;">
+                                <h3>Aucune commande disponible</h3>
+                            </v-card>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <h3>
+                            Commandes acceptées
+                        </h3>
+                        <div v-if="this.deliverNotCompletedOrder !== ''">
+                            <div class="text-secondary" v-for="result in deliverNotCompletedOrder" :key="result._id">
+                                <v-card elevation="10" class="profile-container">
+                                    ID Commande : {{ result._id }}
+                                    <ul>
+                                        <li>
+                                            ID user : {{ result.idUser }}
+                                        </li>
+                                        <li>
+                                            prix total: {{ result.totalPrice }}
+                                        </li>
+                                        <li>
+                                            produits : {{ result.orderList }}
+                                        </li>
+                                        <li>
+                                            Status : {{ result.state_order }}
+                                        </li>
+                                        <li>
+                                            Livreur : {{ result.deliverer_id }}
+                                        </li>
+                                        <v-btn @click="deliver(result._id)"
+                                            v-if="result.state_order == 'Commande prête'">
+                                            Livrer
+                                        </v-btn>
+                                    </ul>
+                                </v-card>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <v-card elevation="10" class="profile-container" style="width:50%;">
+                                <h3>Aucune commande disponible</h3>
+                            </v-card>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <h3>
+                            Commandes en livraison
+                        </h3>
+                        <div v-if="this.myDeliveryAccepted !== ''">
+                            <div class="text-secondary" v-for="result in myDeliveryAccepted" :key="result._id">
+                                <v-card elevation="10" class="profile-container">
+                                    ID Commande : {{ result._id }}
+                                    <ul>
+                                        <li>
+                                            ID user : {{ result.idUser }}
+                                        </li>
+                                        <li>
+                                            prix total: {{ result.totalPrice }}
+                                        </li>
+                                        <li>
+                                            produits : {{ result.orderList }}
+                                        </li>
+                                        <li>
+                                            Status : {{ result.state_order }}
+                                        </li>
+                                        <li>
+                                            Livreur : {{ result.deliverer_id }}
+                                        </li>
+                                    </ul>
+                                    <v-btn @click="complete(result._id)"
+                                        v-if="result.state_order == 'En cours de livraison'">
+                                        Compléter
+                                    </v-btn>
+                                </v-card>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <v-card elevation="10" class="profile-container" style="width:50%;">
+                                <h3>Aucune commande disponible</h3>
+                            </v-card>
+                        </div>
+                    </div>
+                </div>
+
+            </v-container>
+
+        </div>
+        <div v-if="this.tokenRole == 'CLIENT'">
             <h1>Page order CLient</h1>
-        </template>
+        </div>
 
 
     </v-main>
@@ -112,9 +274,15 @@ export default {
             tokenEmail: '',
             tokenRole: '',
             tokenId: '',
-            resultsNotCompleted: '',
+
+            resultsNotCompleted: [],
+            resultsDelivering: [],
+            deliverNotCompletedOrder: '',
+
+            myDeliveryAccepted: '',
+
             resultsCompleted: '',
-            resultsReadyToDeliver: '',
+            deliveryAvailable: '',
             orderId: '',
 
         }
@@ -123,17 +291,7 @@ export default {
 
     mounted() {
 
-        const jwt = require('jose')
-        const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
-        const decodedjwtToken = jwt.decodeJwt(jwtToken)
-        this.tokenJWT = jwtToken
-        this.tokenUsername = decodedjwtToken.username
-        this.tokenEmail = decodedjwtToken.email
-        this.tokenRole = decodedjwtToken.role[0]
-        this.tokenId = decodedjwtToken.id
-
-        this.restaurantCompletedOrders()
-        this.restaurantNotCompletedOrders()
+        this.fetch()
 
 
 
@@ -162,8 +320,6 @@ export default {
         },
         /*For clients */
         async getOrder() {
-            console.log(this.tokenJWT)
-            console.log(this.tokenId)
             await axios.get('/orders/api/orders/' + this.tokenId, {
                 headers: {
                     'Authorization': `${this.tokenJWT}`
@@ -183,8 +339,15 @@ export default {
                     'Authorization': `${this.tokenJWT}`
                 },
             })
+            const results = result.data
+            for (let i = 0; i < results.length; i++) {
+                if (results[i].state_order == 'En cours de livraison') {
+                    this.resultsDelivering.push(results[i])
+                } else {
 
-            this.resultsNotCompleted = result.data
+                    this.resultsNotCompleted.push(results[i])
+                }
+            }
 
         },
         async restaurantCompletedOrders() {
@@ -234,7 +397,99 @@ export default {
                     'Authorization': `${this.tokenJWT}`
                 },
             })
-            this.refresh()
+        },
+
+        /*DELIVERY SECTION*/
+
+        async getDeliveryOrdersAvailable() {
+            try {
+
+                const result = await axios.get('/orders/api/orders/deliverOrders/availableOrders', {
+                    headers: {
+                        'Authorization': `${this.tokenJWT}`
+                    },
+                })
+                this.deliveryAvailable = []
+                this.deliveryAvailable = result.data
+
+            } catch (err) {
+                console.log(err)
+            }
+
+        },
+
+        async deliverNotCompletedOrders(id) {
+            try {
+
+                const result = await axios.get('/orders/api/orders/deliverOrders/deliverNotCompletedOrders/' + id, {
+                    headers: {
+                        'Authorization': `${this.tokenJWT}`
+                    },
+                })
+                this.deliverNotCompletedOrder = result.data
+                console.log(this.deliverNotCompletedOrder)
+
+            } catch (err) {
+                console.log(err)
+            }
+
+        },
+
+        async readyToDeliverOrders(id) {
+            try {
+
+                const result = await axios.get('/orders/api/orders/deliverOrders/myDeliveryAccepted/' + id, {
+                    headers: {
+                        'Authorization': `${this.tokenJWT}`
+                    },
+                })
+                this.myDeliveryAccepted = result.data
+
+            } catch (err) {
+                console.log(err)
+            }
+
+        },
+
+        async acceptDelivery(id) {
+            try {
+                axios.patch('/orders/api/orders/deliverOrders/acceptDelivery/' + id,
+                    {
+                        deliverer: this.tokenId
+                    }
+                    , {
+
+                        headers: {
+                            'Authorization': `${this.tokenJWT}`
+                        },
+                    })
+                // this.refresh()
+
+            } catch (error) {
+                console.log(error)
+            }
+        },
+
+        fetch() {
+            const jwt = require('jose')
+            const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
+            const decodedjwtToken = jwt.decodeJwt(jwtToken)
+            this.tokenJWT = jwtToken
+            this.tokenUsername = decodedjwtToken.username
+            this.tokenEmail = decodedjwtToken.email
+            this.tokenRole = decodedjwtToken.role[0]
+            this.tokenId = decodedjwtToken.id
+
+            if (this.tokenRole == 'RESTAURANT') {
+                this.restaurantNotCompletedOrders()
+                this.restaurantCompletedOrders()
+            }
+            if (this.tokenRole == 'DELIVERY') {
+
+                this.getDeliveryOrdersAvailable()
+                this.deliverNotCompletedOrders(this.tokenId)
+                this.readyToDeliverOrders(this.tokenId)
+            }
         },
         refresh() {
             document.location.href = "/order";
