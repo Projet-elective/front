@@ -16,7 +16,7 @@
                         </tr>
                     </thead>
                     
-                    <tbody class="body-table" v-for="menu in menus" :key="menu">
+                    <tbody class="body-table" v-for="menu in menus" :key="menu._id">
                         <tr v-if="!menu ==''">
                             <td>{{ menu.name }}</td>
                             <td>{{ menu.price }}</td>
@@ -37,7 +37,7 @@
                             <td style="width: 15%">Type</td>
                         </tr>
                     </thead>
-                    <tbody class="body-table" v-for="product in products" :key="product">
+                    <tbody class="body-table" v-for="product in products" :key="product._id">
                         <tr v-if="!product ==''">
                             <td>{{ product.name }}</td>
                             <td>{{ product.description }}</td>

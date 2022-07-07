@@ -324,12 +324,12 @@ export default {
     methods: {
 
         async getAll() {
-                const test = await axios.get('http://localhost:8080/api/auth/getAll')  
+                const test = await axios.get('/auth/api/auth/getAll')  
                 this.tests = test.data   
         },
         async deleteAcc() {
             const password = this.accPassword
-            await axios.delete('http://localhost:8080/api/auth/delete', {
+            await axios.delete('/auth/api/auth/delete', {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -346,7 +346,7 @@ export default {
             })
         },
         async patchBan() {
-            await axios.patch('http://localhost:8080/api/auth/patchForBan', {
+            await axios.patch('/auth/api/auth/patchForBan', {
 
                 username: this.form.username,
             }, {
@@ -369,7 +369,7 @@ export default {
 
         },
         async patchDeBan() {
-            await axios.patch('http://localhost:8080/api/auth/patchForDeBan', {
+            await axios.patch('/auth/api/auth/patchForDeBan', {
 
                 username: this.form.username,
             }, {
@@ -392,7 +392,7 @@ export default {
 
         },
         async patchUsername() {
-            await axios.patch('http://localhost:8080/api/auth/patchUser', {
+            await axios.patch('/auth/api/auth/patchUser', {
 
                 username: this.form.username,
                 newusername: this.form.newusername,
@@ -416,7 +416,7 @@ export default {
 
         },
         async patchEmail() {
-            await axios.patch('http://localhost:8080/api/auth/patchEmail', {
+            await axios.patch('/auth/api/auth/patchEmail', {
 
                 username: this.form.username,
                 newemail: this.form.email,
@@ -440,7 +440,7 @@ export default {
 
         },
         async patchPass() {
-            await axios.patch('http://localhost:8080/api/auth/patchPassword', {
+            await axios.patch('/auth/api/auth/patchPassword', {
 
                 username: this.form.username,
                 newpassword: this.form.password,
@@ -484,10 +484,10 @@ export default {
             this.editEmail = true
         },
         home() {
-            document.location.href = "http://localhost:8090/";
+            document.location.href = "/";
         },
         login() {
-            document.location.href = "http://localhost:8090/login";
+            document.location.href = "/login";
         },
         disconnectUser() {
             document.cookie = "access_token=";

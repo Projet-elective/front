@@ -58,7 +58,7 @@
                         </tr>
                     </thead>
             
-                    <tbody class="body-table" v-for="restaurant in restaurants" :key="restaurant">
+                    <tbody class="body-table" v-for="restaurant in restaurants" :key="restaurant._id">
                         <router-view :restaurant-Id="restaurant._id"></router-view>
                         <tr v-if="!restaurant ==''">
                             <td>{{ restaurant.name }}</td>
