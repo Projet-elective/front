@@ -1,5 +1,5 @@
 <style>
-.stat-body{
+.stat-body {
     background-color: var(--v-secondary-base);
     height: 100%;
 }
@@ -44,43 +44,43 @@
 }
 </style>
 <template>
-<div class="stat-body">
-    <v-container class="stat-container">
-        <template v-if="this.tokenRole == 'COMMERCIAL'">
-            <div class="container-title">
-                <h1>Statistique Commercial</h1>
-            </div>
-            <div class="container-lists">
-                <template>
-                    <h2>Commande de la semaine</h2>
-                    <ul v-for="week in weeks" :key="week">
-                        <li>{{week}}</li> 
-                        
-                    </ul>
-                    <ul>
-                        <li>text</li>  
-                        <li>text</li> 
-                        <li>text</li> 
-                    </ul>
-                </template>
+    <div class="stat-body">
+        <v-container class="stat-container">
+            <template v-if="this.tokenRole == 'COMMERCIAL'">
+                <div class="container-title">
+                    <h1>Statistique Commercial</h1>
+                </div>
+                <div class="container-lists">
+                    <template>
+                        <h2>Commande de la semaine</h2>
+                        <ul v-for="week in weeks" :key="week">
+                            <li>{{ week }}</li>
+
+                        </ul>
+                        <ul>
+                            <li>text</li>
+                            <li>text</li>
+                            <li>text</li>
+                        </ul>
+                    </template>
                     <v-spacer></v-spacer>
-                <template>
-                    <h2>Commande du mois</h2>
-                    <ul v-for="month in months" :key="month">
-                        <li>{{month}}</li>   
-                    </ul>
-                </template>
+                    <template>
+                        <h2>Commande du mois</h2>
+                        <ul v-for="month in months" :key="month">
+                            <li>{{ month }}</li>
+                        </ul>
+                    </template>
                     <v-spacer></v-spacer>
-                <template>
-                    <h2>Commande de l'année</h2>
-                    <ul v-for="year in years" :key="year">
-                        <li>{{year}} </li>   
-                    </ul>
-                </template>
-            </div>
-            
-        </template>
-        <template v-if="this.tokenRole == 'RESTAURANT'">
+                    <template>
+                        <h2>Commande de l'année</h2>
+                        <ul v-for="year in years" :key="year">
+                            <li>{{ year }} </li>
+                        </ul>
+                    </template>
+                </div>
+
+            </template>
+            <template v-if="this.tokenRole == 'RESTAURANT'">
                 <div class="container-title">
                     <h1>Statistique Restaurant</h1>
                 </div>
@@ -88,29 +88,29 @@
                     <template>
                         <h2>Commande de la semaine</h2>
                         <ul v-for="week in weeks" :key="week">
-                            <li>{{week}}</li>   
+                            <li>{{ week }}</li>
                         </ul>
                     </template>
-                        <v-spacer></v-spacer>
+                    <v-spacer></v-spacer>
                     <template>
                         <h2>Commande du mois</h2>
                         <ul v-for="month in months" :key="month">
-                            <li>{{month}}</li>   
+                            <li>{{ month }}</li>
                         </ul>
                     </template>
-                        <v-spacer></v-spacer>
+                    <v-spacer></v-spacer>
                     <template>
                         <h2>Commande de l'année</h2>
                         <ul v-for="year in years" :key="year">
-                            <li>{{year}} </li>   
+                            <li>{{ year }} </li>
                         </ul>
                     </template>
                 </div>
-            
-        </template>
-   </v-container>
-</div>
-    
+
+            </template>
+        </v-container>
+    </div>
+
 </template>
 
 <script>
@@ -118,61 +118,82 @@ import axios from 'axios'
 
 export default {
     name: 'StatComp',
-     components: {
-        
+    components: {
+
     },
     data() {
-        return{
+        return {
             weeks: [],
             months: [],
             years: [],
+            tokenRole: '',
+            tokenId: '',
+            tokenJWT: '',
+            restaurantId: '',
         };
     },
     mounted() {
         const jwt = require('jose')
         const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
         const decodedjwtToken = jwt.decodeJwt(jwtToken)
+        this.tokenJWT = jwtToken
         this.tokenId = decodedjwtToken.id
+        this.tokenRole = decodedjwtToken.role[0]
+        if (this.tokenRole == 'COMMERCIAL') {
+            this.getWeekCommercial();
+            this.getMonthCommercial();
+            this.getYearCommercial();
+        }
+        if (this.tokenRole == 'RESTAURANT') {
+            this.getWeekRestaurant();
+            this.getMonthRestaurant();
+            this.getYearRestaurant();
+        }
     },
-    created() {
-        this.getWeekCommercial();
-        this.getMonthCommercial();
-        this.getYearCommercial();
-        this.getWeekRestaurant();
-        this.getMonthRestaurant();
-        this.getYearRestaurant();
-    },
+
     methods: {
-        getWeekCommercial(){
-            axios.get(`/stats/api/commercials/week`, {mode: 'no-cors'})
-            .then(response => this.weeks = response.data)
-            .catch(e => this.error = [{ title: "Error de chargement",e }]);
+        getWeekCommercial() {
+            axios.get(`/stats/api/commercials/week`, { mode: 'no-cors' })
+                .then(response => this.weeks = response.data)
+                .catch(e => this.error = [{ title: "Error de chargement", e }]);
         },
-        getMonthCommercial(){
-            axios.get(`/stats/api/commercials/month`, {mode: 'no-cors'})
-            .then(response => this.months = response.data)
-            .catch(e => this.error = [{ title: "Error de chargement",e }]);
+        getMonthCommercial() {
+            axios.get(`/stats/api/commercials/month`, { mode: 'no-cors' })
+                .then(response => this.months = response.data)
+                .catch(e => this.error = [{ title: "Error de chargement", e }]);
         },
-        getYearCommercial(){
-            axios.get(`/stats/api/commercials/year`, {mode: 'no-cors'})
-            .then(response => this.years = response.data)
-            .catch(e => this.error = [{ title: "Error de chargement",e }]);
+        getYearCommercial() {
+            axios.get(`/stats/api/commercials/year`, { mode: 'no-cors' })
+                .then(response => this.years = response.data)
+                .catch(e => this.error = [{ title: "Error de chargement", e }]);
         },
 
-        getWeekRestaurant(){
-            axios.get(`/stats/api/restaurants/week/${this.tokenId}`, {mode: 'no-cors'})
-            .then(response => this.weeks = response.data)
-            .catch(e => this.error = [{ title: "Error de chargement",e }]);
+        getWeekRestaurant() {
+            axios.get('/stats/api/restaurants/week/' + this.tokenId, {
+                headers: {
+                    'authorization': `${this.tokenJWT}`
+                }
+            }, { mode: 'no-cors' })
+                .then(response => this.weeks = response.data)
+                .catch(e => this.error = [{ title: "Error de chargement", e }]);
         },
-        getMonthRestaurant(){
-            axios.get(`/stats/api/restaurants/month/${this.tokenId}`, {mode: 'no-cors'})
-            .then(response => this.months = response.data)
-            .catch(e => this.error = [{ title: "Error de chargement",e }]);
+        getMonthRestaurant() {
+            axios.get('/stats/api/restaurants/month/' + this.tokenId, {
+                headers: {
+                    'authorization': `${this.tokenJWT}`
+                }
+            }, { mode: 'no-cors' })
+                .then(response => this.months = response.data)
+                .catch(e => this.error = [{ title: "Error de chargement", e }]);
         },
-        getYearRestaurant(){
-            axios.get(`/stats/api/restaurants/year/${this.tokenId}`, {mode: 'no-cors'})
-            .then(response => this.years = response.data)
-            .catch(e => this.error = [{ title: "Error de chargement",e }]);
+        getYearRestaurant() {
+            axios.get('/stats/api/restaurants/year/' + this.tokenId, {
+                headers: {
+                    'authorization': `${this.tokenJWT}`
+                }
+            }, { mode: 'no-cors' })
+                .then(response => this.years = response.data)
+                .catch(e => this.error = [{ title: "Error de chargement", e }]);
         },
     }
 }
