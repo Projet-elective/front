@@ -59,7 +59,7 @@ const routes = [
     path: '/account',
     name: 'account',
     component: AccountView
-
+  },{
     path: '/techService',
     name: 'techService',
     component: TechServiceView

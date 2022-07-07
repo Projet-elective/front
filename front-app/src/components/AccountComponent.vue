@@ -346,7 +346,7 @@ export default {
             })
         },
         async patchBan() {
-            await axios.patch('http://localhost:8080/api/auth/patchForBan', {
+            await axios.patch('http://localhost:8000/api/auth/patchForBan', {
 
                 username: this.form.username,
             }, {
@@ -369,7 +369,7 @@ export default {
 
         },
         async patchDeBan() {
-            await axios.patch('http://localhost:8080/api/auth/patchForDeBan', {
+            await axios.patch('http://localhost:8000/api/auth/patchForDeBan', {
 
                 username: this.form.username,
             }, {
