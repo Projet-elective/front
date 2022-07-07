@@ -52,6 +52,20 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Address</h6>
+                                </div>
+                                <div class="col-sm-7 text-secondary">
+                                    {{ tokenAddress }}
+                                </div>
+                                <div class="col-sm-2">
+                                    <v-btn @click="addressEdit">
+                                    Modifier l'adresse
+                                </v-btn>
+
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-sm-2">
                                     <v-btn @click="banEdit">
                                         edit ban
@@ -198,6 +212,34 @@
                 </div>
             </form>
         </validation-observer>
+                <validation-observer ref="observer" v-slot="{ invalid }" v-if="editAddress">
+            <form @submit.prevent="patchAddress" style="margin-top: 5rem;" v-if="!successTrigger">
+                <div>
+                    <h3>Enter your new address</h3>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <validation-provider v-slot="{ errors }" name="address" rules="required">
+                            <v-text-field v-model="form.address" :error-messages="errors" label="Address" required>
+                            </v-text-field>
+                        </validation-provider>
+                    </div>
+                    <div class="col-sm-6">
+                        <validation-provider v-slot="{ errors }" name="username" rules="required">
+                            <v-text-field v-model="form.username" :error-messages="errors" label="Username" required>
+                            </v-text-field>
+                        </validation-provider>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <v-btn class="mr-4" type="submit" :disabled="invalid">
+                            Save
+                        </v-btn>
+                    </div>
+                </div>
+            </form>
+        </validation-observer>
         <validation-observer ref="observer" v-slot="{ invalid }" v-if="editBan">
             <form @submit.prevent="patchBan" style="margin-top: 5rem;" v-if="!successTrigger">
                 <div>
@@ -285,9 +327,11 @@ export default {
             username: '',
             password: '',
             email: '',
+            address: '',
             newusername: '',
             newpassword: '',
             newemail: '',
+            newaddress: '',
             role: '',
 
             accPassword: '',
@@ -301,6 +345,7 @@ export default {
             editUsername: false,
             editPassword: false,
             editEmail: false,
+            editAddress: false,
             editBan: false,
             editDeBan: false,
             successMessage: '',
@@ -389,6 +434,35 @@ export default {
                     this.editMessage = res.response.data.message
 
             })
+
+        },
+        async patchAddress() {
+            if (confirm('Confirmer la modification de l\'adresse')) {
+
+                await axios.patch('/auth/api/auth/patchAddress', {
+
+                    username: this.form.username,
+                    newaddress: this.form.newAddress,
+                }, {
+
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                }
+
+                ).then((res) => {
+                    console.log(res)
+                    document.cookie = "access_token=";
+                    this.successTrigger = true
+                    this.successMessage = 'Adresse modifiée !'
+                    // this.login();
+
+                }).catch((res) => {
+                    this.editError = true,
+                        this.editMessage = res.response.data.message
+
+                })
+            }
 
         },
         async patchUsername() {
@@ -482,6 +556,10 @@ export default {
         emailEdit() {
             this.editTrigger = true
             this.editEmail = true
+        },
+        addressEdit() {
+            this.editTrigger = true
+            this.editAddress = true
         },
         home() {
             document.location.href = "/";
