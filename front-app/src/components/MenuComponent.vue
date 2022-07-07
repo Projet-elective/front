@@ -1,8 +1,9 @@
 <template>
   <v-container>
     <div class="body">
-          <a href="/cart" class="link-button" style="color:white; text-decoration:none">Panier : {{totalCount}}</a>
+      <button class="link-button" @click="goToCart()" >Panier </button>
       <template>
+      <!-- {{$route.params.id}} -->
         <h1>Nos Menus</h1>
             <div class="container-restaurant">
                 <table>
@@ -47,7 +48,7 @@
                     </tbody> 
                 </table>   
             </div>
-      </template>
+        </template>
     </div>
   </v-container>
 </template>
@@ -57,19 +58,16 @@ import axios from 'axios'
 
   export default {
     name: 'MenuComp',
-    
     data () {
     return {
       menus:[], 
-      products:[], 
+      products:[],
+      restaurantId: this.$route.params.id._id,
     }
     },
     created () {
       this.getAllMenu();
       this.getAllProduct();
-      this.addProductToCart();
-      this.addProductToCart();
-      this.totalProduct();
     },
     methods: {
 
@@ -90,11 +88,17 @@ import axios from 'axios'
           if (!localStorage.getItem("cart")) {
             localStorage.setItem("cart", JSON.stringify([]));
           }
+          if (!localStorage.getItem("cartId")) {
+            localStorage.setItem("cartId", JSON.stringify([]));
+          }
           const cartItems = JSON.parse(localStorage.getItem("cart"));
+          const cartId = JSON.parse(localStorage.getItem("cartId"));
           cartItems.push(item);
+          cartId.push(item._id);
           localStorage.setItem("cart", JSON.stringify(cartItems));
+          localStorage.setItem("cartId", JSON.stringify(cartId));
           this.cart = JSON.parse(localStorage.getItem("cart"));
-          this.totalProduct();
+          this.cartId = JSON.parse(localStorage.getItem("cartId"));
         },
 
         addProductToCart(itemId) {
@@ -102,29 +106,23 @@ import axios from 'axios'
           if (!localStorage.getItem("cart")) {
             localStorage.setItem("cart", JSON.stringify([]));
           }
+          if (!localStorage.getItem("cartId")) {
+            localStorage.setItem("cartId", JSON.stringify([]));
+          }
           const cartItems = JSON.parse(localStorage.getItem("cart"));
+          const cartId = JSON.parse(localStorage.getItem("cartId"));
           cartItems.push(item);
+          cartId.push(item._id);
           localStorage.setItem("cart", JSON.stringify(cartItems));
+          localStorage.setItem("cartId", JSON.stringify(cartId));
           this.cart = JSON.parse(localStorage.getItem("cart"));
-          this.totalProduct();
+          this.cartId = JSON.parse(localStorage.getItem("cartId"));
         },
-        totalProduct() {
-        if (localStorage.getItem("cart")) {
-          const carts = JSON.parse(localStorage.getItem("cart"));
-          var countProduct=0;
-          carts.forEach(element => {
-              if(element == null){
-                  countProduct= countProduct +0
-              }else{
-                  countProduct= countProduct+ 1
-            }
-          });   
-        }
-        this.totalCount = countProduct;
-      }
-    },
-     beforeMount() {
-        this.totalProduct();
+        
+       goToCart(){
+        const restaurantId = this.restaurantId
+        this.$router.push({name: `cart`, params:{id: restaurantId}})
+      },
     },
 }
 </script>
