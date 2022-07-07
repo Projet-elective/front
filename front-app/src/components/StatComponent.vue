@@ -52,15 +52,9 @@
                 </div>
                 <div class="container-lists">
                     <template>
-                        <h2>Commande de la semaine</h2>
-                        <ul v-for="week in weeks" :key="week">
-                            <li>{{ week }}</li>
-
-                        </ul>
-                        <ul>
-                            <li>text</li>
-                            <li>text</li>
-                            <li>text</li>
+                        <h2>Commande du jour</h2>
+                        <ul v-for="day in days" :key="day">
+                            <li>{{ day }}</li>
                         </ul>
                     </template>
                     <v-spacer></v-spacer>
@@ -86,9 +80,9 @@
                 </div>
                 <div class="container-lists">
                     <template>
-                        <h2>Commande de la semaine</h2>
-                        <ul v-for="week in weeks" :key="week">
-                            <li>{{ week }}</li>
+                        <h2>Commande du jour</h2>
+                        <ul v-for="day in days" :key="day">
+                            <li>{{ day }}</li>
                         </ul>
                     </template>
                     <v-spacer></v-spacer>
@@ -123,7 +117,7 @@ export default {
     },
     data() {
         return {
-            weeks: [],
+            days: [],
             months: [],
             years: [],
             tokenRole: '',
@@ -140,21 +134,21 @@ export default {
         this.tokenId = decodedjwtToken.id
         this.tokenRole = decodedjwtToken.role[0]
         if (this.tokenRole == 'COMMERCIAL') {
-            this.getWeekCommercial();
+            this.getdayCommercial();
             this.getMonthCommercial();
             this.getYearCommercial();
         }
         if (this.tokenRole == 'RESTAURANT') {
-            this.getWeekRestaurant();
+            this.getdayRestaurant();
             this.getMonthRestaurant();
             this.getYearRestaurant();
         }
     },
 
     methods: {
-        getWeekCommercial() {
-            axios.get(`/stats/api/commercials/week`, { mode: 'no-cors' })
-                .then(response => this.weeks = response.data)
+        getDayCommercial() {
+            axios.get(`/stats/api/commercials/day`, { mode: 'no-cors' })
+                .then(response => this.days = response.data)
                 .catch(e => this.error = [{ title: "Error de chargement", e }]);
         },
         getMonthCommercial() {
@@ -168,13 +162,13 @@ export default {
                 .catch(e => this.error = [{ title: "Error de chargement", e }]);
         },
 
-        getWeekRestaurant() {
-            axios.get('/stats/api/restaurants/week/' + this.tokenId, {
+        getDayRestaurant() {
+            axios.get('/stats/api/restaurants/day/' + this.tokenId, {
                 headers: {
                     'authorization': `${this.tokenJWT}`
                 }
             }, { mode: 'no-cors' })
-                .then(response => this.weeks = response.data)
+                .then(response => this.days = response.data)
                 .catch(e => this.error = [{ title: "Error de chargement", e }]);
         },
         getMonthRestaurant() {
