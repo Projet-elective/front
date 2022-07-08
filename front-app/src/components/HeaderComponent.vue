@@ -12,6 +12,14 @@
       <ul class="navigation-links">
         <template v-if="this.tokenRole == 'CLIENT'">
           <li>
+            <v-btn text :to="{ name: 'order' }">
+              <div class="d-flex flex-column-reverse d-lg-block">
+                <span class="mr-2">Commande</span>
+                <v-icon>mdi-cart-outline</v-icon>
+              </div>
+            </v-btn>
+          </li>
+          <li>
             <v-btn text :to="{ name: 'restaurant' }">
               <div class="d-flex flex-column-reverse d-lg-block">
                 <span class="mr-2">Restaurant</span>
@@ -211,7 +219,7 @@ export default {
   },
   mounted() {
     const i = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
-    if(i){
+    if (i) {
       const jwt = require('jose')
       const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
       const decodedjwtToken = jwt.decodeJwt(jwtToken)

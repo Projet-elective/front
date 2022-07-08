@@ -13,7 +13,7 @@
                                 <td style="width: 20%"></td>
                             </tr>
                         </thead>
-                        <tbody class="body-table" v-for="cart in carts" :key="cart.name">
+                        <tbody class="body-table" v-for="cart in carts" :key="cart.id">
                             <tr v-if="!cart == ''">
                                 <td>{{ cart.name }}</td>
                                 <td>{{ cart.price }}</td>
@@ -83,7 +83,7 @@ export default {
             errorInRegister: false,
             errorMessages: '',
             idRestaurant: '',
-            orderList: this.carts._id,
+            // orderList: this.carts._id,
             tokenRole: '',
             tokenUsername: '',
             delivery_address: '',

@@ -19,7 +19,7 @@
                                         prix total: {{ result.totalPrice }}
                                     </li>
                                     <li>
-                                        produits : {{ result.orderList }}
+                                        Menu.s : {{ result.orderList }}
                                     </li>
                                     <li>
                                         Status : {{ result.state_order }}
@@ -63,7 +63,7 @@
                                         prix total: {{ result.totalPrice }}
                                     </li>
                                     <li>
-                                        produits : {{ result.orderList }}
+                                        Menu.s : {{ result.orderList }}
                                     </li>
                                     <li>
                                         status : {{ result.state_order }}
@@ -94,7 +94,7 @@
                                         prix total: {{ result.totalPrice }}
                                     </li>
                                     <li>
-                                        produits : {{ result.orderList }}
+                                        Menu.s : {{ result.orderList }}
                                     </li>
                                     <li>
                                         status : {{ result.state_order }}
@@ -131,7 +131,7 @@
                                             prix total: {{ result.totalPrice }}
                                         </li>
                                         <li>
-                                            produits : {{ result.orderList }}
+                                            Menu.s : {{ result.orderList }}
                                         </li>
                                         <li>
                                             Status : {{ result.state_order }}
@@ -160,7 +160,7 @@
                         <h3>
                             Commandes acceptées
                         </h3>
-                        <div v-if="this.deliverNotCompletedOrder !== ''">
+                        <div v-if="this.deliverNotCompletedOrder != ''">
                             <div class="text-secondary" v-for="result in deliverNotCompletedOrder" :key="result._id">
                                 <v-card elevation="10" class="profile-container">
                                     ID Commande : {{ result._id }}
@@ -172,7 +172,7 @@
                                             prix total: {{ result.totalPrice }}
                                         </li>
                                         <li>
-                                            produits : {{ result.orderList }}
+                                            Menu.s : {{ result.orderList }}
                                         </li>
                                         <li>
                                             Status : {{ result.state_order }}
@@ -198,7 +198,7 @@
                         <h3>
                             Commandes en livraison
                         </h3>
-                        <div v-if="this.myDeliveryAccepted !== ''">
+                        <div v-if="this.myDeliveryAccepted != ''">
                             <div class="text-secondary" v-for="result in myDeliveryAccepted" :key="result._id">
                                 <v-card elevation="10" class="profile-container">
                                     ID Commande : {{ result._id }}
@@ -210,7 +210,7 @@
                                             prix total: {{ result.totalPrice }}
                                         </li>
                                         <li>
-                                            produits : {{ result.orderList }}
+                                            Menu.s : {{ result.orderList }}
                                         </li>
                                         <li>
                                             Status : {{ result.state_order }}
@@ -238,7 +238,40 @@
 
         </div>
         <div v-if="this.tokenRole == 'CLIENT'">
-            <h1>Page order CLient</h1>
+            <div class="col-sm-4">
+                <h3>
+                    Mes commandes
+                </h3>
+                <div v-if="this.myClientOrders != ''">
+                    <div class="text-secondary" v-for="orders in myClientOrders" :key="orders._id">
+                        <v-card elevation="10" class="profile-container">
+                            ID Commande : {{ orders._id }}
+                            <ul>
+                                <li>
+                                    ID user : {{ orders.idUser }}
+                                </li>
+                                <li>
+                                    prix total: {{ orders.totalPrice }}
+                                </li>
+                                <li>
+                                    Menu.s : {{ orders.orderList }}
+                                </li>
+                                <li>
+                                    Status : {{ orders.state_order }}
+                                </li>
+                                <li>
+                                    Livreur : {{ orders.deliverer_id }}
+                                </li>
+                            </ul>
+                        </v-card>
+                    </div>
+                </div>
+                <div v-else>
+                    <v-card elevation="10" class="profile-container" style="width:50%;">
+                        <h3>Aucune commande disponible</h3>
+                    </v-card>
+                </div>
+            </div>
         </div>
 
 
@@ -284,6 +317,8 @@ export default {
             resultsCompleted: '',
             deliveryAvailable: '',
             orderId: '',
+
+            myClientOrders: '',
 
         }
 
@@ -346,6 +381,7 @@ export default {
                 } else {
 
                     this.resultsNotCompleted.push(results[i])
+
                 }
             }
 
@@ -358,6 +394,7 @@ export default {
                 },
             })
             this.resultsCompleted = result.data
+
 
         },
 
@@ -448,7 +485,6 @@ export default {
             } catch (err) {
                 console.log(err)
             }
-
         },
 
         async acceptDelivery(id) {
@@ -468,6 +504,21 @@ export default {
             } catch (error) {
                 console.log(error)
             }
+        },
+        async myOrdersClient(id) {
+            try {
+
+                const result = await axios.get('/orders/api/orders/myOrders/' + id, {
+                    headers: {
+                        'Authorization': `${this.tokenJWT}`
+                    },
+                })
+                this.myClientOrders = result.data
+
+            } catch (err) {
+                console.log(err)
+            }
+
         },
 
         fetch() {
@@ -490,9 +541,12 @@ export default {
                 this.deliverNotCompletedOrders(this.tokenId)
                 this.readyToDeliverOrders(this.tokenId)
             }
+            if (this.tokenRole == 'CLIENT') {
+                this.myOrdersClient(this.tokenId)
+            }
         },
         refresh() {
-            document.location.href = "/order";
+            this.$router.go({ name: 'order' })
         }
 
 

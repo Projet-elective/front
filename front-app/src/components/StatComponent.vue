@@ -81,21 +81,21 @@
                 <div class="container-lists">
                     <template>
                         <h2>Commande du jour</h2>
-                        <ul v-for="day in days" :key="day">
+                        <ul v-for="day in days" :key="day.id">
                             <li>{{ day }}</li>
                         </ul>
                     </template>
                     <v-spacer></v-spacer>
                     <template>
                         <h2>Commande du mois</h2>
-                        <ul v-for="month in months" :key="month">
+                        <ul v-for="month in months" :key="month.id">
                             <li>{{ month }}</li>
                         </ul>
                     </template>
                     <v-spacer></v-spacer>
                     <template>
                         <h2>Commande de l'année</h2>
-                        <ul v-for="year in years" :key="year">
+                        <ul v-for="year in years" :key="year.id">
                             <li>{{ year }} </li>
                         </ul>
                     </template>
@@ -139,7 +139,7 @@ export default {
             this.getYearCommercial();
         }
         if (this.tokenRole == 'RESTAURANT') {
-            this.getdayRestaurant();
+            this.getDayRestaurant();
             this.getMonthRestaurant();
             this.getYearRestaurant();
         }
