@@ -220,7 +220,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <validation-provider v-slot="{ errors }" name="address" rules="required">
-                            <v-text-field v-model="form.address" :error-messages="errors" label="Address" required>
+                            <v-text-field v-model="form.newAddress" :error-messages="errors" label="Address" required>
                             </v-text-field>
                         </validation-provider>
                     </div>
@@ -319,6 +319,7 @@ export default {
 
             form: {
                 username: '',
+                newAddress: '',
             },
             tokenUsername: '',
             tokenEmail: '',
@@ -331,7 +332,7 @@ export default {
             newusername: '',
             newpassword: '',
             newemail: '',
-            newaddress: '',
+            
             role: '',
 
             accPassword: '',
