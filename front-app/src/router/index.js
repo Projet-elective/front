@@ -18,7 +18,9 @@ import OrderView from '../views/OrderView.vue'
 import ContactView from '../views/ContactView.vue'
 import MyRestaurantView from '../views/MyRestaurantView.vue'
 import addProductView from '../views/addProductView.vue'
+import editProductView from '../views/editProductView.vue'
 import addMenuView from '../views/addMenuView.vue'
+import editMenuView from '../views/editMenuView.vue'
 import MyProductsView from '../views/MyProductsView.vue'
 import MyMenusView from '../views/MyMenusView.vue'
 
@@ -114,9 +116,19 @@ const routes = [
     component: addProductView,
   },
   {
+    path: '/myRestaurant/editProduct',
+    name: 'editProduct',
+    component: editProductView,
+  },
+  {
     path: '/myRestaurant/addMenu',
     name: 'addMenu',
     component: addMenuView,
+  },
+  {
+    path: '/myRestaurant/editMenu',
+    name: 'editMenu',
+    component: editMenuView,
   },
   {
     path: '/myRestaurant/myProducts',

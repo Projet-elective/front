@@ -38,6 +38,9 @@
                                         <v-btn @click="deleteProduct(product._id)">
                                             Supprimer
                                         </v-btn>
+                                        <v-btn @click="goToEditProduct(product)">
+                                            éditer
+                                        </v-btn>
                                     </v-card>
                                 </div>
                             </div>
@@ -59,24 +62,27 @@
 
 import axios from 'axios'
 
+
 export default {
     name: 'MyProductsComp',
     components: {
 
     },
-    data: () => ({
-        name: '',
-        description: '',
-        price: '',
-        type: '',
-        savingSuccessful: false,
-        errorInRegister: false,
-        errorMessages: '',
-        tokenJWT: '',
-        tokenRole: '',
-        tokenId: '',
-        myProducts: '',
-    }),
+    data() {
+        return {
+            name: '',
+            description: '',
+            price: '',
+            type: '',
+            savingSuccessful: false,
+            errorInRegister: false,
+            errorMessages: '',
+            tokenJWT: '',
+            tokenRole: '',
+            tokenId: '',
+            myProducts: '',
+        }
+    },
     mounted() {
         const jwt = require('jose')
         const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
@@ -91,7 +97,7 @@ export default {
 
     methods: {
         async getRestaurantByOwner(ownerId) {
-            await axios.get('../../restaurant/api/restaurants/getByOwner/' + ownerId, {
+            await axios.get('/restaurant/api/restaurants/getByOwner/' + ownerId, {
                 headers: {
                     'Authorization': `${this.tokenJWT}`
                 },
@@ -107,10 +113,27 @@ export default {
             })
 
         },
+        // try {
+        //     await axios.patch('/restaurant/api/products/editProduct/' + id, {
+
+        //     }, {
+
+        //         headers: {
+        //             'Authorization': `${this.tokenJWT}`
+        //         },
+        //     })
+
+        // } catch (error) {
+        //     console.log(error)
+
+        // }
+        async goToEditProduct(product) {
+            this.$router.push({ name: 'editProduct', params: { product: product } })
+        },
 
         deleteProduct(id) {
             if (confirm('Comfirmer la suppression du produit')) {
-                axios.delete('../../restaurant/api/products/deleteProduct/' + id, {
+                axios.delete('/restaurant/api/products/deleteProduct/' + id, {
 
                     headers: {
                         'Authorization': `${this.tokenJWT}`

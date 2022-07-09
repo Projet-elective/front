@@ -34,9 +34,15 @@
                                             <li>
                                                 Boisson : {{ menu.drink.name }}
                                             </li>
+                                            <li>
+                                                Prix : {{ menu.price }}
+                                            </li>
                                         </ul>
                                         <v-btn @click="deleteMenu(menu._id)">
                                             Supprimer
+                                        </v-btn>
+                                        <v-btn @click="goToEditMenu(menu)">
+                                            éditer
                                         </v-btn>
                                     </v-card>
                                 </div>
@@ -97,6 +103,9 @@ export default {
                 console.log(res)
             })
 
+        },
+        async goToEditMenu(menu) {
+            this.$router.push({ name: 'editMenu', params: { menu: menu } })
         },
 
         deleteMenu(id) {
