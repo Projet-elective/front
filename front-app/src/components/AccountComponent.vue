@@ -332,6 +332,7 @@ export default {
             newusername: '',
             newpassword: '',
             newemail: '',
+            newAddress:'',
             
             role: '',
 

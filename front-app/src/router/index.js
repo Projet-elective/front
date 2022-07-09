@@ -23,6 +23,7 @@ import addMenuView from '../views/addMenuView.vue'
 import editMenuView from '../views/editMenuView.vue'
 import MyProductsView from '../views/MyProductsView.vue'
 import MyMenusView from '../views/MyMenusView.vue'
+import logsView from '../views/logsView.vue'
 
 
 Vue.use(VueRouter)
@@ -140,6 +141,12 @@ const routes = [
     name: 'myMenus',
     component: MyMenusView,
   },
+  {
+    path: '/logs',
+    name: 'logs',
+    component: logsView,
+  },
+
 
 ]
 
