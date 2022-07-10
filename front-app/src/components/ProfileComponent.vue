@@ -50,14 +50,6 @@
                                         </div>
 
                                     </div>
-                                    <!-- <div class="row">
-                                    <div class="col-sm-2">
-                                            <v-btn color="accent" @click="sponsorshipAdd">
-                                                Ajouter un parrainage
-                                            </v-btn>
-                                        </div>
-                                        </div> -->
-
                                     <validation-observer ref="observer" v-slot="{ invalid }">
                                         <form @submit.prevent="deleteAcc" style="margin-top: 5rem;">
                                             <div>
@@ -110,6 +102,9 @@
                                     Modifier l'adresse
                                 </v-btn>
                                 <v-btn class="create-button" color="accent" @click="sponsorCodeAdd">
+                                    Créer un code de parrainage
+                                </v-btn>
+                                <v-btn class="create-button" color="accent" @click="sponsorshipAdd">
                                     Ajouter un code de parrainage
                                 </v-btn>
                             </div>
@@ -263,16 +258,17 @@
                     </v-btn>
                 </div>
             </validation-observer>
-            <!-- <validation-observer ref="observer" v-slot="{ invalid }" v-if="editSponsorship">
+            <validation-observer ref="observer" v-slot="{ invalid }" v-if="editSponsorship">
                 <div class="profile-container">
                     <form @submit.prevent="addSponsorship" style="margin-top: 5rem;" v-if="!successTrigger">
                         <div>
-                            <h3>Enter a test</h3>
+                            <h3>Entrez un code de parrainage</h3>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
-                                <validation-provider v-slot="{ errors }" name="test" rules="required">
-                                    <v-text-field v-model="form.test" :error-messages="errors" label="test" required>
+                                <validation-provider v-slot="{ errors }" name="code" rules="required">
+                                    <v-text-field v-model="form.sponsorship" :error-messages="errors"
+                                        label="Code de parrainage" required>
                                     </v-text-field>
                                 </validation-provider>
                             </div>
@@ -285,8 +281,11 @@
                             </div>
                         </div>
                     </form>
+                    <v-btn @click="profile" class="create-button">
+                        Revenir au profil
+                    </v-btn>
                 </div>
-            </validation-observer> -->
+            </validation-observer>
             <div class="container" v-if="editError" style="color: red;">
                 <h2>{{ editMessage }}</h2>
             </div>
@@ -338,12 +337,14 @@ export default {
                 newEmail: '',
                 newAddress: '',
                 sponsorCode: '',
+                sponsorship: '',
             },
             tokenUsername: '',
             tokenEmail: '',
             tokenRole: '',
             tokenId: '',
             tokenAddress: '',
+            tokenJWT: '',
 
             username: '',
             password: '',
@@ -351,6 +352,7 @@ export default {
             role: '',
             code: '',
             test: '',
+            sponsored: '',
 
             accPassword: '',
 
@@ -386,6 +388,7 @@ export default {
             this.tokenRole = decodedjwtToken.role[0]
             this.tokenAddress = decodedjwtToken.address
             this.tokenExists = true
+            this.tokenJWT = jwtToken
 
         } else {
             this.tokenExists = false
@@ -534,15 +537,17 @@ export default {
         async addSponsorCode() {
             if (confirm('Confirmer l\'ajout du code de parrainage')) {
 
-                await axios.post('http://localhost:8080/api/sponsor-code/add', {
+                await axios.post('sponsor/api/sponsor-code/add', {
 
-                    user: this.tokenId,
-                    role: this.tokenRole,
+                    user: this.tokenUsername,
                     code: this.form.sponsorCode,
+                    role: this.tokenRole,
+                    
                 }, {
 
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `${this.tokenJWT}`
                     },
                 }
 
@@ -561,36 +566,36 @@ export default {
             }
 
         },
-        // async addSponsorship() {
-        //     await axios.post('http://localhost:8080/api/sponsorship/add', {
+        async addSponsorship() {
+            await axios.post('sponsor/api/sponsorship/add', {
 
-        //         code: this.form.code,
-        //         user: {
-        //             id: this.tokenId,
-        //             role: this.tokenRole
-        //         }
+                code: this.form.code,
+                sponsored: {
+                    role: this.tokenRole
+                }
 
-        //     }, {
+            }, {
 
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //     }
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${this.tokenJWT}`
+                },
+            }
 
-        //     ).then(() => {
-        //         document.cookie = "access_token=";
-        //         this.successTrigger = true
+            ).then(() => {
+                document.cookie = "access_token=";
+                this.successTrigger = true
 
-        //         this.successMessage = 'Sponsorship added successfully!'
+                this.successMessage = 'Sponsorship added successfully!'
 
 
-        //     }).catch((res) => {
-        //         this.editError = true,
-        //             this.editMessage = res.response.data.message
+            }).catch((res) => {
+                this.editError = true,
+                    this.editMessage = res.response.data.message
 
-        //     })
+            })
 
-        // },
+        },
         usernameEdit() {
             this.editTrigger = true
             this.editUsername = true
