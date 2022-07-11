@@ -267,7 +267,7 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <validation-provider v-slot="{ errors }" name="code" rules="required">
-                                    <v-text-field v-model="form.sponsorship" :error-messages="errors"
+                                    <v-text-field v-model="form.code" :error-messages="errors"
                                         label="Code de parrainage" required>
                                     </v-text-field>
                                 </validation-provider>
@@ -338,6 +338,7 @@ export default {
                 newAddress: '',
                 sponsorCode: '',
                 sponsorship: '',
+                code: '',
             },
             tokenUsername: '',
             tokenEmail: '',
@@ -539,7 +540,7 @@ export default {
 
                 await axios.post('sponsor/api/sponsor-code/add', {
 
-                    user: this.tokenUsername,
+                    user: this.tokenId,
                     code: this.form.sponsorCode,
                     role: this.tokenRole,
                     
@@ -552,11 +553,10 @@ export default {
                 }
 
                 ).then(() => {
-                    document.cookie = "access_token=";
                     this.successTrigger = true
 
                     this.successMessage = 'Sponsor Code added successfully!'
-
+                    this.profile()
 
                 }).catch((res) => {
                     this.editError = true,
@@ -571,6 +571,7 @@ export default {
 
                 code: this.form.code,
                 sponsored: {
+                    user: this.tokenId,
                     role: this.tokenRole
                 }
 
@@ -583,11 +584,10 @@ export default {
             }
 
             ).then(() => {
-                document.cookie = "access_token=";
                 this.successTrigger = true
 
                 this.successMessage = 'Sponsorship added successfully!'
-
+                this.profile()
 
             }).catch((res) => {
                 this.editError = true,
@@ -622,13 +622,13 @@ export default {
         },
 
         home() {
-            document.location.href = "/";
+            this.$router.push({ name: 'home' })
         },
         login() {
-            document.location.href = "/login";
+            this.$router.push({ name: 'login' })
         },
         profile() {
-            document.location.href = "/profile";
+            this.$router.go({ name: 'profile' })
         },
         disconnectUser() {
             document.cookie = "access_token=";
