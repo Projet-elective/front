@@ -137,7 +137,7 @@
 
         <template v-if="this.tokenRole == 'DEV'">
           <li>
-            <v-btn text :to="{ name: 'composant' }">
+            <v-btn text :to="{ name: 'dev' }">
               <div class="d-flex flex-column-reverse d-lg-block">
                 <span class="mr-2">Composant</span>
                 <v-icon>mdi-square-rounded-outline</v-icon>

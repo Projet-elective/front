@@ -24,6 +24,7 @@ import editMenuView from '../views/editMenuView.vue'
 import MyProductsView from '../views/MyProductsView.vue'
 import MyMenusView from '../views/MyMenusView.vue'
 import logsView from '../views/logsView.vue'
+import DevView from '../views/DevView.vue'
 
 
 Vue.use(VueRouter)
@@ -146,7 +147,11 @@ const routes = [
     name: 'logs',
     component: logsView,
   },
-
+  {
+    path: '/dev',
+    name: 'dev',
+    component: DevView,
+  },
 
 ]
 
