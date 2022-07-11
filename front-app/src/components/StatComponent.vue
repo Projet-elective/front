@@ -102,6 +102,15 @@
                 </div>
 
             </template>
+
+            <template v-if="this.tokenRole == 'TECH'">
+                <div class="container-title">
+                        <h1>Utilisation de la mémoire</h1>
+                    </div>
+                    <div class="container-lists">
+                          {{freememory}} Go disponblie, sur les  {{totalmemory}} Go initial
+                    </div>
+            </template>
         </v-container>
     </div>
 
@@ -124,6 +133,8 @@ export default {
             tokenId: '',
             tokenJWT: '',
             restaurantId: '',
+            freememory:[],
+            totalmemory:[],
         };
     },
     mounted() {
@@ -142,6 +153,10 @@ export default {
             this.getDayRestaurant();
             this.getMonthRestaurant();
             this.getYearRestaurant();
+        }
+         if (this.tokenRole == 'TECH') {
+            this.getFreeMemory();
+            this.getTotalMemory();
         }
     },
 
@@ -189,6 +204,25 @@ export default {
                 .then(response => this.years = response.data)
                 .catch(e => this.error = [{ title: "Error de chargement", e }]);
         },
+        getFreeMemory() {
+            axios.get('/stats/api/techniques/freemem', {
+                headers: {
+                    'authorization': `${this.tokenJWT}`
+                }
+            }, { mode: 'no-cors' })
+                .then(response => this.freememory = response.data)
+                .catch(e => this.error = [{ title: "Error de chargement", e }]);
+        },
+        getTotalMemory() {
+            axios.get('/stats/api/techniques/totalmem', {
+                headers: {
+                    'authorization': `${this.tokenJWT}`
+                }
+            }, { mode: 'no-cors' })
+                .then(response => this.totalmemory = response.data)
+                .catch(e => this.error = [{ title: "Error de chargement", e }]);
+        },
+
     }
 }
 </script>
