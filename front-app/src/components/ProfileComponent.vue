@@ -543,7 +543,7 @@ export default {
                     user: this.tokenId,
                     code: this.form.sponsorCode,
                     role: this.tokenRole,
-                    
+
                 }, {
 
                     headers: {
@@ -570,10 +570,8 @@ export default {
             await axios.post('sponsor/api/sponsorship/add', {
 
                 code: this.form.code,
-                sponsored: {
-                    user: this.tokenId,
-                    role: this.tokenRole
-                }
+                sponsoredId: this.tokenId,
+                sponsoredRole: this.tokenRole
 
             }, {
 
@@ -632,7 +630,7 @@ export default {
         },
         disconnectUser() {
             document.cookie = "access_token=";
-            this.home();
+            document.location.href='/'
         }
     }
 }

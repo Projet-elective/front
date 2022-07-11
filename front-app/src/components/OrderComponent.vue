@@ -237,6 +237,43 @@
             </v-container>
 
         </div>
+
+        <div v-if="this.tokenRole == 'COMMERCIAL'">
+            <div class="col-sm-4">
+                <h3>
+                    Commandes
+                </h3>
+                <div v-if="this.orderCommercials != ''">
+                    <div class="text-secondary" v-for="orders in orderCommercials" :key="orders._id">
+                        <v-card elevation="10" class="profile-container">
+                            ID Commande : {{ orders._id }}
+                            <ul>
+                                <li>
+                                    ID user : {{ orders.idUser }}
+                                </li>
+                                <li>
+                                    prix total: {{ orders.totalPrice }}
+                                </li>
+                                <li>
+                                    Menu.s : {{ orders.orderList }}
+                                </li>
+                                <li>
+                                    Status : {{ orders.state_order }}
+                                </li>
+                                <li>
+                                    Livreur : {{ orders.deliverer_id }}
+                                </li>
+                            </ul>
+                        </v-card>
+                    </div>
+                </div>
+                <div v-else>
+                    <v-card elevation="10" class="profile-container" style="width:50%;">
+                        <h3>Aucune commande disponible</h3>
+                    </v-card>
+                </div>
+            </div>
+        </div>
         <div v-if="this.tokenRole == 'CLIENT'">
             <div class="col-sm-4">
                 <h3>
@@ -273,6 +310,7 @@
                 </div>
             </div>
         </div>
+
 
 
     </v-main>
@@ -320,6 +358,8 @@ export default {
 
             myClientOrders: '',
 
+            orderCommercials:'',
+
         }
 
     },
@@ -332,6 +372,34 @@ export default {
 
     },
     methods: {
+        fetch() {
+            const jwt = require('jose')
+            const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
+            const decodedjwtToken = jwt.decodeJwt(jwtToken)
+            this.tokenJWT = jwtToken
+            this.tokenUsername = decodedjwtToken.username
+            this.tokenEmail = decodedjwtToken.email
+            this.tokenRole = decodedjwtToken.role[0]
+            this.tokenId = decodedjwtToken.id
+            console.log(this.tokenRole)
+
+            if (this.tokenRole == 'RESTAURANT') {
+                this.restaurantNotCompletedOrders()
+                this.restaurantCompletedOrders()
+            }
+            if (this.tokenRole == 'DELIVERY') {
+
+                this.getDeliveryOrdersAvailable()
+                this.deliverNotCompletedOrders(this.tokenId)
+                this.readyToDeliverOrders(this.tokenId)
+            }
+            if (this.tokenRole == 'CLIENT') {
+                this.myOrdersClient(this.tokenId)
+            }
+            if (this.tokenRole == 'COMMERCIAL') {
+                this.orderCommercial()
+            }
+        },
         async getRestaurantByOwner(ownerId) {
             await axios.get('restaurant/api/restaurants/getByOwner/' + ownerId, {
                 headers: {
@@ -434,6 +502,7 @@ export default {
                     'Authorization': `${this.tokenJWT}`
                 },
             })
+            this.refresh()
         },
 
         /*DELIVERY SECTION*/
@@ -499,12 +568,14 @@ export default {
                             'Authorization': `${this.tokenJWT}`
                         },
                     })
-                // this.refresh()
+                this.refresh()
 
             } catch (error) {
                 console.log(error)
             }
         },
+
+        //CLIENT
         async myOrdersClient(id) {
             try {
 
@@ -521,29 +592,21 @@ export default {
 
         },
 
-        fetch() {
-            const jwt = require('jose')
-            const jwtToken = document.cookie.split('; ').find(row => row.startsWith('access_token'))?.split('=')[1];
-            const decodedjwtToken = jwt.decodeJwt(jwtToken)
-            this.tokenJWT = jwtToken
-            this.tokenUsername = decodedjwtToken.username
-            this.tokenEmail = decodedjwtToken.email
-            this.tokenRole = decodedjwtToken.role[0]
-            this.tokenId = decodedjwtToken.id
+        //COMMERCIAL
+        async orderCommercial() {
+            try {
 
-            if (this.tokenRole == 'RESTAURANT') {
-                this.restaurantNotCompletedOrders()
-                this.restaurantCompletedOrders()
-            }
-            if (this.tokenRole == 'DELIVERY') {
+                const result = await axios.get('/orders/api/orders/allNotCompletedOrders/', {
+                    headers: {
+                        'Authorization': `${this.tokenJWT}`
+                    },
+                })
+                this.orderCommercials = result.data
 
-                this.getDeliveryOrdersAvailable()
-                this.deliverNotCompletedOrders(this.tokenId)
-                this.readyToDeliverOrders(this.tokenId)
+            } catch (err) {
+                console.log(err)
             }
-            if (this.tokenRole == 'CLIENT') {
-                this.myOrdersClient(this.tokenId)
-            }
+
         },
         refresh() {
             this.$router.go({ name: 'order' })

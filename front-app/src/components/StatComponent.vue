@@ -105,11 +105,11 @@
 
             <template v-if="this.tokenRole == 'TECH'">
                 <div class="container-title">
-                        <h1>Utilisation de la mémoire</h1>
-                    </div>
-                    <div class="container-lists">
-                          {{freememory}} Go disponblie, sur les  {{totalmemory}} Go initial
-                    </div>
+                    <h1>Utilisation de la mémoire</h1>
+                </div>
+                <div class="container-lists">
+                    {{ freememory }} Go disponblie, sur les {{ totalmemory }} Go initial
+                </div>
             </template>
         </v-container>
     </div>
@@ -133,8 +133,8 @@ export default {
             tokenId: '',
             tokenJWT: '',
             restaurantId: '',
-            freememory:[],
-            totalmemory:[],
+            freememory: [],
+            totalmemory: [],
         };
     },
     mounted() {
@@ -145,7 +145,7 @@ export default {
         this.tokenId = decodedjwtToken.id
         this.tokenRole = decodedjwtToken.role[0]
         if (this.tokenRole == 'COMMERCIAL') {
-            this.getdayCommercial();
+            this.getDayCommercial();
             this.getMonthCommercial();
             this.getYearCommercial();
         }
@@ -154,7 +154,7 @@ export default {
             this.getMonthRestaurant();
             this.getYearRestaurant();
         }
-         if (this.tokenRole == 'TECH') {
+        if (this.tokenRole == 'TECH') {
             this.getFreeMemory();
             this.getTotalMemory();
         }
@@ -162,17 +162,29 @@ export default {
 
     methods: {
         getDayCommercial() {
-            axios.get(`/stats/api/commercials/day`, { mode: 'no-cors' })
+            axios.get(`/stats/api/commercials/day`, {
+                headers: {
+                    'authorization': `${this.tokenJWT}`
+                }
+            })
                 .then(response => this.days = response.data)
                 .catch(e => this.error = [{ title: "Error de chargement", e }]);
         },
         getMonthCommercial() {
-            axios.get(`/stats/api/commercials/month`, { mode: 'no-cors' })
+            axios.get(`/stats/api/commercials/month`, {
+                headers: {
+                    'authorization': `${this.tokenJWT}`
+                }
+            })
                 .then(response => this.months = response.data)
                 .catch(e => this.error = [{ title: "Error de chargement", e }]);
         },
         getYearCommercial() {
-            axios.get(`/stats/api/commercials/year`, { mode: 'no-cors' })
+            axios.get(`/stats/api/commercials/year`, {
+                headers: {
+                    'authorization': `${this.tokenJWT}`
+                }
+            })
                 .then(response => this.years = response.data)
                 .catch(e => this.error = [{ title: "Error de chargement", e }]);
         },

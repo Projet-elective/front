@@ -55,14 +55,6 @@
             </v-btn>
           </li>
           <li>
-            <v-btn text :to="{ name: 'profile' }">
-              <div class="d-flex flex-column-reverse d-lg-block">
-                <span class="mr-2">profile</span>
-                <v-icon>mdi-account</v-icon>
-              </div>
-            </v-btn>
-          </li>
-          <li>
             <v-btn text :to="{ name: 'stat' }">
               <div class="d-flex flex-column-reverse d-lg-block">
                 <span class="mr-2">Statistique</span>
@@ -70,7 +62,15 @@
               </div>
             </v-btn>
           </li>
-          
+          <li>
+            <v-btn text :to="{ name: 'profile' }">
+              <div class="d-flex flex-column-reverse d-lg-block">
+                <span class="mr-2">profile</span>
+                <v-icon>mdi-account</v-icon>
+              </div>
+            </v-btn>
+          </li>
+
         </template>
 
         <template v-if="this.tokenRole == 'RESTAURANT'">
@@ -160,6 +160,14 @@
               <div class="d-flex flex-column-reverse d-lg-block">
                 <span class="mr-2">Comptes</span>
                 <v-icon>mdi-clipboard-text-multiple-outline</v-icon>
+              </div>
+            </v-btn>
+          </li>
+          <li>
+            <v-btn text :to="{ name: 'order' }">
+              <div class="d-flex flex-column-reverse d-lg-block">
+                <span class="mr-2">Commandes</span>
+                <v-icon>mdi-truck-delivery</v-icon>
               </div>
             </v-btn>
           </li>
